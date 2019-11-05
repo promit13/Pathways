@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1062328257232",
+    "firebase_url": "https://tickle-suds.firebaseio.com",
+    "project_id": "tickle-suds",
+    "storage_bucket": "tickle-suds.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062328257232:android:3d73a4f934bf5113",
+        "android_client_info": {
+          "package_name": "com.tickle.suds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062328257232-1i8qi56k06fshuvtra4pfcai8mem189a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfYxBXmiKPtBvLUDuetu9oCqUiEaB57Zc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062328257232-1i8qi56k06fshuvtra4pfcai8mem189a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1062328257232-ncbrgkefgdkc3su5hjohghebkbdpbr6l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tickle.sqweeks"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
