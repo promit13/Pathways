@@ -170,10 +170,11 @@ HomeStack.navigationOptions = ({ navigation }) => {
 
 const MainStackNavigator = createStackNavigator(
   {
-    SignedIn
+    SignedOut
+    // SignedIn
   },
   {
-    initialRouteName: "SignedIn"
+    // initialRouteName: "SignedIn"
     // headerMode: 'none'
   }
 );
