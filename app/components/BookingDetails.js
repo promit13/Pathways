@@ -2,7 +2,8 @@ import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { Avatar, Icon } from "react-native-elements";
 import colors from "../style";
-const BookingDetails = ({ user, booking, onPress }) => (
+
+const BookingDetails = ({ user, booking, onPress, caseDetails }) => (
   <View>
     <TouchableOpacity
       onPress={onPress}
@@ -30,10 +31,10 @@ const BookingDetails = ({ user, booking, onPress }) => (
             marginLeft: 18
           }}
         >
-          Jane Doe
+          {caseDetails.Referral__r && caseDetails.Referral__r.Name}
         </Text>
         <Text style={{ fontSize: 15, color: colors.grey, marginLeft: 18 }}>
-          24 August 1996
+          {caseDetails.Referral__r && caseDetails.Referral__r.Date_of_Birth__c}
         </Text>
       </View>
       <Icon

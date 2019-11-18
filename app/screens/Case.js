@@ -32,6 +32,8 @@ export default class Case extends React.Component {
     this.state = {
       currentPosition: 0
     };
+
+    const { caseDetails } = this.props.navigation.state.params;
     return (
       <ScrollView>
         <Image
@@ -60,8 +62,8 @@ export default class Case extends React.Component {
             <Text
               style={{
                 fontWeight: "600",
+                paddingRight: 20,
                 fontSize: 20,
-                marginLeft: 10,
                 color: "white",
                 marginTop: 8
               }}
@@ -76,14 +78,14 @@ export default class Case extends React.Component {
                 color: colors.darkGrey
               }}
             >
-              Started 24 August 1996
+              Started {moment(caseDetails.CreatedDate).format("DD MMM YYYY")}
             </Text>
           </View>
           <View
             style={{
               height: 50,
               backgroundColor: "white",
-              marginHorizontal: 10,
+              marginHorizontal: 20,
               borderWidth: 1,
               marginTop: 10
             }}
@@ -96,7 +98,7 @@ export default class Case extends React.Component {
                 marginTop: 10
               }}
             >
-              Jane Doe
+              {caseDetails.Referral__r.Name}
             </Text>
           </View>
           <View
@@ -104,7 +106,7 @@ export default class Case extends React.Component {
               height: 50,
               backgroundColor: "white",
               borderWidth: 1,
-              marginHorizontal: 10,
+              marginHorizontal: 20,
               marginTop: 10,
               display: "flex"
             }}
@@ -117,7 +119,7 @@ export default class Case extends React.Component {
                 marginTop: 9
               }}
             >
-              07123456789
+              {caseDetails.Referral__r.Phone}
             </Text>
             <Icon
               name="phone"
@@ -144,85 +146,81 @@ export default class Case extends React.Component {
               style={{
                 fontSize: 20,
                 color: colors.darkGrey,
-                marginLeft: 20,
+                marginLeft: 30,
                 marginTop: 10,
                 fontWeight: "600"
               }}
             >
               STATUS
             </Text>
-            <View style={{ marginTop: 10 }}>
-              <StepIndicator
-                customStyles={{
-                  stepIndicatorSize: 20,
-                  currentStepIndicatorSize: 30,
-                  separatorStrokeWidth: 6,
-                  currentStepStrokeWidth: 3,
-                  stepStrokeCurrentColor: colors.darkGrey,
-                  stepStrokeWidth: 1,
-                  currentStepStrokeWidth: 1,
-                  stepStrokeFinishedColor: "#7eaec4",
-                  stepStrokeUnFinishedColor: colors.darkGrey,
-                  separatorUnFinishedColor: colors.darkGrey,
-                  stepIndicatorFinishedColor: "#7eaec4",
-                  stepIndicatorUnFinishedColor: "white",
-                  stepIndicatorCurrentColor: colors.accent,
-                  stepIndicatorLabelCurrentColor: "transparent",
-                  stepIndicatorLabelFinishedColor: "transparent",
-                  stepIndicatorLabelUnFinishedColor: "transparent",
-                  labelColor: colors.darkGrey,
-                  labelSize: 13,
-                  currentStepLabelColor: colors.accent
-                }}
-                currentPosition={this.state.currentPosition}
-                labels={labels}
-              />
-            </View>
           </View>
         </View>
-
         <View
           style={{
-            height: 105,
-
-            marginTop: 160
+            marginTop: 70,
+            marginHorizontal: 20,
+            height: 60,
+            backgroundColor: colors.accent
           }}
         >
           <Text
             style={{
-              fontSize: 20,
-              color: colors.darkGrey,
-              marginLeft: 30,
-              marginTop: 10,
-              fontWeight: "600"
+              textAlign: "center",
+              alignSelf: "center",
+              color: "white",
+
+              fontSize: 25,
+              marginTop: 14,
+              textTransform: "uppercase"
             }}
           >
-            RECOVERY PATHWAY
+            {caseDetails.Triage_Status__c}
           </Text>
-          <TouchableOpacity
+        </View>
+        {caseDetails.Recovery_Pathway__r && (
+          <View
             style={{
-              alignContent: "center",
-              alignItems: "center",
-              marginTop: 10,
-              height: 60,
-              marginHorizontal: 30,
-              backgroundColor: colors.accent
+              height: 105,
+              marginTop: 20
             }}
           >
             <Text
               style={{
-                textAlign: "center",
-                alignSelf: "center",
-                color: "white",
-
-                fontSize: 25,
-                marginTop: 14
+                fontSize: 20,
+                color: colors.darkGrey,
+                marginLeft: 30,
+                marginTop: 10,
+                fontWeight: "600"
               }}
             >
-              ONBOARDED
+              RECOVERY PATHWAY
             </Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={{
+                alignContent: "center",
+                alignItems: "center",
+                marginTop: 10,
+                height: 60,
+                marginHorizontal: 20,
+                backgroundColor: colors.accent
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  alignSelf: "center",
+                  color: "white",
+
+                  fontSize: 25,
+                  marginTop: 14,
+                  textTransform: "uppercase"
+                }}
+              >
+                {caseDetails.Recovery_Pathway__r.StageName}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <View
           style={{
             height: 95,
@@ -244,7 +242,7 @@ export default class Case extends React.Component {
             onPress={() => this.props.navigation.navigate("PdfViewer")}
             style={{
               height: 50,
-              marginHorizontal: 10,
+              marginHorizontal: 20,
               backgroundColor: "white",
               marginTop: 10,
               borderWidth: 1
@@ -253,12 +251,12 @@ export default class Case extends React.Component {
             <Text
               style={{
                 fontSize: 20,
-                color: colors.darkGrey,
+                color: colors.accent,
                 marginLeft: 20,
                 marginTop: 13
               }}
             >
-              Court Injuction
+              {/* {status} */}
             </Text>
             <Icon
               name="angle-right"
@@ -266,7 +264,7 @@ export default class Case extends React.Component {
               size={40}
               iconStyle={{
                 position: "absolute",
-                bottom: -7,
+                bottom: -15,
                 right: 20,
                 color: colors.darkGrey
               }}

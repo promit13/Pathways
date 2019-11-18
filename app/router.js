@@ -93,7 +93,6 @@ const SignedIn = createBottomTabNavigator(
       // tabBarLabel: navigation.state.routeName,
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
-        console.log(routeName);
         if (routeName === "Home") {
           return (
             <Image
