@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Dimensions,
   Image,
+  Alert,
   KeyboardAvoidingView
 } from "react-native";
 import SmoothPinCodeInput from "react-native-smooth-pincode-input";
@@ -47,6 +48,7 @@ export default class ActivateDevice extends Component {
           this.setState({ error: true });
         } else {
           this.setState({ error: false });
+          Alert.alert("Code Approved");
         }
       })
       .catch(err => {

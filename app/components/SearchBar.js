@@ -5,6 +5,26 @@ import colors from "../style";
 import { Dropdown } from "react-native-material-dropdown";
 import SearchBar from "react-native-material-design-searchbar";
 
+const styles = {
+  touchableStyle: {
+    paddingVertical: 20,
+    marginRight: 5,
+    justifyContent: "center",
+    flex: 1
+  },
+  textStyle: {
+    textAlign: "center",
+    fontSize: 12
+  },
+  viewItemContainerStyle: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginHorizontal: 10,
+    marginTop: 10,
+    marginBottom: 10
+  }
+};
 export default class SearchBarWrapper extends Component {
   state = {
     myFilter: false
@@ -22,150 +42,120 @@ export default class SearchBarWrapper extends Component {
             marginBottom: 20
           }}
         />
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            marginHorizontal: 10,
-            marginTop: 10,
-            marginBottom: 10
-          }}
-        >
+        <View style={styles.viewItemContainerStyle}>
           <TouchableOpacity
-            style={{
-              height: 40,
-
-              marginRight: 5,
-              justifyContent: "center",
-              flex: 1,
-              backgroundColor: this.state.sevenDays
-                ? colors.accent
-                : "transparent"
-            }}
-            onPress={() =>
-              this.setState({
-                sevenDays: !this.state.sevenDays
-              })
-            }
+            style={[
+              styles.touchableStyle,
+              {
+                backgroundColor: this.props.sevenDays
+                  ? colors.accent
+                  : "transparent"
+              }
+            ]}
+            onPress={this.props.sevenDaysPress}
           >
             <Text
-              style={{
-                color: this.state.sevenDays ? "white" : colors.accent,
-                textAlign: "center",
-                fontSize: 12
-              }}
+              style={[
+                styles.textStyle,
+                {
+                  color: this.props.sevenDays ? "white" : colors.accent
+                }
+              ]}
             >
               7 Days
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              height: 40,
-
-              marginRight: 5,
-              flex: 1,
-              justifyContent: "center",
-              backgroundColor: this.state.thirtyDays
-                ? colors.accent
-                : "transparent"
-            }}
-            onPress={() =>
-              this.setState({
-                thirtyDays: !this.state.thirtyDays
-              })
-            }
+            style={[
+              styles.touchableStyle,
+              {
+                backgroundColor: this.props.thirtyDays
+                  ? colors.accent
+                  : "transparent"
+              }
+            ]}
+            onPress={this.props.thirtyDaysPress}
           >
             <Text
-              style={{
-                color: this.state.thirtyDays ? "white" : colors.accent,
-                textAlign: "center",
-                fontSize: 12
-              }}
+              style={[
+                styles.textStyle,
+                {
+                  color: this.props.thirtyDays ? "white" : colors.accent
+                }
+              ]}
             >
               30 Days
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              height: 40,
-              flex: 1,
-              marginRight: 5,
-              justifyContent: "center",
-              backgroundColor: this.state.sixtyDays
-                ? colors.accent
-                : "transparent"
-            }}
-            onPress={() =>
-              this.setState({
-                sixtyDays: !this.state.sixtyDays
-              })
-            }
+            style={[
+              styles.touchableStyle,
+              {
+                backgroundColor: this.props.sixtyDays
+                  ? colors.accent
+                  : "transparent"
+              }
+            ]}
+            onPress={this.props.sixtyDaysPress}
           >
             <Text
-              style={{
-                color: this.state.sixtyDays ? "white" : colors.accent,
-                textAlign: "center",
-                fontSize: 12
-              }}
+              style={[
+                styles.textStyle,
+                {
+                  color: this.props.sixtyDays ? "white" : colors.accent
+                }
+              ]}
             >
               60 Days
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              height: 40,
-              marginRight: 5,
-              flex: 1,
-              justifyContent: "center",
-              backgroundColor: this.state.ninetyDays
-                ? colors.accent
-                : "transparent"
-            }}
-            onPress={() =>
-              this.setState({
-                ninetyDays: !this.state.ninetyDays
-              })
-            }
+            style={[
+              styles.touchableStyle,
+              {
+                backgroundColor: this.props.ninetyDays
+                  ? colors.accent
+                  : "transparent"
+              }
+            ]}
+            onPress={this.props.ninetyDaysPress}
           >
             <Text
-              style={{
-                color: this.state.ninetyDays ? "white" : colors.accent,
-                textAlign: "center",
-                fontSize: 12
-              }}
+              style={[
+                styles.textStyle,
+                {
+                  color: this.props.ninetyDays ? "white" : colors.accent
+                }
+              ]}
             >
               90 Days
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              height: 40,
-              flex: 1,
-              justifyContent: "center",
-              backgroundColor: this.state.allDays
-                ? colors.accent
-                : "transparent"
-            }}
-            onPress={() =>
-              this.setState({
-                allDays: !this.state.allDays
-              })
-            }
+            style={[
+              styles.touchableStyle,
+              {
+                backgroundColor: this.props.allDays
+                  ? colors.accent
+                  : "transparent"
+              }
+            ]}
+            onPress={this.props.allDaysPress}
           >
             <Text
-              style={{
-                color: this.state.allDays ? "white" : colors.accent,
-                textAlign: "center",
-                fontSize: 12
-              }}
+              style={[
+                styles.textStyle,
+                {
+                  color: this.props.allDays ? "white" : colors.accent
+                }
+              ]}
             >
               All
             </Text>
           </TouchableOpacity>
         </View>
         <SearchBar
-          onSearchChange={() => console.log("On Search Change")}
+          onSearchChange={this.props.onSearchChange}
           height={50}
           onFocus={() => console.log("On Focus")}
           onBlur={() => console.log("On Blur")}
@@ -175,93 +165,69 @@ export default class SearchBarWrapper extends Component {
           padding={10}
           returnKeyType={"search"}
         />
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            marginHorizontal: 5,
-            marginTop: 10
-          }}
-        >
+        <View style={styles.viewItemContainerStyle}>
           <TouchableOpacity
-            style={{
-              height: 40,
-
-              paddingVertical: 8,
-              paddingHorizontal: 8,
-              marginRight: 5,
-              justifyContent: "center",
-              backgroundColor: this.state.myFilter
-                ? colors.accent
-                : "transparent"
-            }}
-            onPress={() =>
-              this.setState({
-                myFilter: !this.state.myFilter
-              })
-            }
+            style={[
+              styles.touchableStyle,
+              {
+                backgroundColor: this.props.myReferrals
+                  ? colors.accent
+                  : "transparent"
+              }
+            ]}
+            onPress={this.props.myReferralsPress}
           >
             <Text
-              style={{
-                color: this.state.myFilter ? "white" : colors.accent,
-                textAlign: "center",
-                fontSize: 12
-              }}
+              style={[
+                styles.textStyle,
+                {
+                  color: this.props.myReferrals ? "white" : colors.accent
+                }
+              ]}
             >
               My Referrals
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              height: 40,
-              paddingVertical: 8,
-              paddingHorizontal: 8,
-              marginRight: 5,
-              justifyContent: "center",
-              backgroundColor: this.state.myConstabulary
-                ? colors.accent
-                : "transparent"
-            }}
-            onPress={() =>
-              this.setState({
-                myConstabulary: !this.state.myConstabulary
-              })
-            }
+            style={[
+              styles.touchableStyle,
+              {
+                backgroundColor: this.props.myConstabulary
+                  ? colors.accent
+                  : "transparent"
+              }
+            ]}
+            onPress={this.props.myConstabularyPress}
           >
             <Text
-              style={{
-                color: this.state.myConstabulary ? "white" : colors.accent,
-                textAlign: "center",
-                fontSize: 12
-              }}
+              style={[
+                styles.textStyle,
+                {
+                  color: this.props.myConstabulary ? "white" : colors.accent
+                }
+              ]}
             >
               My Constabulary
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              height: 40,
-
-              paddingVertical: 8,
-              paddingHorizontal: 8,
-              justifyContent: "center",
-              backgroundColor: this.state.nationalReferrals
-                ? colors.accent
-                : "transparent"
-            }}
-            onPress={() =>
-              this.setState({
-                nationalReferrals: !this.state.nationalReferrals
-              })
-            }
+            style={[
+              styles.touchableStyle,
+              {
+                backgroundColor: this.props.nationalReferrals
+                  ? colors.accent
+                  : "transparent"
+              }
+            ]}
+            onPress={this.props.nationalReferralsPress}
           >
             <Text
-              style={{
-                color: this.state.nationalReferrals ? "white" : colors.accent,
-                textAlign: "center",
-                fontSize: 12
-              }}
+              style={[
+                styles.textStyle,
+                {
+                  color: this.props.nationalReferrals ? "white" : colors.accent
+                }
+              ]}
             >
               National Referrals
             </Text>

@@ -24,7 +24,17 @@ import SearchBarWrapper from "../components/SearchBar";
 
 export default class ActiveCases extends React.Component {
   state = {
-    activeCases: []
+    activeCases: [],
+    searchKey: "",
+    sevenDays: false,
+    thirtyDays: false,
+    sixtyDays: false,
+    ninetyDays: false,
+    allDays: false,
+    myReferrals: false,
+    myConstabulary: false,
+    nationalReferrals: false,
+    checkDays: null
   };
 
   componentDidMount() {
@@ -36,6 +46,31 @@ export default class ActiveCases extends React.Component {
     });
   }
 
+  buttonPress = i => {
+    const {
+      sevenDays,
+      thirtyDays,
+      sixtyDays,
+      ninetyDays,
+      allDays,
+      myReferrals,
+      myConstabulary,
+      nationalReferrals
+    } = this.state;
+    this.setState({
+      sevenDays: sevenDays || i === 0 ? !this.state.sevenDays : false,
+      thirtyDays: thirtyDays || i === 1 ? !this.state.thirtyDays : false,
+      sixtyDays: sixtyDays || i === 2 ? !this.state.sixtyDays : false,
+      ninetyDays: ninetyDays || i === 3 ? !this.state.ninetyDays : false,
+      allDays: allDays || i === 4 ? !this.state.allDays : false,
+      myReferrals: myReferrals || i === 5 ? !this.state.myReferrals : false,
+      myConstabulary:
+        myConstabulary || i === 6 ? !this.state.myConstabulary : false,
+      nationalReferrals:
+        nationalReferrals || i === 7 ? !this.state.nationalReferrals : false
+    });
+  };
+
   render() {
     let titles = [
       "Awaiting to be Contacted",
@@ -45,19 +80,71 @@ export default class ActiveCases extends React.Component {
       "Completed",
       "Closed"
     ];
-    const { activeCases } = this.state;
+    const {
+      activeCases,
+      sevenDays,
+      thirtyDays,
+      sixtyDays,
+      ninetyDays,
+      allDays,
+      myReferrals,
+      myConstabulary,
+      nationalReferrals,
+      checkDays
+    } = this.state;
+    console.log(sevenDays);
 
     const filteredArray = [];
-
+    const todayDate = new Date();
+    const toDate = moment(todayDate).subtract(checkDays, "d");
+    console.log(toDate);
+    const searchFilteredArray = activeCases.filter(item => {
+      const isBetween = moment(item.CreatedDate).isBetween(toDate, todayDate);
+      console.log(isBetween);
+      if (checkDays === null) {
+        if (myReferrals) {
+          return (
+            item.Referral__r &&
+            item.Referral__r.Unique_ID__c === "myUniqueId" &&
+            item.Referral__r.Name.startsWith(this.state.searchKey)
+          );
+        }
+        if (myConstabulary) {
+          return (
+            item.Referral__r &&
+            item.Referral__r.Referrer_Organisation__c === "myConstabulary" &&
+            item.Referral__r.Name.startsWith(this.state.searchKey)
+          );
+        }
+        if (nationalReferrals) {
+          return (
+            item.Referral__r &&
+            item.Referral__r.Referrer_Organisation__c === "National" &&
+            item.Referral__r.Name.startsWith(this.state.searchKey)
+          );
+        }
+        return (
+          item.Referral__r &&
+          item.Referral__r.Name.startsWith(this.state.searchKey)
+        );
+      }
+      return (
+        item.Referral__r &&
+        isBetween &&
+        item.Referral__r.Name.startsWith(this.state.searchKey)
+      );
+    });
+    console.log(searchFilteredArray);
     titles.map(title => {
-      const filteredTitle = activeCases.filter(caseDetails => {
+      const filteredTitle = searchFilteredArray.filter(caseDetails => {
         return caseDetails.Triage_Status__c === title;
       });
-      const myReferrals = activeCases.filter(caseDetails => {
+      const myReferrals = searchFilteredArray.filter(caseDetails => {
         return caseDetails.Triage_Status__c === title;
       });
       return filteredArray.push({ [title]: filteredTitle });
     });
+    console.log(filteredArray);
 
     return (
       <ScrollView>
@@ -70,7 +157,52 @@ export default class ActiveCases extends React.Component {
           }}
         >
           <View style={{ marginBottom: -30 }}>
-            <SearchBarWrapper />
+            <SearchBarWrapper
+              onSearchChange={searchKey => {
+                this.setState({ searchKey });
+                console.log(searchKey);
+              }}
+              sevenDaysPress={() => {
+                this.setState({ checkDays: 7 });
+                this.buttonPress(0);
+              }}
+              thirtyDaysPress={() => {
+                this.setState({ checkDays: 30 });
+                this.buttonPress(1);
+              }}
+              sixtyDaysPress={() => {
+                this.setState({ checkDays: 60 });
+                this.buttonPress(2);
+              }}
+              ninetyDaysPress={() => {
+                this.setState({ checkDays: 90 });
+                this.buttonPress(3);
+              }}
+              allDaysPress={() => {
+                this.setState({ checkDays: null });
+                this.buttonPress(4);
+              }}
+              myReferralsPress={() => {
+                this.setState({ checkDays: null });
+                this.buttonPress(5);
+              }}
+              myConstabularyPress={() => {
+                this.setState({ checkDays: null });
+                this.buttonPress(6);
+              }}
+              nationalReferralsPress={() => {
+                this.setState({ checkDays: null });
+                this.buttonPress(7);
+              }}
+              sevenDays={sevenDays}
+              thirtyDays={thirtyDays}
+              sixtyDays={sixtyDays}
+              ninetyDays={ninetyDays}
+              allDays={allDays}
+              myReferrals={myReferrals}
+              myConstabulary={myConstabulary}
+              nationalReferrals={nationalReferrals}
+            />
           </View>
           <View
             style={{
@@ -80,8 +212,7 @@ export default class ActiveCases extends React.Component {
               justifyContent: "center",
               display: "flex"
             }}
-          ></View>
-
+          />
           {filteredArray.map(status => {
             return (
               <View>
