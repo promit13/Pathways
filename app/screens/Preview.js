@@ -9,26 +9,112 @@ import {
   AsyncStorage,
   FlatList,
   Picker,
+  TouchableOpacity,
   ImageBackground
 } from "react-native";
 import { SafeAreaView } from "react-navigation";
 import { Button, Rating, Avatar, Icon } from "react-native-elements";
 import firebase from "react-native-firebase";
-import profilePicture from "../../assets/profilePicture.jpg";
+import axios from "axios";
 import Modal from "react-native-modal";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { AirbnbRating } from "react-native-elements";
 import { Slider } from "react-native-elements";
 import BookingSingle from "../components/BookingSingle";
 import colors from "../style";
-import axios from "axios";
+import profilePicture from "../../assets/profilePicture.jpg";
+import LoadScreen from "../components/LoadScreen";
+
+const styles = {
+  listItemContainerStyle: {
+    display: "flex",
+    justifyContent: "space-evenly",
+    alignContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    height: 80,
+    borderColor: colors.grey,
+    borderWidth: 2,
+    borderBottomWidth: 0,
+    paddingHorizontal: 20,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent"
+  },
+  listItemTextStyle: {
+    color: colors.darkGrey,
+    fontSize: 21,
+    flex: 5,
+    marginLeft: 10
+  },
+  listItemCountStyle: {
+    fontSize: 40,
+    color: colors.darkGrey,
+    textAlign: "center"
+  }
+};
+
+let completedCasesArray = [];
+let injunctionServedArray = [];
+let criticalPathwayArray = [];
+let casesFallenArray = [];
 
 export default class Profile extends React.Component {
   static navigationOptions = {
     header: null
   };
 
+  state = {
+    activeCasesArray: [],
+    completedCasesArray: [],
+    injunctionServedArray: [],
+    criticalPathwayArray: [],
+    casesFallenArray: [],
+    loadScreen: true
+  };
+
+  componentDidMount() {
+    axios.get("http://localhost:8675/referrals").then(res => {
+      console.log(res.data.records);
+      const { records } = res.data;
+      records.map((record, index) => {
+        if (record.Triage_Status__c === "Completed") {
+          completedCasesArray.push(record);
+        }
+        if (record.Triage_Status__c === "Served") {
+          injunctionServedArray.push(record);
+        }
+        if (record.Triage_Status__c === "Critical") {
+          criticalPathwayArray.push(record);
+        }
+        if (record.Triage_Status__c === "Fallen") {
+          casesFallenArray.push(record);
+        }
+        if (index === records.length - 1) {
+          this.setState({
+            completedCasesArray,
+            injunctionServedArray,
+            criticalPathwayArray,
+            casesFallenArray,
+            activeCasesArray: records,
+            loadScreen: false
+          });
+        }
+      });
+      // this.setState({
+      //   activeCases: res.data.records
+      // });
+    });
+  }
+
   render() {
+    const {
+      activeCasesArray,
+      completedCasesArray,
+      injunctionServedArray,
+      criticalPathwayArray,
+      casesFallenArray,
+      loadScreen
+    } = this.state;
+    if (loadScreen) return <LoadScreen text="Please wait" />;
     return (
       <ScrollView>
         <View>
@@ -45,7 +131,6 @@ export default class Profile extends React.Component {
             onPress={() => this.props.navigation.navigate("NewCase")}
             style={{
               height: 60,
-
               display: "flex",
               flexDirection: "row",
               borderWidth: 2,
@@ -84,216 +169,98 @@ export default class Profile extends React.Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("ActiveCases")}
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-              height: 80,
-              borderColor: colors.grey,
-              borderWidth: 2,
-              borderBottomWidth: 0,
-              paddingHorizontal: 20,
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent"
+            onPress={() => {
+              this.props.navigation.navigate("ActiveCases", {
+                casesArray: activeCasesArray,
+                activeCaseCheck: true
+              });
             }}
+            style={styles.listItemContainerStyle}
           >
             <Image
               source={require("../../assets/user.png")}
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text
-              style={{
-                color: colors.darkGrey,
-                fontSize: 21,
-                flex: 5,
-                marginLeft: 10
-              }}
-            >
-              Active cases
-            </Text>
-            <Text
-              style={{
-                fontSize: 40,
-                color: colors.darkGrey,
-                textAlign: "center"
-              }}
-            >
-              1
+            <Text style={styles.listItemTextStyle}>Active cases</Text>
+            <Text style={styles.listItemCountStyle}>
+              {activeCasesArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("CompletedReferrals")}
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-              height: 80,
-              borderColor: colors.grey,
-              borderWidth: 2,
-              borderBottomWidth: 0,
-              paddingHorizontal: 20,
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent"
+            onPress={() => {
+              this.props.navigation.navigate("ActiveCases", {
+                casesArray: completedCasesArray,
+                arrayTitle: "Completed"
+              });
             }}
+            style={styles.listItemContainerStyle}
           >
             <Image
               source={require("../../assets/tick.png")}
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text
-              style={{
-                color: colors.darkGrey,
-                fontSize: 21,
-                flex: 5,
-                marginLeft: 10
-              }}
-            >
-              Completed referrals
-            </Text>
-            <Text
-              style={{
-                fontSize: 40,
-                color: colors.darkGrey,
-
-                textAlign: "center"
-              }}
-            >
-              24
+            <Text style={styles.listItemTextStyle}>Completed referrals</Text>
+            <Text style={styles.listItemCountStyle}>
+              {completedCasesArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("InjunctionServed")}
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-              height: 80,
-              borderColor: colors.grey,
-              borderWidth: 2,
-              borderBottomWidth: 0,
-              paddingHorizontal: 20,
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent"
+            onPress={() => {
+              this.props.navigation.navigate("ActiveCases", {
+                casesArray: injunctionServedArray,
+                arrayTitle: "Injunction Served"
+              });
             }}
+            style={styles.listItemContainerStyle}
           >
             <Image
               source={require("../../assets/injunction.png")}
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text
-              style={{
-                color: colors.darkGrey,
-                fontSize: 21,
-                flex: 5,
-                marginLeft: 10
-              }}
-            >
-              Injunction served
-            </Text>
-            <Text
-              style={{
-                fontSize: 40,
-                color: colors.darkGrey,
-
-                textAlign: "center"
-              }}
-            >
-              24
+            <Text style={styles.listItemTextStyle}>Injunction Served</Text>
+            <Text style={styles.listItemCountStyle}>
+              {injunctionServedArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("CriticalPathway")}
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-              height: 80,
-              borderColor: colors.grey,
-              borderWidth: 2,
-              borderBottomWidth: 0,
-              paddingHorizontal: 20,
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent"
+            onPress={() => {
+              this.props.navigation.navigate("ActiveCases", {
+                casesArray: criticalPathwayArray,
+                arrayTitle: "Critical Pathway"
+              });
             }}
+            style={styles.listItemContainerStyle}
           >
             <Image
               source={require("../../assets/logo-circle.png")}
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text
-              style={{
-                color: colors.darkGrey,
-                fontSize: 21,
-                flex: 5,
-                marginLeft: 10
-              }}
-            >
-              On a critical pathway
-            </Text>
-            <Text
-              style={{
-                fontSize: 40,
-                color: colors.darkGrey,
-
-                textAlign: "center"
-              }}
-            >
-              24
+            <Text style={styles.listItemTextStyle}>On a critical pathway</Text>
+            <Text style={styles.listItemCountStyle}>
+              {criticalPathwayArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("CasesFallen")}
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              alignContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-              height: 80,
-              borderColor: colors.grey,
-              borderWidth: 2,
-              paddingHorizontal: 20,
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent"
+            onPress={() => {
+              this.props.navigation.navigate("ActiveCases", {
+                casesArray: casesFallenArray,
+                arrayTitle: "Cases Fallen"
+              });
             }}
+            style={styles.listItemContainerStyle}
           >
             <Image
               source={require("../../assets/cross.png")}
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text
-              style={{
-                color: colors.darkGrey,
-                fontSize: 21,
-                flex: 4,
-                marginLeft: 10
-              }}
-            >
-              Cases fallen through
-            </Text>
-            <Text
-              style={{
-                fontSize: 40,
-                color: colors.darkGrey,
-
-                textAlign: "center"
-              }}
-            >
-              100
+            <Text style={styles.listItemTextStyle}>Cases fallen through</Text>
+            <Text style={styles.listItemCountStyle}>
+              {casesFallenArray.length}
             </Text>
           </TouchableOpacity>
         </View>

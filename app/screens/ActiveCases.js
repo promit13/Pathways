@@ -14,6 +14,7 @@ import { Button, Input, Icon, Avatar, Rating } from "react-native-elements";
 import cases from "../../data/cases";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from "moment";
+import { withNavigation } from "react-navigation";
 import logo from "../../assets/logo-shadow.png";
 import UserDetails from "../components/UserDetails";
 import colors from "../style";
@@ -22,7 +23,7 @@ import { Dropdown } from "react-native-material-dropdown";
 import BookingDetails from "../components/BookingDetails";
 import SearchBarWrapper from "../components/SearchBar";
 
-export default class ActiveCases extends React.Component {
+class ActiveCases extends React.Component {
   state = {
     activeCases: [],
     searchKey: "",
@@ -38,12 +39,14 @@ export default class ActiveCases extends React.Component {
   };
 
   componentDidMount() {
-    axios.get("http://localhost:8675/referrals").then(res => {
-      console.log(res.data.records);
-      this.setState({
-        activeCases: res.data.records
-      });
-    });
+    const { casesArray } = this.props.navigation.state.params;
+    this.setState({ activeCases: casesArray });
+    // axios.get("http://localhost:8675/referrals").then(res => {
+    //   console.log(res.data.records);
+    //   this.setState({
+    //     activeCases: res.data.records
+    //   });
+    // });
   }
 
   buttonPress = i => {
@@ -72,7 +75,12 @@ export default class ActiveCases extends React.Component {
   };
 
   render() {
-    let titles = [
+    const {
+      casesArray,
+      activeCaseCheck,
+      arrayTitle
+    } = this.props.navigation.state.params;
+    const titles = [
       "Awaiting to be Contacted",
       "Contacting",
       "Contact Made",
@@ -94,11 +102,11 @@ export default class ActiveCases extends React.Component {
     } = this.state;
     console.log(sevenDays);
 
-    const filteredArray = [];
+    let filteredArray = [];
     const todayDate = new Date();
     const toDate = moment(todayDate).subtract(checkDays, "d");
     console.log(toDate);
-    const searchFilteredArray = activeCases.filter(item => {
+    const searchFilteredArray = casesArray.filter(item => {
       const isBetween = moment(item.CreatedDate).isBetween(toDate, todayDate);
       console.log(isBetween);
       if (checkDays === null) {
@@ -135,15 +143,19 @@ export default class ActiveCases extends React.Component {
       );
     });
     console.log(searchFilteredArray);
-    titles.map(title => {
-      const filteredTitle = searchFilteredArray.filter(caseDetails => {
-        return caseDetails.Triage_Status__c === title;
+    if (activeCaseCheck) {
+      titles.map(title => {
+        const filteredTitle = searchFilteredArray.filter(caseDetails => {
+          return caseDetails.Triage_Status__c === title;
+        });
+        const myReferrals = searchFilteredArray.filter(caseDetails => {
+          return caseDetails.Triage_Status__c === title;
+        });
+        return filteredArray.push({ [title]: filteredTitle });
       });
-      const myReferrals = searchFilteredArray.filter(caseDetails => {
-        return caseDetails.Triage_Status__c === title;
-      });
-      return filteredArray.push({ [title]: filteredTitle });
-    });
+    } else {
+      filteredArray.push({ [arrayTitle]: searchFilteredArray });
+    }
     console.log(filteredArray);
 
     return (
@@ -264,3 +276,4 @@ export default class ActiveCases extends React.Component {
     );
   }
 }
+export default withNavigation(ActiveCases);
