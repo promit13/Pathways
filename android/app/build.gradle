@@ -105,7 +105,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.tickle.suds"
+        applicationId "com.socialdynamics.pathways"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

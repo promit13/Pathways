@@ -1,27 +1,7 @@
 import React from "react";
-import {
-  Image,
-  Text,
-  Dimensions,
-  View,
-  ScrollView,
-  StyleSheet,
-  AsyncStorage,
-  FlatList,
-  Picker,
-  TouchableOpacity,
-  ImageBackground
-} from "react-native";
-import { SafeAreaView } from "react-navigation";
-import { Button, Rating, Avatar, Icon } from "react-native-elements";
-import firebase from "react-native-firebase";
+import { Image, Text, View, ScrollView, TouchableOpacity } from "react-native";
 import axios from "axios";
-import Modal from "react-native-modal";
-import { AirbnbRating } from "react-native-elements";
-import { Slider } from "react-native-elements";
-import BookingSingle from "../components/BookingSingle";
 import colors from "../style";
-import profilePicture from "../../assets/profilePicture.jpg";
 import LoadScreen from "../components/LoadScreen";
 
 const styles = {

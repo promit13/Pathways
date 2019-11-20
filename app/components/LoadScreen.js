@@ -1,6 +1,7 @@
 import React from "react";
 import { View, ActivityIndicator, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
+import Modal from "react-native-modal";
 import colors from "../style";
 
 const styles = {
@@ -8,7 +9,7 @@ const styles = {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: colors.accent
+    backgroundColor: "white"
   },
   text: {
     color: "white",
@@ -26,7 +27,23 @@ export default LoadScreen = ({ text }) => {
         hidden
       /> */}
       <Text style={styles.text}>{text}</Text>
-      <ActivityIndicator size="large" color="gray" style={{ marginTop: 20 }} />
+      <ActivityIndicator size="large" color="black" style={{ marginTop: 20 }} />
     </View>
+  );
+};
+
+export const ModalLoading = ({ text }) => {
+  return (
+    <Modal
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      isVisible={true}
+      coverScreen
+      hasBackdrop
+      backdropColor="black"
+      backdropOpacity={0.9}
+    >
+      <Text style={styles.text}>{text}</Text>
+      <ActivityIndicator size="large" color="gray" style={{ marginTop: 20 }} />
+    </Modal>
   );
 };

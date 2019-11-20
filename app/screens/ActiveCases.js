@@ -22,10 +22,21 @@ import axios from "axios";
 import { Dropdown } from "react-native-material-dropdown";
 import BookingDetails from "../components/BookingDetails";
 import SearchBarWrapper from "../components/SearchBar";
+import LoadScreen from "../components/LoadScreen";
 
+const titles = [
+  "Awaiting to be Contacted",
+  "Contacting",
+  "Contact Made",
+  "Live",
+  "Completed",
+  "Closed"
+];
 class ActiveCases extends React.Component {
   state = {
     activeCases: [],
+    activeCaseCheck: false,
+    arrayTitle: "",
     searchKey: "",
     sevenDays: false,
     thirtyDays: false,
@@ -35,18 +46,33 @@ class ActiveCases extends React.Component {
     myReferrals: false,
     myConstabulary: false,
     nationalReferrals: false,
-    checkDays: null
+    checkDays: null,
+    loadScreen: true
   };
 
   componentDidMount() {
-    const { casesArray } = this.props.navigation.state.params;
-    this.setState({ activeCases: casesArray });
-    // axios.get("http://localhost:8675/referrals").then(res => {
-    //   console.log(res.data.records);
-    //   this.setState({
-    //     activeCases: res.data.records
-    //   });
-    // });
+    if (this.props.navigation.state.params === undefined) {
+      axios.get("http://localhost:8675/referrals").then(res => {
+        console.log(res.data.records);
+        this.setState({
+          activeCases: res.data.records,
+          activeCaseCheck: true,
+          loadScreen: false
+        });
+      });
+    } else {
+      const {
+        casesArray,
+        activeCaseCheck,
+        arrayTitle
+      } = this.props.navigation.state.params;
+      this.setState({
+        activeCases: casesArray,
+        activeCaseCheck,
+        arrayTitle,
+        loadScreen: false
+      });
+    }
   }
 
   buttonPress = i => {
@@ -76,20 +102,9 @@ class ActiveCases extends React.Component {
 
   render() {
     const {
-      casesArray,
-      activeCaseCheck,
-      arrayTitle
-    } = this.props.navigation.state.params;
-    const titles = [
-      "Awaiting to be Contacted",
-      "Contacting",
-      "Contact Made",
-      "Live",
-      "Completed",
-      "Closed"
-    ];
-    const {
       activeCases,
+      activeCaseCheck,
+      arrayTitle,
       sevenDays,
       thirtyDays,
       sixtyDays,
@@ -98,17 +113,14 @@ class ActiveCases extends React.Component {
       myReferrals,
       myConstabulary,
       nationalReferrals,
-      checkDays
+      checkDays,
+      loadScreen
     } = this.state;
-    console.log(sevenDays);
-
     let filteredArray = [];
     const todayDate = new Date();
     const toDate = moment(todayDate).subtract(checkDays, "d");
-    console.log(toDate);
-    const searchFilteredArray = casesArray.filter(item => {
+    const searchFilteredArray = activeCases.filter(item => {
       const isBetween = moment(item.CreatedDate).isBetween(toDate, todayDate);
-      console.log(isBetween);
       if (checkDays === null) {
         if (myReferrals) {
           return (
@@ -124,13 +136,6 @@ class ActiveCases extends React.Component {
             item.Referral__r.Name.startsWith(this.state.searchKey)
           );
         }
-        if (nationalReferrals) {
-          return (
-            item.Referral__r &&
-            item.Referral__r.Referrer_Organisation__c === "National" &&
-            item.Referral__r.Name.startsWith(this.state.searchKey)
-          );
-        }
         return (
           item.Referral__r &&
           item.Referral__r.Name.startsWith(this.state.searchKey)
@@ -142,7 +147,6 @@ class ActiveCases extends React.Component {
         item.Referral__r.Name.startsWith(this.state.searchKey)
       );
     });
-    console.log(searchFilteredArray);
     if (activeCaseCheck) {
       titles.map(title => {
         const filteredTitle = searchFilteredArray.filter(caseDetails => {
@@ -156,8 +160,7 @@ class ActiveCases extends React.Component {
     } else {
       filteredArray.push({ [arrayTitle]: searchFilteredArray });
     }
-    console.log(filteredArray);
-
+    if (loadScreen) return <LoadScreen text="Please wait" />;
     return (
       <ScrollView>
         <View

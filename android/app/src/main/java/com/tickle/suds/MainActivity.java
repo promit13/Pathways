@@ -1,4 +1,4 @@
-package com.tickle.suds;
+package com.socialdynamics.pathways;
 
 import com.facebook.react.ReactActivity;
 

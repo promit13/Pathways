@@ -120,7 +120,8 @@ export default class NewCase extends React.Component {
                 />
                 <TouchableOpacity
                   onPress={() =>
-                    this.props.navigation.navigate("RepeatReferrals")
+                    // this.props.navigation.navigate("RepeatReferrals")
+                    firebase.auth().signOut()
                   }
                   style={{
                     marginHorizontal: 40,

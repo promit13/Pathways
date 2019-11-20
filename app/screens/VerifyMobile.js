@@ -2,32 +2,24 @@ import React, { Component, Fragment } from "react";
 import {
   TextInput,
   Text,
-  Alert,
   TouchableOpacity,
-  AsyncStorage,
   StyleSheet,
   Dimensions,
   View,
   Image,
   ScrollView,
-  ImageBackground,
   KeyboardAvoidingView
 } from "react-native";
 import { Formik } from "formik";
-import axios from "axios";
 import * as yup from "yup";
-import { Button, Icon } from "react-native-elements";
-import { scale, verticalScale, moderateScale } from "react-native-size-matters";
-import firebase from "react-native-firebase";
-import { getFcmToken } from "../utils/FcmToken";
+import axios from "axios";
 import ErrorMessage from "../components/Error";
-import { ModalLoading } from "../components/LoadScreen";
 import colors from "../style";
+import { ModalLoading } from "../components/LoadScreen";
 
 var { height, width } = Dimensions.get("window");
 
-const getAccountApi = "http://localhost:8675/account";
-const getCustomTokenApi = "http://localhost:8675/getCustomToken";
+const getVerificationCodeApi = "http://localhost:8675/getVerificationCode";
 
 // const text = [
 //   "Welcome to Pathway, please enter your activation code to verify your device. Your activation code can be found in your welcome email.",
@@ -38,7 +30,9 @@ const getCustomTokenApi = "http://localhost:8675/getCustomToken";
 
 const text = [
   "Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
-  "If you do not have a welcome email please call 0800 1017 110. If you wish to apply to become a referrer please go to:"
+  "If you do not have a welcome email please call 0800 1017 110. If you wish to apply to become a referrer please go to:",
+  "Thank you. Please verify your mobile number.",
+  "If you are having difficulties completing the authorisation please call 0800 1017 110."
 ];
 
 const styles = StyleSheet.create({
@@ -79,101 +73,63 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Login extends Component {
+export default class VerifyMobile extends Component {
   static navigationOptions = {
     header: null
   };
 
   state = {
+    secureTextEntry: true,
     fcmToken: "",
     showError: false,
     errorMessage: "",
-    mobileNumber: "",
-    loading: false
+    loading: false,
+    accountVerified: false,
+    mobileNumber: ""
   };
 
-  componentDidMount = async () => {
-    const fcmToken = await getFcmToken();
-    this.setState({ fcmToken });
-  };
+  componentDidMount = () => {};
 
-  registerUser = values => {
+  registerMobile = values => {
+    this.setState({ loading: true });
+    const { user } = this.props.navigation.state.params;
+    console.log("REGISTER MOBILE NUMBER");
+    console.log(values);
     const { code } = values;
     axios
-      .post(getAccountApi, { id: "0014J00000A4eBgQAJ" })
-      .then(accountResponse => {
-        console.log(accountResponse);
-        const { Phone } = accountResponse.data[0];
-        console.log(Phone);
-        axios
-          .post(getCustomTokenApi, { uid: "0014J00000A4eBgQAJ" })
-          .then(response => {
-            console.log(response);
-            console.log(response.data);
-            firebase
-              .auth()
-              .signInWithCustomToken(response.data)
-              .then(res => {
-                console.log(res);
-                console.log(res.user._user.uid);
-                const userDetails = {
-                  userVerified: true,
-                  userId: "0014J00000A4eBgQAJ",
-                  phoneVerified: false,
-                  pin: 0,
-                  pinSet: false,
-                  phone: Phone,
-                  messagingToken: this.state.fcmToken
-                };
-                firebase
-                  .firestore()
-                  .collection("users")
-                  .doc(res.user._user.uid)
-                  .set(userDetails);
-              })
-              .then(r => {
-                this.setState({ loading: false });
-                console.log(r);
-              })
-              .catch(e => {
-                this.setState({
-                  loading: false,
-                  showError: true,
-                  errorMessage: "Something went wrong. Please try again."
-                });
-                console.log(e);
-              })
-              .catch(error => {
-                this.setState({
-                  loading: false,
-                  showError: true,
-                  errorMessage: "Something went wrong. Please try again."
-                });
-                console.log(error);
-                // ...
-              });
-          })
-          .catch(err => {
-            this.setState({
-              loading: false,
-              showError: true,
-              errorMessage: "Something went wrong. Please try again."
-            });
-            console.log(err);
-          });
+      .post(getVerificationCodeApi, {
+        mobileNumber: code
       })
-      .catch(er => {
+      .then(response => {
+        console.log(response);
+        if (response.data.code === 60200) {
+          return this.setState({
+            showError: true,
+            loading: false,
+            errorMessage: "Please enter valid phone number."
+          });
+        }
+        this.setState({ loading: false, showError: false, errorMessage: "" });
+        this.props.navigation.navigate("ActivateDevice", {
+          mobileNumber: code,
+          user
+        });
+      })
+      .catch(err => {
         this.setState({
           loading: false,
           showError: true,
           errorMessage: "Something went wrong. Please try again."
         });
-        console.log(er);
+        console.log(err);
       });
   };
 
   render() {
-    const { showError, errorMessage, mobileNumber, loading } = this.state;
+    const { user, currentUser } = this.props.navigation.state.params;
+    const mobileNumber = user.phone !== null ? user.phone : "";
+    console.log(user);
+    const { showError, errorMessage, loading } = this.state;
     console.log(mobileNumber);
     return (
       <KeyboardAvoidingView
@@ -185,11 +141,10 @@ export default class Login extends Component {
           <Formik
             initialValues={{ code: mobileNumber }}
             onSubmit={values => {
-              this.setState({ loading: true });
-              this.registerUser(values);
+              this.registerMobile(values);
             }}
             validationSchema={yup.object().shape({
-              code: yup.string().required("Please enter the activation code")
+              code: yup.string().required("Please enter your mobile number")
             })}
           >
             {({
@@ -218,22 +173,24 @@ export default class Login extends Component {
                     marginBottom: 20
                   }}
                 >
-                  {text[0]}
+                  {text[2]}
                 </Text>
                 <View>
                   <TextInput
                     style={styles.textInputStyle}
                     value={values.code}
                     onChangeText={handleChange("code")}
-                    placeholder="ACTIVATION CODE"
+                    placeholder="MOBILE NUMBER (+447*********)"
                     onBlur={() => setFieldTouched("code")}
                   />
                 </View>
                 {touched.code && errors.code && (
                   <Text style={styles.textErrorStyle}>{errors.code}</Text>
                 )}
-                {showError && <ErrorMessage errorMessage={errorMessage} />}
-                {loading && <ModalLoading text="Please wait ..." />}
+                {showError && (
+                  <ErrorMessage errorMessage={errorMessage} marginTop={5} />
+                )}
+                {loading && <ModalLoading text="Please wait..." />}
                 <TouchableOpacity
                   style={{ marginTop: 20 }}
                   onPress={handleSubmit}
@@ -249,9 +206,38 @@ export default class Login extends Component {
                       height: 45
                     }}
                   >
-                    AUTHORISE
+                    ACTIVATE
                   </Text>
                 </TouchableOpacity>
+                <View>
+                  <Text
+                    style={{
+                      color: colors.darkGrey,
+                      fontSize: 20,
+                      marginTop: 20
+                    }}
+                  >
+                    If you have not received a code please click button below.
+                  </Text>
+                  <TouchableOpacity onPress={() => this.registerMobile(values)}>
+                    <Text
+                      style={{
+                        color: colors.darkGrey,
+                        fontSize: 20,
+                        marginTop: 10
+                      }}
+                    >
+                      Click here
+                    </Text>
+                    <View
+                      style={{
+                        backgroundColor: colors.darkGrey,
+                        height: 1,
+                        width: 90
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
                 <Text
                   style={{
                     color: colors.darkGrey,
@@ -259,7 +245,7 @@ export default class Login extends Component {
                     marginTop: 20
                   }}
                 >
-                  {text[1]}
+                  {text[3]}
                 </Text>
                 <Text
                   style={{
