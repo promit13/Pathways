@@ -97,7 +97,7 @@ export default class Profile extends React.Component {
     if (loadScreen) return <LoadScreen text="Please wait" />;
     return (
       <ScrollView>
-        <View>
+        <View style={{ flex: 1, marginTop: 80 }}>
           <Image
             source={require("../../assets/path-logo.png")}
             style={{

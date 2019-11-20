@@ -17,9 +17,6 @@ const styles = {
   }
 };
 export default class Pathways extends Component {
-  static navigationOptions = {
-    header: null
-  };
   state = {
     pin: "",
     pinMatched: false,

@@ -179,7 +179,7 @@ export default class Login extends Component {
       <KeyboardAvoidingView
         behavior="padding"
         enabled
-        style={{ flex: 1, padding: 40 }}
+        style={{ flex: 1, padding: 40, marginTop: 40 }}
       >
         <ScrollView>
           <Formik

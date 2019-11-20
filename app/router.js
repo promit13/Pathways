@@ -73,21 +73,39 @@ const SearchStack = createStackNavigator({
   ActiveCases
 });
 
-const SignedOut = createStackNavigator({
-  Login,
-  ActivateDevice,
-  PinRegistration
-});
+const SignedOut = createStackNavigator(
+  {
+    Login
+  },
+  {
+    navigationOptions: {
+      header: null
+    }
+  }
+);
 
-const RegisterMobile = createStackNavigator({
-  VerfifyMobile,
-  ActivateDevice,
-  PinRegistration
-});
+const RegisterMobile = createStackNavigator(
+  {
+    VerfifyMobile,
+    ActivateDevice
+  },
+  {
+    navigationOptions: {
+      header: null
+    }
+  }
+);
 
-const RegisterPin = createStackNavigator({
-  PinRegistration
-});
+const RegisterPin = createStackNavigator(
+  {
+    PinRegistration
+  },
+  {
+    navigationOptions: {
+      header: null
+    }
+  }
+);
 // const Stack1 = ({ navigation }) => <MapStack navigation={navigation} screenProps={{ rootNavigation: navigation.user }} />;
 // Stack1.router = MapStack.router;
 
@@ -97,10 +115,8 @@ const SignedIn = createBottomTabNavigator(
     Add: AddStack,
     Search: SearchStack
   },
-
   {
     defaultNavigationOptions: ({ navigation }) => ({
-      header: null,
       // tabBarLabel: navigation.state.routeName,
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
@@ -188,8 +204,8 @@ const MainStackNavigator = createStackNavigator(
     AuthLoadingScreen
   },
   {
-    initialRouteName: "AuthLoadingScreen"
-    // headerMode: 'none'
+    initialRouteName: "AuthLoadingScreen",
+    headerMode: "none"
   }
 );
 

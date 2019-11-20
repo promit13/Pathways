@@ -17,10 +17,6 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
 
 export default class NewCase extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   state = {
     checkBoxChecked: false
   };

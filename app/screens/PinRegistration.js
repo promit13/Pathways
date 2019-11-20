@@ -98,7 +98,7 @@ export default class PinRegistration extends Component {
       <KeyboardAvoidingView
         behavior="padding"
         enabled
-        style={{ padding: 40, flex: 1, alignItems: "center" }}
+        style={{ padding: 40, flex: 1, alignItems: "center", marginTop: 40 }}
       >
         <Image
           source={require("../../assets/path-logo.png")}

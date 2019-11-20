@@ -89,7 +89,7 @@ export default class ActivateDevice extends Component {
       <KeyboardAvoidingView
         behavior="padding"
         enabled
-        style={{ flex: 1, alignItems: "center" }}
+        style={{ flex: 1, alignItems: "center", marginTop: 80 }}
       >
         <Image
           source={require("../../assets/path-logo.png")}
