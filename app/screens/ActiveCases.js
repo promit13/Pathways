@@ -266,11 +266,12 @@ class ActiveCases extends React.Component {
                         textTransform: "uppercase"
                       }}
                     >
-                      {Object.keys(status)}
+                      {title}
                     </Text>
                   </View>
                 </View>
-                {Object.values(status)[0].map(caseDetails => {
+
+                {activeCases.filter(caseDetails => {
                   return (
                     <BookingDetails
                       caseDetails={caseDetails}

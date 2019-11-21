@@ -15,6 +15,8 @@ import firebase from "react-native-firebase";
 import colors from "../style";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
+import * as yup from "yup";
+import { TextInputMask } from "react-native-masked-text";
 
 export default class NewCase extends React.Component {
   state = {
@@ -48,8 +50,25 @@ export default class NewCase extends React.Component {
             referral.
           </Text>
           <Formik
-            initialValues={{ email: "" }}
-            onSubmit={values => console.log(values)}
+            initialValues={{ name: "" }}
+            onSubmit={values => {
+              this.props.navigation.navigate("RepeatReferrals");
+            }}
+            validationSchema={yup.object().shape({
+              name: yup
+                .string()
+                .required("Please enter the name of the victim"),
+              dob: yup.string().required("Please enter a date of birth"),
+              phone: yup.string().required("Please enter a contact number"),
+              safeContactNumber: yup
+                .string()
+                .required("Please enter a safe contact number"),
+              safeEmail: yup
+                .string()
+                .email()
+                .required("Please enter a safe email address"),
+              message: yup.string().required("Please enter messages/notes")
+            })}
           >
             {props => (
               <View>
@@ -61,37 +80,72 @@ export default class NewCase extends React.Component {
                   placeholderTextColor={colors.darkGrey}
                   style={styles.container}
                 />
+                {props.touched.name && props.errors.name && (
+                  <Text style={styles.textErrorStyle}>{props.errors.name}</Text>
+                )}
+                <TextInputMask
+                  type={"datetime"}
+                  options={{
+                    format: "DD/MM/YYYY"
+                  }}
+                  placeholderTextColor={colors.darkGrey}
+                  placeholder="DATE OF BIRTH"
+                  // value={this.state.dt}
+                  // onChangeText={text => {
+                  //   this.setState({
+                  //     dt: text
+                  //   });
+                  // }}
+                  onChangeText={props.handleChange("dob")}
+                  onBlur={props.handleBlur("dob")}
+                  value={props.values.dob}
+                  style={styles.container}
+                />
+                {props.touched.dob && props.errors.dob && (
+                  <Text style={styles.textErrorStyle}>{props.errors.dob}</Text>
+                )}
                 <TextInput
                   onChangeText={props.handleChange("phone")}
+                  keyboardType="phone-pad"
                   onBlur={props.handleBlur("phone")}
                   value={props.values.phone}
                   placeholder="VICTIM CONTACT NUMBER"
                   placeholderTextColor={colors.darkGrey}
                   style={styles.container}
                 />
+                {props.touched.phone && props.errors.phone && (
+                  <Text style={styles.textErrorStyle}>
+                    {props.errors.phone}
+                  </Text>
+                )}
                 <TextInput
                   onChangeText={props.handleChange("altphone")}
                   onBlur={props.handleBlur("altphone")}
+                  keyboardType="phone-pad"
                   value={props.values.altphone}
                   placeholder="SAFE CONTACT NUMBER"
                   placeholderTextColor={colors.darkGrey}
                   style={styles.container}
                 />
+                {props.touched.safeContactNumber &&
+                  props.errors.safeContactNumber && (
+                    <Text style={styles.textErrorStyle}>
+                      {props.errors.safeContactNumber}
+                    </Text>
+                  )}
                 <TextInput
-                  onChangeText={props.handleChange("dob")}
-                  onBlur={props.handleBlur("dob")}
-                  value={props.values.dob}
-                  placeholder="DATE OF BIRTH"
-                  placeholderTextColor={colors.darkGrey}
-                  style={styles.container}
-                />
-                {/* <TextInput
                   onChangeText={props.handleChange("safeEmail")}
                   onBlur={props.handleBlur("safeEmail")}
                   value={props.values.safeEmail}
                   placeholder="SAFE EMAIL ADDRESS"
+                  placeholderTextColor={colors.darkGrey}
                   style={styles.container}
-                /> */}
+                />
+                {props.touched.safeEmail && props.errors.safeEmail && (
+                  <Text style={styles.textErrorStyle}>
+                    {props.errors.safeEmail}
+                  </Text>
+                )}
                 <TextInput
                   onChangeText={props.handleChange("message")}
                   onBlur={props.handleBlur("message")}
@@ -101,6 +155,11 @@ export default class NewCase extends React.Component {
                   style={styles.notes}
                   multiline="true"
                 />
+                {props.touched.message && props.errors.message && (
+                  <Text style={styles.textErrorStyle}>
+                    {props.errors.message}
+                  </Text>
+                )}
                 <CheckBox
                   title="THE VICTIM HAS GIVEN CONSENT TO BE REFERRED"
                   checked={checkBoxChecked}
@@ -115,6 +174,11 @@ export default class NewCase extends React.Component {
                     this.setState({ checkBoxChecked: !checkBoxChecked })
                   }
                 />
+                {props.touched.safeEmail && props.errors.safeEmail && (
+                  <Text style={styles.textErrorStyle}>
+                    {props.errors.safeEmail}
+                  </Text>
+                )}
                 <TouchableOpacity
                   onPress={
                     () => this.props.navigation.navigate("Questions")
@@ -168,5 +232,11 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     textAlign: "left",
     paddingLeft: 20
+  },
+  textErrorStyle: {
+    fontSize: 10,
+    color: "red",
+    marginLeft: 45,
+    marginVertical: 4
   }
 });
