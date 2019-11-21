@@ -22,42 +22,36 @@ import { Dropdown } from "react-native-material-dropdown";
 import BookingDetails from "../components/BookingDetails";
 import SearchBarWrapper from "../components/SearchBar";
 
+let titles = [
+  "Awaiting to be Contacted",
+  "Contacting",
+  "Contact Made",
+  "Live",
+  "Completed",
+  "Closed"
+];
+
 export default class ActiveCases extends React.Component {
   state = {
-    activeCases: []
+    filteredArray: [],
+    searchKey: ""
   };
 
-  componentDidMount() {
+  componentDidMount = () => {
     axios.get("http://localhost:8675/referrals").then(res => {
       console.log(res.data.records);
+      const { records } = res.data;
       this.setState({
-        activeCases: res.data.records
+        activeCases: records
       });
+      // this.setState({
+      //   activeCases: res.data.records
+      // });
     });
-  }
+  };
 
   render() {
-    let titles = [
-      "Awaiting to be Contacted",
-      "Contacting",
-      "Contact Made",
-      "Live",
-      "Completed",
-      "Closed"
-    ];
-    const { activeCases } = this.state;
-
-    const filteredArray = [];
-
-    titles.map(title => {
-      const filteredTitle = activeCases.filter(caseDetails => {
-        return caseDetails.Triage_Status__c === title;
-      });
-      const myReferrals = activeCases.filter(caseDetails => {
-        return caseDetails.Triage_Status__c === title;
-      });
-      return filteredArray.push({ [title]: filteredTitle });
-    });
+    const { activeCases, filteredArray } = this.state;
 
     return (
       <ScrollView>
@@ -70,7 +64,9 @@ export default class ActiveCases extends React.Component {
           }}
         >
           <View style={{ marginBottom: -30 }}>
-            <SearchBarWrapper />
+            <SearchBarWrapper
+              onSearchChange={searchKey => this.setState({ searchKey })}
+            />
           </View>
           <View
             style={{
@@ -81,8 +77,7 @@ export default class ActiveCases extends React.Component {
               display: "flex"
             }}
           ></View>
-
-          {filteredArray.map(status => {
+          {titles.map(title => {
             return (
               <View>
                 <View
@@ -109,11 +104,12 @@ export default class ActiveCases extends React.Component {
                         textTransform: "uppercase"
                       }}
                     >
-                      {Object.keys(status)}
+                      {title}
                     </Text>
                   </View>
                 </View>
-                {Object.values(status)[0].map(caseDetails => {
+
+                {activeCases.filter(caseDetails => {
                   return (
                     <BookingDetails
                       caseDetails={caseDetails}
