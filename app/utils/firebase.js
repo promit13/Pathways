@@ -1,21 +1,20 @@
 import * as firebase from "firebase";
-import * as geofirex from "geofirex";
 import "@firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAxDGWtvcwEpzrPqwGLKuI_jT_am5VnxZ0",
-  authDomain: "pathways-d376e.firebaseapp.com",
-  databaseURL: "https://pathways-d376e.firebaseio.com",
-  projectId: "pathways-d376e",
-  storageBucket: "pathways-d376e.appspot.com",
-  messagingSenderId: "60507481498",
-  appId: "1:60507481498:web:591f291ca716d52f7d0623",
-  measurementId: "G-29WEG3R3JP"
+  apiKey: "AIzaSyB5Xph1yPLyuZcoeAnvgzTtoTO4A2Jpg3Y",
+  authDomain: "pathways-429eb.firebaseapp.com",
+  databaseURL: "https://pathways-429eb.firebaseio.com",
+  projectId: "pathways-429eb",
+  storageBucket: "pathways-429eb.appspot.com",
+  messagingSenderId: "787179059970",
+  appId: "1:787179059970:web:cd0ad3a48eced7089ce01b",
+  measurementId: "G-2K1SZRR87N"
 };
 
 firebase.initializeApp(firebaseConfig);
 
-export const geo = geofirex.init(firebase);
-export const GOOGLE_API = "AIzaSyAzny6yRXLVY91uAUPZAKRtwpU3pMcP7VI";
+// export const geo = geofirex.init(firebase);
+// export const GOOGLE_API = "AIzaSyAzny6yRXLVY91uAUPZAKRtwpU3pMcP7VI";
 
 export default firebase;

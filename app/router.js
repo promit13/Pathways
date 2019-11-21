@@ -22,6 +22,7 @@ import colors from "./style";
 import Preview from "./screens/Preview";
 import Login from "./screens/Login";
 import Pathway from "../assets/pathway.png";
+import AuthLoadingScreen from "./screens/AuthLoadingScreen";
 import Pathways from "./screens/Pathways";
 import logoText from "../assets/logo-text.png";
 import ActiveCases from "./screens/ActiveCases";
@@ -33,6 +34,7 @@ import CriticalPathway from "./screens/CriticalPathway";
 import RepeatReferrals from "./screens/RepeatReferral";
 import Case from "./screens/Case";
 import ProfileUpdate from "./screens/ProfileUpdate";
+import VerfifyMobile from "./screens/VerifyMobile";
 import ActivateDevice from "./screens/ActivateDevice";
 import PinRegistration from "./screens/PinRegistration";
 import CompletedReferrals from "./screens/CompletedReferrals";
@@ -45,7 +47,6 @@ const add = require("../assets/add.png");
 const search = require("../assets/search2.png");
 
 const HomeStack = createStackNavigator({
-  // PinRegistration,
   Pathways,
   Preview,
   ActiveCases,
@@ -72,11 +73,39 @@ const SearchStack = createStackNavigator({
   ActiveCases
 });
 
-const SignedOut = createStackNavigator({
-  Login,
-  ActivateDevice,
-  PinRegistration
-});
+const SignedOut = createStackNavigator(
+  {
+    Login
+  },
+  {
+    navigationOptions: {
+      header: null
+    }
+  }
+);
+
+const RegisterMobile = createStackNavigator(
+  {
+    VerfifyMobile,
+    ActivateDevice
+  },
+  {
+    navigationOptions: {
+      header: null
+    }
+  }
+);
+
+const RegisterPin = createStackNavigator(
+  {
+    PinRegistration
+  },
+  {
+    navigationOptions: {
+      header: null
+    }
+  }
+);
 // const Stack1 = ({ navigation }) => <MapStack navigation={navigation} screenProps={{ rootNavigation: navigation.user }} />;
 // Stack1.router = MapStack.router;
 
@@ -86,10 +115,8 @@ const SignedIn = createBottomTabNavigator(
     Add: AddStack,
     Search: SearchStack
   },
-
   {
     defaultNavigationOptions: ({ navigation }) => ({
-      header: null,
       // tabBarLabel: navigation.state.routeName,
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
@@ -170,11 +197,15 @@ HomeStack.navigationOptions = ({ navigation }) => {
 
 const MainStackNavigator = createStackNavigator(
   {
-    SignedIn
+    SignedOut,
+    RegisterMobile,
+    RegisterPin,
+    SignedIn,
+    AuthLoadingScreen
   },
   {
-    initialRouteName: "SignedIn"
-    // headerMode: 'none'
+    initialRouteName: "AuthLoadingScreen",
+    headerMode: "none"
   }
 );
 

@@ -46,7 +46,6 @@
 		7708DF478B2B479E8EF4EA69 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1603489B1EA64E638EA6A766 /* FontAwesome5_Solid.ttf */; };
 		783D189D7968449994FAECA8 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 76DEA5629FD5455BA7FA09EF /* FontAwesome.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		8430CB5422E5DB5D0072DD07 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8430CB5222E5DB440072DD07 /* libRNCAsyncStorage.a */; };
 		84E3ACCA22E714E3008D2EDE /* libRCTCameraRoll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E3ACA522E714D2008D2EDE /* libRCTCameraRoll.a */; };
 		8869C6E9CB394ADD905BF428 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B5360223997C4798AD40F26A /* Feather.ttf */; };
 		8AEB10120B9847F8905B7DA1 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C97DD56AE46E45398AF70E2E /* libRNFirebase.a */; };
@@ -63,7 +62,8 @@
 		ECC86FB5AA354EEA9DA1211E /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B738619E392F44D9842ADB4F /* EvilIcons.ttf */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
-		F933A0F3231FD350000C2689 /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8430CB1422E5D4220072DD07 /* libReactNativePermissions.a */; };
+		F9F29CC22382AD1600C3F608 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9F29CC12382AD1600C3F608 /* libRNCAsyncStorage.a */; };
+		F9F29CC42382AD1D00C3F608 /* libReactNativePermissions.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9F29CC32382AD1D00C3F608 /* libReactNativePermissions.a */; };
 		FD4A122B2D8D45BAB73136A7 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 050B7F67E4AD45799A5CF1F1 /* Entypo.ttf */; };
 /* End PBXBuildFile section */
 
@@ -455,6 +455,8 @@
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F660AE4CAEA6A10E58DEB5BA /* libPods-Suds.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Suds.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F933A0BE231FC6B2000C2689 /* TPSStripe.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TPSStripe.xcodeproj; path = "../node_modules/tipsi-stripe/ios/TPSStripe.xcodeproj"; sourceTree = "<group>"; };
+		F9F29CC12382AD1600C3F608 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNCAsyncStorage.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9F29CC32382AD1D00C3F608 /* libReactNativePermissions.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReactNativePermissions.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBAAD6BBA0904CBC998E5DE2 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -471,10 +473,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9F29CC42382AD1D00C3F608 /* libReactNativePermissions.a in Frameworks */,
+				F9F29CC22382AD1600C3F608 /* libRNCAsyncStorage.a in Frameworks */,
 				D7EEE4CB235F1EC4000A1268 /* libRNFetchBlob.a in Frameworks */,
-				F933A0F3231FD350000C2689 /* libReactNativePermissions.a in Frameworks */,
 				84E3ACCA22E714E3008D2EDE /* libRCTCameraRoll.a in Frameworks */,
-				8430CB5422E5DB5D0072DD07 /* libRNCAsyncStorage.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -659,6 +661,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F9F29CC32382AD1D00C3F608 /* libReactNativePermissions.a */,
+				F9F29CC12382AD1600C3F608 /* libRNCAsyncStorage.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
@@ -1709,7 +1713,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tickle.sqweeks;
+				PRODUCT_BUNDLE_IDENTIFIER = com.socialdynamics.pathways;
 				PRODUCT_NAME = Suds;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1734,7 +1738,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tickle.sqweeks;
+				PRODUCT_BUNDLE_IDENTIFIER = com.socialdynamics.pathways;
 				PRODUCT_NAME = Suds;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

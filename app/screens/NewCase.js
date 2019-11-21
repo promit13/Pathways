@@ -19,10 +19,6 @@ import * as yup from "yup";
 import { TextInputMask } from "react-native-masked-text";
 
 export default class NewCase extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   state = {
     checkBoxChecked: false
   };
@@ -183,7 +179,10 @@ export default class NewCase extends React.Component {
                   </Text>
                 )}
                 <TouchableOpacity
-                  onPress={props.handleSubmit}
+                  onPress={() =>
+                    // this.props.navigation.navigate("RepeatReferrals")
+                    firebase.auth().signOut()
+                  }
                   style={{
                     marginHorizontal: 40,
                     marginTop: 20,

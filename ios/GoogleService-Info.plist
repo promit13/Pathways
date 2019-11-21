@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1062328257232-ncbrgkefgdkc3su5hjohghebkbdpbr6l.apps.googleusercontent.com</string>
+	<string>787179059970-spcqmsd0lt5spg48fg602frseam4uuhj.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1062328257232-ncbrgkefgdkc3su5hjohghebkbdpbr6l</string>
+	<string>com.googleusercontent.apps.787179059970-spcqmsd0lt5spg48fg602frseam4uuhj</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBsGFS6wYKqY_8H22OBgtud03YlbueuLwA</string>
+	<string>AIzaSyCxSYKV8bgyV-yvJIO13ZuMMNNQQvf8c74</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1062328257232</string>
+	<string>787179059970</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.tickle.sqweeks</string>
+	<string>com.socialdynamics.pathways</string>
 	<key>PROJECT_ID</key>
-	<string>tickle-suds</string>
+	<string>pathways-429eb</string>
 	<key>STORAGE_BUCKET</key>
-	<string>tickle-suds.appspot.com</string>
+	<string>pathways-429eb.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1062328257232:ios:0c9b8b75e2e7415e</string>
+	<string>1:787179059970:ios:45f187c335efc2e89ce01b</string>
 	<key>DATABASE_URL</key>
-	<string>https://tickle-suds.firebaseio.com</string>
+	<string>https://pathways-429eb.firebaseio.com</string>
 </dict>
 </plist>
