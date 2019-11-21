@@ -50,7 +50,7 @@ export default class NewCase extends React.Component {
             referral.
           </Text>
           <Formik
-            initialValues={{ name: "" }}
+            initialValues={{}}
             onSubmit={values => {
               this.props.navigation.navigate("RepeatReferrals");
             }}
@@ -119,10 +119,10 @@ export default class NewCase extends React.Component {
                   </Text>
                 )}
                 <TextInput
-                  onChangeText={props.handleChange("altphone")}
-                  onBlur={props.handleBlur("altphone")}
+                  onChangeText={props.handleChange("safeContactNumber")}
+                  onBlur={props.handleBlur("safeContactNumber")}
                   keyboardType="phone-pad"
-                  value={props.values.altphone}
+                  value={props.values.safeContactNumber}
                   placeholder="SAFE CONTACT NUMBER"
                   placeholderTextColor={colors.darkGrey}
                   style={styles.container}
@@ -174,11 +174,6 @@ export default class NewCase extends React.Component {
                     this.setState({ checkBoxChecked: !checkBoxChecked })
                   }
                 />
-                {props.touched.safeEmail && props.errors.safeEmail && (
-                  <Text style={styles.textErrorStyle}>
-                    {props.errors.safeEmail}
-                  </Text>
-                )}
                 <TouchableOpacity
                   onPress={
                     () => this.props.navigation.navigate("Questions")
