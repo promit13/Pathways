@@ -23,6 +23,11 @@ const styles = {
     fontSize: 20
   }
 };
+
+const text = [
+  "In order to secure the data in the app, we need you to create a PIN. You will need to enter every time you access the app.",
+  "Please re-enter your PIN to confirm you have entered it correctly."
+];
 export default class PinRegistration extends Component {
   static navigationOptions = {
     header: null
@@ -110,8 +115,7 @@ export default class PinRegistration extends Component {
           }}
         />
         <Text style={styles.textStyle}>
-          In order to secure the data in the app we need you to create a PIN you
-          will need to enter every time you access the app.
+          {reconfirmCode ? text[1] : text[0]}
         </Text>
         <View
           style={{
@@ -121,9 +125,6 @@ export default class PinRegistration extends Component {
             marginTop: 20
           }}
         >
-          <Text style={[styles.textStyle, { marginBottom: 10 }]}>
-            {reconfirmCode ? "Confirm your pin" : "Enter Pin"}
-          </Text>
           <SmoothPinCodeInput
             textStyle={{
               fontSize: 24,

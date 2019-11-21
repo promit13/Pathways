@@ -30,6 +30,7 @@
     "react-native-modal-datetime-picker": "^7.5.0",
     "react-native-pdf": "^5.1.7",
     "react-native-permissions": "^1.2.0",
+    "react-native-picker-select": "^6.3.3",
     "react-native-select-input-ios": "^2.0.2",
     "react-native-size-matters": "^0.2.1",
     "react-native-smooth-pincode-input": "^1.0.7",

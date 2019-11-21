@@ -37,6 +37,7 @@ import ProfileUpdate from "./screens/ProfileUpdate";
 import VerfifyMobile from "./screens/VerifyMobile";
 import ActivateDevice from "./screens/ActivateDevice";
 import PinRegistration from "./screens/PinRegistration";
+import Questions from "./screens/Questions";
 import CompletedReferrals from "./screens/CompletedReferrals";
 import InjunctionServed from "./screens/InjunctionServed";
 import CasesFallen from "./screens/CasesFallen";
@@ -64,6 +65,7 @@ const HomeStack = createStackNavigator({
 
 const AddStack = createStackNavigator({
   NewCase,
+  Questions,
   RepeatReferrals,
   ThankYou,
   Preview

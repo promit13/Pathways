@@ -37,8 +37,9 @@ export default class NewCase extends React.Component {
           />
           <Text
             style={{
-              color: colors.darkGrey,
+              color: colors.accent,
               fontSize: 20,
+              fontWeight: "300",
               marginHorizontal: 40,
               marginBottom: 20
             }}
@@ -115,9 +116,10 @@ export default class NewCase extends React.Component {
                   }
                 />
                 <TouchableOpacity
-                  onPress={() =>
-                    // this.props.navigation.navigate("RepeatReferrals")
-                    firebase.auth().signOut()
+                  onPress={
+                    () => this.props.navigation.navigate("Questions")
+                    // () => this.props.navigation.navigate("RepeatReferrals")
+                    // () => firebase.auth().signOut()
                   }
                   style={{
                     marginHorizontal: 40,
@@ -135,7 +137,7 @@ export default class NewCase extends React.Component {
                       fontSize: 17
                     }}
                   >
-                    SUBMIT
+                    Continue
                   </Text>
                 </TouchableOpacity>
               </View>

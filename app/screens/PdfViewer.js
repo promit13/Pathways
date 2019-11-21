@@ -1,9 +1,15 @@
 import React from "react";
 import { StyleSheet, Dimensions, View } from "react-native";
-
 import Pdf from "react-native-pdf";
+import colors from "../style";
 
 export default class PdfViewer extends React.Component {
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: colors.accent
+    },
+    headerTintColor: "#fff"
+  };
   render() {
     const source = {
       uri: "http://samples.leanpub.com/thereactnativebook-sample.pdf",

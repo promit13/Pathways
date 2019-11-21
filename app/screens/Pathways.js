@@ -36,7 +36,7 @@ export default class Pathways extends Component {
     if (code !== pin) {
       this.setState({
         showError: true,
-        errorMessage: "Wrong pin. Try again!",
+        errorMessage: "Sorry your PIN's do not match, please try again.",
         code: ""
       });
     } else {
@@ -115,9 +115,9 @@ export default class Pathways extends Component {
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={{ alignItems: "center" }}>
-            <Text style={[styles.textStyle, { marginBottom: 10 }]}>
-              Enter Your Pin
+          <View style={{ alignItems: "center", padding: 40 }}>
+            <Text style={[styles.textStyle, { marginBottom: 40 }]}>
+              Welcome back, please enter your PIN to access your account.
             </Text>
             <SmoothPinCodeInput
               textStyle={{

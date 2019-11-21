@@ -33,6 +33,17 @@ const titles = [
   "Closed"
 ];
 class ActiveCases extends React.Component {
+  static navigationOptions = {
+    // title: "Register",
+    // headerTitleStyle: {
+    //   fontWeight: "bold",
+    //   fontSize: 20
+    // }
+    headerStyle: {
+      backgroundColor: colors.accent
+    },
+    headerTintColor: "#fff"
+  };
   state = {
     activeCases: [],
     activeCaseCheck: false,
@@ -126,25 +137,25 @@ class ActiveCases extends React.Component {
           return (
             item.Referral__r &&
             item.Referral__r.Unique_ID__c === "myUniqueId" &&
-            item.Referral__r.Name.startsWith(this.state.searchKey)
+            item.Referral__r.Name.includes(this.state.searchKey)
           );
         }
         if (myConstabulary) {
           return (
             item.Referral__r &&
             item.Referral__r.Referrer_Organisation__c === "myConstabulary" &&
-            item.Referral__r.Name.startsWith(this.state.searchKey)
+            item.Referral__r.Name.includes(this.state.searchKey)
           );
         }
         return (
           item.Referral__r &&
-          item.Referral__r.Name.startsWith(this.state.searchKey)
+          item.Referral__r.Name.includes(this.state.searchKey)
         );
       }
       return (
         item.Referral__r &&
         isBetween &&
-        item.Referral__r.Name.startsWith(this.state.searchKey)
+        item.Referral__r.Name.includes(this.state.searchKey) //startsWith
       );
     });
     if (activeCaseCheck) {

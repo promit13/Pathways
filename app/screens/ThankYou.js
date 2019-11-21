@@ -1,18 +1,6 @@
-import React, { Component } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ImageBackground,
-  ScrollView,
-  FlatList,
-  Image
-} from "react-native";
-import { Avatar, Button, Input, Icon } from "react-native-elements";
-import firebase from "react-native-firebase";
+import React from "react";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import colors from "../style";
-import DateTimePicker from "react-native-modal-datetime-picker";
 
 import { Formik } from "formik";
 
