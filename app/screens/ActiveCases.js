@@ -77,6 +77,7 @@ class ActiveCases extends React.Component {
         activeCaseCheck,
         arrayTitle
       } = this.props.navigation.state.params;
+      console.log(casesArray);
       this.setState({
         activeCases: casesArray,
         activeCaseCheck,
@@ -172,6 +173,7 @@ class ActiveCases extends React.Component {
       filteredArray.push({ [arrayTitle]: searchFilteredArray });
     }
     if (loadScreen) return <LoadScreen text="Please wait" />;
+    console.log(filteredArray);
     return (
       <ScrollView>
         <View
@@ -240,6 +242,8 @@ class ActiveCases extends React.Component {
             }}
           />
           {filteredArray.map(status => {
+            console.log(status);
+            console.log(Object.keys(status)[0]);
             return (
               <View>
                 <View
@@ -266,13 +270,27 @@ class ActiveCases extends React.Component {
                         textTransform: "uppercase"
                       }}
                     >
-                      {title}
+                      {Object.keys(status)[0]}
                     </Text>
                   </View>
                 </View>
-
                 {activeCases.filter(caseDetails => {
-                  return (
+                  {
+                    if (caseDetails.Referral__r) {
+                      return (
+                        <BookingDetails
+                          caseDetails={caseDetails}
+                          onPress={() =>
+                            this.props.navigation.navigate("Case", {
+                              caseDetails
+                            })
+                          }
+                        />
+                      );
+                    }
+                  }
+                  {
+                    /* return (
                     <BookingDetails
                       caseDetails={caseDetails}
                       onPress={() =>
@@ -281,7 +299,8 @@ class ActiveCases extends React.Component {
                         })
                       }
                     />
-                  );
+                  ); */
+                  }
                 })}
               </View>
             );

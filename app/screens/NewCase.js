@@ -78,7 +78,13 @@ export default class NewCase extends React.Component {
                   value={props.values.name}
                   placeholder="NAME OF VICTIM"
                   placeholderTextColor={colors.darkGrey}
-                  style={styles.container}
+                  style={[
+                    styles.container,
+                    {
+                      borderBottomWidth:
+                        props.touched.name && props.errors.name ? 2 : 0
+                    }
+                  ]}
                 />
                 {props.touched.name && props.errors.name && (
                   <Text style={styles.textErrorStyle}>{props.errors.name}</Text>
@@ -99,7 +105,13 @@ export default class NewCase extends React.Component {
                   onChangeText={props.handleChange("dob")}
                   onBlur={props.handleBlur("dob")}
                   value={props.values.dob}
-                  style={styles.container}
+                  style={[
+                    styles.container,
+                    {
+                      borderBottomWidth:
+                        props.touched.dob && props.errors.dob ? 2 : 0
+                    }
+                  ]}
                 />
                 {props.touched.dob && props.errors.dob && (
                   <Text style={styles.textErrorStyle}>{props.errors.dob}</Text>
@@ -111,7 +123,13 @@ export default class NewCase extends React.Component {
                   value={props.values.phone}
                   placeholder="VICTIM CONTACT NUMBER"
                   placeholderTextColor={colors.darkGrey}
-                  style={styles.container}
+                  style={[
+                    styles.container,
+                    {
+                      borderBottomWidth:
+                        props.touched.phone && props.errors.phone ? 2 : 0
+                    }
+                  ]}
                 />
                 {props.touched.phone && props.errors.phone && (
                   <Text style={styles.textErrorStyle}>
@@ -125,7 +143,16 @@ export default class NewCase extends React.Component {
                   value={props.values.safeContactNumber}
                   placeholder="SAFE CONTACT NUMBER"
                   placeholderTextColor={colors.darkGrey}
-                  style={styles.container}
+                  style={[
+                    styles.container,
+                    {
+                      borderBottomWidth:
+                        props.touched.safeContactNumber &&
+                        props.errors.safeContactNumber
+                          ? 2
+                          : 0
+                    }
+                  ]}
                 />
                 {props.touched.safeContactNumber &&
                   props.errors.safeContactNumber && (
@@ -139,7 +166,15 @@ export default class NewCase extends React.Component {
                   value={props.values.safeEmail}
                   placeholder="SAFE EMAIL ADDRESS"
                   placeholderTextColor={colors.darkGrey}
-                  style={styles.container}
+                  style={[
+                    styles.container,
+                    {
+                      borderBottomWidth:
+                        props.touched.safeEmail && props.errors.safeEmail
+                          ? 2
+                          : 0
+                    }
+                  ]}
                 />
                 {props.touched.safeEmail && props.errors.safeEmail && (
                   <Text style={styles.textErrorStyle}>
@@ -152,7 +187,10 @@ export default class NewCase extends React.Component {
                   value={props.values.message}
                   placeholder="MESSAGE/NOTES"
                   placeholderTextColor={colors.darkGrey}
-                  style={styles.notes}
+                  style={[
+                    styles.container,
+                    { borderBottomWidth: 2, height: 60 }
+                  ]}
                   multiline="true"
                 />
                 {props.touched.message && props.errors.message && (
@@ -231,7 +269,6 @@ const styles = StyleSheet.create({
   textErrorStyle: {
     fontSize: 10,
     color: "red",
-    marginLeft: 45,
-    marginVertical: 4
+    marginLeft: 45
   }
 });
