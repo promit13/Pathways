@@ -26,7 +26,7 @@ import colors from "../style";
 
 var { height, width } = Dimensions.get("window");
 
-const getAccountApi = "http://localhost:8675/account";
+const getAccountApi = "http://localhost:8675/getAccount";
 const getCustomTokenApi = "http://localhost:8675/getCustomToken";
 
 // const text = [
@@ -181,7 +181,7 @@ export default class Login extends Component {
         enabled
         style={{ flex: 1, padding: 40, marginTop: 40 }}
       >
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Formik
             initialValues={{ code: mobileNumber }}
             onSubmit={values => {

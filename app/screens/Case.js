@@ -35,7 +35,10 @@ export default class Case extends React.Component {
   render() {
     const { caseDetails } = this.props.navigation.state.params;
     return (
-      <ScrollView contentContainerStyle={{ paddingHorizontal: 20 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 20 }}
+      >
         <Image
           source={require("../../assets/path-logo.png")}
           style={{

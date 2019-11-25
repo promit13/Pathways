@@ -68,7 +68,8 @@ export default class Questions extends React.Component {
   };
 
   registerAnswers = () => {
-    console.log("CHECK");
+    const { userDetails } = this.props.navigation.state.params;
+    console.log(userDetails);
     this.setState({ loadscreen: true });
     const {
       recentAbuse,
@@ -76,7 +77,6 @@ export default class Questions extends React.Component {
       bailCondition,
       requireInjunction
     } = this.state;
-    const { user } = this.props.navigation.state.params;
     if (
       recentAbuse === null ||
       pastAbuse === null ||
@@ -85,38 +85,18 @@ export default class Questions extends React.Component {
     ) {
       console.log("check");
       return this.setState({
-        errorMessage: "Please fill in all section",
+        errorMessage: "Please answer all the question above",
         errorMessageVisible: true,
         loadscreen: false
       });
     }
-    const userDetails = {
-      recentAbuse,
-      pastAbuse,
-      bailCondition,
-      requireInjunction
-    };
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(user.userId)
-      .update({
-        questionsRegistered: true
-      })
-      .then(() => {
-        this.setState({
-          errorMessage: "",
-          errorMessageVisible: false,
-          loadscreen: false
-        });
-      })
-      .catch(err => {
-        this.setState({
-          errorMessage: "",
-          errorMessageVisible: false,
-          loadscreen: false
-        });
-      });
+    this.props.navigation.navigate("RepeatReferrals");
+    // const userDetails = {
+    //   recentAbuse,
+    //   pastAbuse,
+    //   bailCondition,
+    //   requireInjunction
+    // };
   };
 
   renderQuestions = () => {
@@ -126,7 +106,7 @@ export default class Questions extends React.Component {
           Has there been a recent incident of domestic abuse?
         </Text>
         <RNPickerSelect
-          onValueChange={value => this.setState({ counselling: value })}
+          onValueChange={value => this.setState({ recentAbuse: value })}
           items={pickerItems}
           useNativeAndroidPickerStyle={false}
           style={pickerSelectStyles}
@@ -135,7 +115,7 @@ export default class Questions extends React.Component {
           Is there a prior history of domestic abuse?
         </Text>
         <RNPickerSelect
-          onValueChange={value => this.setState({ sadness: value })}
+          onValueChange={value => this.setState({ pastAbuse: value })}
           items={pickerItems}
           useNativeAndroidPickerStyle={false}
           style={pickerSelectStyles}
@@ -144,7 +124,7 @@ export default class Questions extends React.Component {
           Are there any bail conditions currently in place?
         </Text>
         <RNPickerSelect
-          onValueChange={value => this.setState({ anxiety: value })}
+          onValueChange={value => this.setState({ bailCondition: value })}
           items={pickerItems}
           useNativeAndroidPickerStyle={false}
           style={pickerSelectStyles}
@@ -153,7 +133,7 @@ export default class Questions extends React.Component {
           Do you feel the victim requires a protective injunction?
         </Text>
         <RNPickerSelect
-          onValueChange={value => this.setState({ suicidal: value })}
+          onValueChange={value => this.setState({ requireInjunction: value })}
           items={pickerItems}
           useNativeAndroidPickerStyle={false}
           style={pickerSelectStyles}
@@ -163,20 +143,7 @@ export default class Questions extends React.Component {
   };
 
   render() {
-    const platform = Platform.OS;
-    const {
-      errorMessageVisible,
-      errorMessage,
-      loadscreen,
-      gender,
-      ageGroup,
-      counselling,
-      sadness,
-      anxiety,
-      suicidal,
-      phobias
-    } = this.state;
-    console.log(gender, ageGroup, counselling, sadness, anxiety, suicidal);
+    const { errorMessageVisible, errorMessage, loadscreen } = this.state;
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ flex: 1, paddingHorizontal: 35 }}>
@@ -208,8 +175,9 @@ export default class Questions extends React.Component {
 
           <TouchableOpacity
             onPress={
+              () => this.registerAnswers()
               // () => this.props.navigation.navigate("Questions")
-              () => this.props.navigation.navigate("RepeatReferrals")
+              // () => this.props.navigation.navigate("RepeatReferrals")
               // firebase.auth().signOut()
             }
             style={{

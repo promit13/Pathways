@@ -77,6 +77,10 @@ export default class Profile extends React.Component {
             activeCasesArray: records,
             loadScreen: false
           });
+          completedCasesArray = [];
+          injunctionServedArray = [];
+          criticalPathwayArray = [];
+          casesFallenArray = [];
         }
       });
       // this.setState({
@@ -96,7 +100,7 @@ export default class Profile extends React.Component {
     } = this.state;
     if (loadScreen) return <LoadScreen text="Please wait" />;
     return (
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ flex: 1, marginTop: 80 }}>
           <Image
             source={require("../../assets/path-logo.png")}

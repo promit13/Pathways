@@ -35,7 +35,7 @@ export default class NewCase extends React.Component {
       });
       return;
     }
-    this.props.navigation.navigate("Questions");
+    this.props.navigation.navigate("Questions", { userDetails: values });
   };
 
   render() {
@@ -127,7 +127,7 @@ export default class NewCase extends React.Component {
                     format: "DD/MM/YYYY"
                   }}
                   placeholderTextColor={colors.darkGrey}
-                  placeholder="DATE OF BIRTH"
+                  placeholder="DATE OF BIRTH ( DD/MM/YYYY )"
                   // value={this.state.dt}
                   // onChangeText={text => {
                   //   this.setState({
@@ -225,7 +225,8 @@ export default class NewCase extends React.Component {
                     marginTop: 20,
                     backgroundColor: "transparent",
                     borderWidth: 0,
-                    marginLeft: 32
+                    marginLeft: 32,
+                    paddingRight: 20
                   }}
                   checkedColor={colors.accent}
                   onPress={() =>
