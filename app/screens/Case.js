@@ -81,8 +81,18 @@ export default class Case extends React.Component {
               {caseDetails.Referral__r.Name}
             </Text>
           </View>
-          <View style={styles.viewBoxStyle}>
-            <Text style={styles.textBoxStyle}>
+          <View
+            style={[
+              styles.viewBoxStyle,
+              {
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-start"
+              }
+            ]}
+          >
+            <Text style={[styles.textBoxStyle, { flex: 4 }]}>
               {caseDetails.Referral__r.Phone}
             </Text>
             <Icon
@@ -91,8 +101,10 @@ export default class Case extends React.Component {
               size={30}
               color={colors.darkGrey}
               iconStyle={{
-                position: "absolute",
-                right: 20,
+                flex: 1,
+                alignSelf: "flex-end",
+                justifySelf: "center",
+                justifySelf: "flex-end",
                 color: colors.darkGrey
               }}
             />
@@ -157,16 +169,28 @@ export default class Case extends React.Component {
         <Text style={styles.textHeaderStyle}>DOCUMENTS</Text>
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate("PdfViewer")}
-          style={styles.viewBoxStyle}
+          style={[
+            styles.viewBoxStyle,
+            {
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-start"
+            }
+          ]}
         >
-          <Text style={styles.textBoxStyle}>{/* {status} */}</Text>
+          <Text style={[styles.textBoxStyle, { flex: 4 }]}>
+            Test
+            {/* {status} */}
+          </Text>
           <Icon
             name="angle-right"
             type="font-awesome"
             size={40}
             iconStyle={{
-              position: "absolute",
-              right: 20,
+              flex: 1,
+              alignSelf: "flex-end",
+              justifySelf: "center",
               color: colors.darkGrey
             }}
           />

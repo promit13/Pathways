@@ -5,7 +5,6 @@ import colors from "../style";
 
 const BookingDetails = ({ onPress, caseDetails }) => (
   <View>
-    <Text>Test</Text>
     <TouchableOpacity
       onPress={onPress}
       style={{
