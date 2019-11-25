@@ -5,7 +5,8 @@ import colors from "../style";
 
 const BookingDetails = ({ user, booking, onPress, caseDetails }) => (
   <View>
-    <TouchableOpacity
+    <Text>Test</Text>
+    {/* <TouchableOpacity
       onPress={onPress}
       style={{
         backgroundColor: "white",
@@ -20,8 +21,8 @@ const BookingDetails = ({ user, booking, onPress, caseDetails }) => (
         paddingHorizontal: 15,
         justifyContent: "center"
       }}
-    >
-      <View style={{ display: "flex", flexDirection: "column", flex: 8 }}>
+    > */}
+    {/* <View style={{ display: "flex", flexDirection: "column", flex: 8 }}>
         <Text
           style={{
             color: colors.darkGrey,
@@ -36,14 +37,14 @@ const BookingDetails = ({ user, booking, onPress, caseDetails }) => (
         <Text style={{ fontSize: 15, color: colors.grey, marginLeft: 18 }}>
           {caseDetails.Referral__r && caseDetails.Referral__r.Date_of_Birth__c}
         </Text>
-      </View>
-      <Icon
+      </View> */}
+    {/* <Icon
         name="angle-right"
         type="font-awesome"
         color="black"
         containerStyle={{ flex: 1, justifyContent: "center" }}
       />
-    </TouchableOpacity>
+    </TouchableOpacity> */}
   </View>
 );
 export default BookingDetails;

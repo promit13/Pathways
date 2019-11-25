@@ -21182,22 +21182,6 @@
 			};
 			name = Release;
 		};
-		13F40D78314A4C7F8E3725EE87714F1C /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30FFA91DE720D8E87A79A4071A829AB8 /* Stripe.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Stripe";
-				INFOPLIST_FILE = "Target Support Files/Stripe/ResourceBundle-Stripe-Stripe-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				PRODUCT_NAME = Stripe;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 		1989BF0D5D8F422E8549BBC393FC9865 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6EB61CE8794C2A37CF756D438345FF65 /* FirebaseFirestore.xcconfig */;
@@ -21291,22 +21275,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		2C12F358F279AC76BFAB262B7E3BACB1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A660F6E7E967B1F0E9155F6C830CE275 /* gRPC-C++.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
-				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-gRPC-C++-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = gRPCCertificates;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
 		};
@@ -21635,6 +21603,23 @@
 			};
 			name = Debug;
 		};
+		5734D9CF93D3573E04DCECD0F89BDC8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 30FFA91DE720D8E87A79A4071A829AB8 /* Stripe.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Stripe";
+				IBSC_MODULE = Stripe;
+				INFOPLIST_FILE = "Target Support Files/Stripe/ResourceBundle-Stripe-Stripe-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_NAME = Stripe;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 		582080F69AB25BEDAD089E66869DC30D /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 61871CC0A17CE93D4F02A5D7B03877BF /* Folly.xcconfig */;
@@ -21816,6 +21801,23 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		692204306D63763B35269BE2CD3E96A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A660F6E7E967B1F0E9155F6C830CE275 /* gRPC-C++.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
+				IBSC_MODULE = grpcpp;
+				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-gRPC-C++-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = gRPCCertificates;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -22225,22 +22227,6 @@
 			};
 			name = Release;
 		};
-		9A7B6D49BF9AB8E85BD939B0F53F4C7D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A660F6E7E967B1F0E9155F6C830CE275 /* gRPC-C++.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
-				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-gRPC-C++-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = gRPCCertificates;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 		9B4666021DFB2CDCFEC6DFE51E0B5003 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 841333F27FA397AD8AF30829ECD05C4C /* nanopb.xcconfig */;
@@ -22330,6 +22316,23 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9EC4D928BC9AEDBDCCB2CD06B2AD90A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A660F6E7E967B1F0E9155F6C830CE275 /* gRPC-C++.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/gRPC-C++";
+				IBSC_MODULE = grpcpp;
+				INFOPLIST_FILE = "Target Support Files/gRPC-C++/ResourceBundle-gRPCCertificates-gRPC-C++-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PRODUCT_NAME = gRPCCertificates;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
 		};
@@ -22449,22 +22452,6 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		C05CC6F4E696A9C42E90AACF4C4B92CC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 30FFA91DE720D8E87A79A4071A829AB8 /* Stripe.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Stripe";
-				INFOPLIST_FILE = "Target Support Files/Stripe/ResourceBundle-Stripe-Stripe-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				PRODUCT_NAME = Stripe;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
 		};
@@ -22726,6 +22713,23 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
+		};
+		E24CD8E4BEF619EB3B04CF1BFC36C471 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 30FFA91DE720D8E87A79A4071A829AB8 /* Stripe.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Stripe";
+				IBSC_MODULE = Stripe;
+				INFOPLIST_FILE = "Target Support Files/Stripe/ResourceBundle-Stripe-Stripe-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				PRODUCT_NAME = Stripe;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
 		};
 		E4528EC186719544F354C613761377CB /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -23080,8 +23084,8 @@
 		8A069DEE9EF9E78F9141426D9127D101 /* Build configuration list for PBXNativeTarget "gRPC-C++-gRPCCertificates" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				2C12F358F279AC76BFAB262B7E3BACB1 /* Debug */,
-				9A7B6D49BF9AB8E85BD939B0F53F4C7D /* Release */,
+				A9EC4D928BC9AEDBDCCB2CD06B2AD90A /* Debug */,
+				692204306D63763B35269BE2CD3E96A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -23251,8 +23255,8 @@
 		E2B0CAA9D19DBA8A24A5C0FE538BE4D7 /* Build configuration list for PBXNativeTarget "Stripe-Stripe" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C05CC6F4E696A9C42E90AACF4C4B92CC /* Debug */,
-				13F40D78314A4C7F8E3725EE87714F1C /* Release */,
+				E24CD8E4BEF619EB3B04CF1BFC36C471 /* Debug */,
+				5734D9CF93D3573E04DCECD0F89BDC8D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

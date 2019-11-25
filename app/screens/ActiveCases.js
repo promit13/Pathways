@@ -240,6 +240,7 @@ class ActiveCases extends React.Component {
             }}
           />
           {filteredArray.map(status => {
+            console.log(status, "status");
             return (
               <View>
                 <View
@@ -266,12 +267,13 @@ class ActiveCases extends React.Component {
                         textTransform: "uppercase"
                       }}
                     >
-                      {title}
+                      Test
                     </Text>
                   </View>
                 </View>
 
                 {activeCases.filter(caseDetails => {
+                  console.log(caseDetails);
                   return (
                     <BookingDetails
                       caseDetails={caseDetails}

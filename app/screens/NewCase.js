@@ -23,8 +23,16 @@ export default class NewCase extends React.Component {
     checkBoxChecked: false
   };
 
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: colors.accent
+    },
+    headerTintColor: "#fff"
+  };
+
   render() {
     const { checkBoxChecked } = this.state;
+
     return (
       <ScrollView>
         <View>
@@ -67,7 +75,8 @@ export default class NewCase extends React.Component {
                 .string()
                 .email()
                 .required("Please enter a safe email address"),
-              message: yup.string().required("Please enter messages/notes")
+              message: yup.string().required("Please enter messages/notes"),
+              checkbox: yup.boolean().required("Must accept conditions")
             })}
           >
             {props => (
@@ -162,7 +171,7 @@ export default class NewCase extends React.Component {
                 )}
                 <CheckBox
                   title="THE VICTIM HAS GIVEN CONSENT TO BE REFERRED"
-                  checked={checkBoxChecked}
+                  checked={props.values.checkbox}
                   containerStyle={{
                     marginTop: 20,
                     backgroundColor: "transparent",
