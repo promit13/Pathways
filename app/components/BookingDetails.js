@@ -1,20 +1,18 @@
 import React from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import { Avatar, Icon } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import colors from "../style";
 
-const BookingDetails = ({ user, booking, onPress, caseDetails }) => (
+const BookingDetails = ({ onPress, caseDetails }) => (
   <View>
     <Text>Test</Text>
     {/* <TouchableOpacity
       onPress={onPress}
       style={{
         backgroundColor: "white",
-
         display: "flex",
         flexDirection: "row",
         width: "100%",
-
         borderColor: colors.lightGrey,
         height: 50,
         borderWidth: 2,
@@ -32,10 +30,12 @@ const BookingDetails = ({ user, booking, onPress, caseDetails }) => (
             marginLeft: 18
           }}
         >
-          {caseDetails.Referral__r && caseDetails.Referral__r.Name}
+          {/* {caseDetails.Referral__r.Name} */}
+          Test
         </Text>
         <Text style={{ fontSize: 15, color: colors.grey, marginLeft: 18 }}>
-          {caseDetails.Referral__r && caseDetails.Referral__r.Date_of_Birth__c}
+          {/* {caseDetails.Referral__r.Date_of_Birth__c} */}
+          Test
         </Text>
       </View> */}
     {/* <Icon
