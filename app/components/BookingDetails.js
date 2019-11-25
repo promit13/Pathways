@@ -45,4 +45,5 @@ const BookingDetails = ({ onPress, caseDetails }) => (
     </TouchableOpacity>
   </View>
 );
+
 export default BookingDetails;
