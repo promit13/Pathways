@@ -17,10 +17,25 @@ import DateTimePicker from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { TextInputMask } from "react-native-masked-text";
+import ErrorMessage from "../components/Error";
 
 export default class NewCase extends React.Component {
   state = {
-    checkBoxChecked: false
+    checkBoxChecked: false,
+    showError: true,
+    errorMessage: ""
+  };
+
+  onContinue = values => {
+    console.log(values);
+    if (!this.state.checkBoxChecked) {
+      this.setState({
+        showError: true,
+        errorMessage: "Please check the consent from victim"
+      });
+      return;
+    }
+    this.props.navigation.navigate("Questions");
   };
 
   static navigationOptions = {
@@ -31,8 +46,7 @@ export default class NewCase extends React.Component {
   };
 
   render() {
-    const { checkBoxChecked } = this.state;
-
+    const { checkBoxChecked, showError, errorMessage } = this.state;
     return (
       <ScrollView>
         <View>
@@ -58,18 +72,27 @@ export default class NewCase extends React.Component {
             referral.
           </Text>
           <Formik
-            initialValues={{}}
+            initialValues={{
+              name: "",
+              dob: "",
+              phone: "",
+              safeContactNumber: "",
+              safeEmail: "",
+              message: ""
+            }}
             onSubmit={values => {
-              this.props.navigation.navigate("RepeatReferrals");
+              console.log(values);
+              this.onContinue(values);
+              // this.props.navigation.navigate("RepeatReferrals");
             }}
             validationSchema={yup.object().shape({
               name: yup
                 .string()
                 .required("Please enter the name of the victim"),
               dob: yup.string().required("Please enter a date of birth"),
-              phone: yup.string().required("Please enter a contact number"),
+              phone: yup.number().required("Please enter a contact number"),
               safeContactNumber: yup
-                .string()
+                .number()
                 .required("Please enter a safe contact number"),
               safeEmail: yup
                 .string()
@@ -79,24 +102,32 @@ export default class NewCase extends React.Component {
               checkbox: yup.boolean().required("Must accept conditions")
             })}
           >
-            {props => (
+            {({
+              values,
+              handleChange,
+              handleBlur,
+              errors,
+              setFieldTouched,
+              touched,
+              isValid,
+              handleSubmit
+            }) => (
               <View>
                 <TextInput
-                  onChangeText={props.handleChange("name")}
-                  onBlur={props.handleBlur("name")}
-                  value={props.values.name}
+                  onChangeText={handleChange("name")}
+                  onBlur={handleBlur("name")}
+                  value={values.name}
                   placeholder="NAME OF VICTIM"
                   placeholderTextColor={colors.darkGrey}
                   style={[
                     styles.container,
                     {
-                      borderBottomWidth:
-                        props.touched.name && props.errors.name ? 2 : 0
+                      borderBottomWidth: touched.name && errors.name ? 2 : 0
                     }
                   ]}
                 />
-                {props.touched.name && props.errors.name && (
-                  <Text style={styles.textErrorStyle}>{props.errors.name}</Text>
+                {touched.name && errors.name && (
+                  <Text style={styles.textErrorStyle}>{errors.name}</Text>
                 )}
                 <TextInputMask
                   type={"datetime"}
@@ -111,89 +142,79 @@ export default class NewCase extends React.Component {
                   //     dt: text
                   //   });
                   // }}
-                  onChangeText={props.handleChange("dob")}
-                  onBlur={props.handleBlur("dob")}
-                  value={props.values.dob}
+                  onChangeText={handleChange("dob")}
+                  onBlur={handleBlur("dob")}
+                  value={values.dob}
                   style={[
                     styles.container,
                     {
-                      borderBottomWidth:
-                        props.touched.dob && props.errors.dob ? 2 : 0
+                      borderBottomWidth: touched.dob && errors.dob ? 2 : 0
                     }
                   ]}
                 />
-                {props.touched.dob && props.errors.dob && (
-                  <Text style={styles.textErrorStyle}>{props.errors.dob}</Text>
+                {touched.dob && errors.dob && (
+                  <Text style={styles.textErrorStyle}>{errors.dob}</Text>
                 )}
                 <TextInput
-                  onChangeText={props.handleChange("phone")}
+                  onChangeText={handleChange("phone")}
                   keyboardType="phone-pad"
-                  onBlur={props.handleBlur("phone")}
-                  value={props.values.phone}
+                  onBlur={handleBlur("phone")}
+                  value={values.phone}
                   placeholder="VICTIM CONTACT NUMBER"
                   placeholderTextColor={colors.darkGrey}
                   style={[
                     styles.container,
                     {
-                      borderBottomWidth:
-                        props.touched.phone && props.errors.phone ? 2 : 0
+                      borderBottomWidth: touched.phone && errors.phone ? 2 : 0
                     }
                   ]}
                 />
-                {props.touched.phone && props.errors.phone && (
-                  <Text style={styles.textErrorStyle}>
-                    {props.errors.phone}
-                  </Text>
+                {touched.phone && errors.phone && (
+                  <Text style={styles.textErrorStyle}>{errors.phone}</Text>
                 )}
                 <TextInput
-                  onChangeText={props.handleChange("safeContactNumber")}
-                  onBlur={props.handleBlur("safeContactNumber")}
+                  onChangeText={handleChange("safeContactNumber")}
+                  onBlur={handleBlur("safeContactNumber")}
                   keyboardType="phone-pad"
-                  value={props.values.safeContactNumber}
+                  value={values.safeContactNumber}
                   placeholder="SAFE CONTACT NUMBER"
                   placeholderTextColor={colors.darkGrey}
                   style={[
                     styles.container,
                     {
                       borderBottomWidth:
-                        props.touched.safeContactNumber &&
-                        props.errors.safeContactNumber
+                        touched.safeContactNumber && errors.safeContactNumber
                           ? 2
                           : 0
                     }
                   ]}
                 />
-                {props.touched.safeContactNumber &&
-                  props.errors.safeContactNumber && (
-                    <Text style={styles.textErrorStyle}>
-                      {props.errors.safeContactNumber}
-                    </Text>
-                  )}
+                {touched.safeContactNumber && errors.safeContactNumber && (
+                  <Text style={styles.textErrorStyle}>
+                    {errors.safeContactNumber}
+                  </Text>
+                )}
                 <TextInput
-                  onChangeText={props.handleChange("safeEmail")}
-                  onBlur={props.handleBlur("safeEmail")}
-                  value={props.values.safeEmail}
+                  onChangeText={handleChange("safeEmail")}
+                  onBlur={handleBlur("safeEmail")}
+                  value={values.safeEmail}
                   placeholder="SAFE EMAIL ADDRESS"
                   placeholderTextColor={colors.darkGrey}
                   style={[
                     styles.container,
                     {
                       borderBottomWidth:
-                        props.touched.safeEmail && props.errors.safeEmail
-                          ? 2
-                          : 0
+                        touched.safeEmail && errors.safeEmail ? 2 : 0
                     }
                   ]}
                 />
-                {props.touched.safeEmail && props.errors.safeEmail && (
-                  <Text style={styles.textErrorStyle}>
-                    {props.errors.safeEmail}
-                  </Text>
+                {touched.safeEmail && errors.safeEmail && (
+                  <Text style={styles.textErrorStyle}>{errors.safeEmail}</Text>
                 )}
                 <TextInput
-                  onChangeText={props.handleChange("message")}
-                  onBlur={props.handleBlur("message")}
-                  value={props.values.message}
+                  onChangeText={handleChange("message")}
+                  onBlur={handleBlur("message")}
+                  value={values.message}
                   placeholder="MESSAGE/NOTES"
                   placeholderTextColor={colors.darkGrey}
                   style={[
@@ -202,10 +223,8 @@ export default class NewCase extends React.Component {
                   ]}
                   multiline="true"
                 />
-                {props.touched.message && props.errors.message && (
-                  <Text style={styles.textErrorStyle}>
-                    {props.errors.message}
-                  </Text>
+                {touched.message && errors.message && (
+                  <Text style={styles.textErrorStyle}>{errors.message}</Text>
                 )}
                 <CheckBox
                   title="THE VICTIM HAS GIVEN CONSENT TO BE REFERRED"
@@ -218,15 +237,21 @@ export default class NewCase extends React.Component {
                   }}
                   checkedColor={colors.accent}
                   onPress={() =>
-                    this.setState({ checkBoxChecked: !checkBoxChecked })
+                    this.setState({
+                      checkBoxChecked: !checkBoxChecked,
+                      showError: false,
+                      errorMessage: ""
+                    })
                   }
                 />
+                {showError && (
+                  <ErrorMessage errorMessage={errorMessage} marginLeft={40} />
+                )}
                 <TouchableOpacity
-                  onPress={
-                    () => this.props.navigation.navigate("Questions")
-                    // () => this.props.navigation.navigate("RepeatReferrals")
-                    // () => firebase.auth().signOut()
-                  }
+                  onPress={handleSubmit}
+                  // () => this.props.navigation.navigate("Questions")
+                  // () => this.props.navigation.navigate("RepeatReferrals")
+                  // () => firebase.auth().signOut()
                   style={{
                     marginHorizontal: 40,
                     marginTop: 20,
