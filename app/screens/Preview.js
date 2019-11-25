@@ -185,7 +185,7 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Completed referrals</Text>
+            <Text style={styles.listItemTextStyle}>Contact Made</Text>
             <Text style={styles.listItemCountStyle}>
               {completedCasesArray.length}
             </Text>
@@ -204,7 +204,7 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Injunction Served</Text>
+            <Text style={styles.listItemTextStyle}>Live</Text>
             <Text style={styles.listItemCountStyle}>
               {injunctionServedArray.length}
             </Text>
@@ -223,7 +223,7 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>On a critical pathway</Text>
+            <Text style={styles.listItemTextStyle}>Completed</Text>
             <Text style={styles.listItemCountStyle}>
               {criticalPathwayArray.length}
             </Text>
@@ -242,7 +242,7 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Cases fallen through</Text>
+            <Text style={styles.listItemTextStyle}>Closed</Text>
             <Text style={styles.listItemCountStyle}>
               {casesFallenArray.length}
             </Text>

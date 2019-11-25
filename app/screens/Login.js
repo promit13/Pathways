@@ -30,14 +30,14 @@ const getAccountApi = "http://localhost:8675/getAccount";
 const getCustomTokenApi = "http://localhost:8675/getCustomToken";
 
 // const text = [
-//   "Welcome to Pathway, please enter your activation code to verify your device. Your activation code can be found in your welcome email.",
+//   " to Pathway, please enter your activation code to verify your device. Your activation code can be found in your welcome email.",
 //   "If you do not have a welcome email please call 0800 1017 110. If you wish to apply to become a referrer please go to:",
 //   "Thank you, an authorisation code has been sent to your mobile number, please enter it below to complete your device activation.",
 //   "If you are having difficulties completing the authorisation please call 0800 1017 110."
 // ];
 
 const text = [
-  "Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
+  " Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
   "If you do not have a welcome email please call 0800 1017 110. If you wish to apply to become a referrer please go to:"
 ];
 

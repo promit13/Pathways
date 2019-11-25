@@ -48,6 +48,7 @@ const add = require("../assets/add.png");
 const search = require("../assets/search2.png");
 
 const HomeStack = createStackNavigator({
+  NewCase,
   Pathways,
   Preview,
   ActiveCases,
@@ -97,7 +98,6 @@ const RegisterMobile = createStackNavigator(
     }
   }
 );
-
 const RegisterPin = createStackNavigator(
   {
     PinRegistration
@@ -163,7 +163,7 @@ const SignedIn = createBottomTabNavigator(
     }),
     tabBarOptions: {
       header: null,
-      activeTintColor: "transparent",
+      activeTintColor: colors.accent,
       inactiveTintColor: "#fff",
       activeBackgroundColor: "transparent",
       inactiveBackgroundColor: "transparent",
@@ -199,8 +199,8 @@ HomeStack.navigationOptions = ({ navigation }) => {
 
 const MainStackNavigator = createStackNavigator(
   {
-    SignedOut,
     RegisterMobile,
+    SignedOut,
     RegisterPin,
     SignedIn,
     AuthLoadingScreen

@@ -38,6 +38,13 @@ export default class NewCase extends React.Component {
     this.props.navigation.navigate("Questions", { userDetails: values });
   };
 
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: colors.accent
+    },
+    headerTintColor: "#fff"
+  };
+
   render() {
     const { checkBoxChecked, showError, errorMessage } = this.state;
     return (
@@ -91,7 +98,8 @@ export default class NewCase extends React.Component {
                 .string()
                 .email()
                 .required("Please enter a safe email address"),
-              message: yup.string().required("Please enter messages/notes")
+              message: yup.string().required("Please enter messages/notes"),
+              checkbox: yup.boolean().required("Must accept conditions")
             })}
           >
             {({
@@ -220,7 +228,7 @@ export default class NewCase extends React.Component {
                 )}
                 <CheckBox
                   title="THE VICTIM HAS GIVEN CONSENT TO BE REFERRED"
-                  checked={checkBoxChecked}
+                  checked={props.values.checkbox}
                   containerStyle={{
                     marginTop: 20,
                     backgroundColor: "transparent",

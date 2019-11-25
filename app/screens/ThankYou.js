@@ -5,6 +5,13 @@ import colors from "../style";
 import { Formik } from "formik";
 
 export default class ThankYou extends React.Component {
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: colors.accent
+    },
+    headerTintColor: "#fff"
+  };
+
   render() {
     return (
       <ScrollView>
