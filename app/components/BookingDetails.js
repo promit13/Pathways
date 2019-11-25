@@ -29,12 +29,10 @@ const BookingDetails = ({ onPress, caseDetails }) => (
             marginLeft: 18
           }}
         >
-          {/* {caseDetails.Referral__r.Name} */}
-          Test
+          {caseDetails.Referral__r.Name}
         </Text>
         <Text style={{ fontSize: 15, color: colors.grey, marginLeft: 18 }}>
-          {/* {caseDetails.Referral__r.Date_of_Birth__c} */}
-          Test
+          {caseDetails.Referral__r.Date_of_Birth__c}
         </Text>
       </View>
       <Icon
@@ -46,4 +44,5 @@ const BookingDetails = ({ onPress, caseDetails }) => (
     </TouchableOpacity>
   </View>
 );
+
 export default BookingDetails;

@@ -175,138 +175,118 @@ class ActiveCases extends React.Component {
     if (loadScreen) return <LoadScreen text="Please wait" />;
     console.log(filteredArray);
     return (
-      <ScrollView>
+      <View
+        style={{
+          borderBottomWidth: 2,
+          borderBottomColor: "#F1F3F2",
+          borderTopWidth: 2,
+          borderTopColor: "#F1F3F2"
+        }}
+      >
+        <View style={{ marginBottom: -30 }}>
+          <SearchBarWrapper
+            onSearchChange={searchKey => {
+              this.setState({ searchKey });
+              console.log(searchKey);
+            }}
+            sevenDaysPress={() => {
+              this.setState({ checkDays: 7 });
+              this.buttonPress(0);
+            }}
+            thirtyDaysPress={() => {
+              this.setState({ checkDays: 30 });
+              this.buttonPress(1);
+            }}
+            sixtyDaysPress={() => {
+              this.setState({ checkDays: 60 });
+              this.buttonPress(2);
+            }}
+            ninetyDaysPress={() => {
+              this.setState({ checkDays: 90 });
+              this.buttonPress(3);
+            }}
+            allDaysPress={() => {
+              this.setState({ checkDays: null });
+              this.buttonPress(4);
+            }}
+            myReferralsPress={() => {
+              this.setState({ checkDays: null });
+              this.buttonPress(5);
+            }}
+            myConstabularyPress={() => {
+              this.setState({ checkDays: null });
+              this.buttonPress(6);
+            }}
+            nationalReferralsPress={() => {
+              this.setState({ checkDays: null });
+              this.buttonPress(7);
+            }}
+            sevenDays={sevenDays}
+            thirtyDays={thirtyDays}
+            sixtyDays={sixtyDays}
+            ninetyDays={ninetyDays}
+            allDays={allDays}
+            myReferrals={myReferrals}
+            myConstabulary={myConstabulary}
+            nationalReferrals={nationalReferrals}
+          />
+        </View>
         <View
           style={{
-            borderBottomWidth: 2,
-            borderBottomColor: "#F1F3F2",
-            borderTopWidth: 2,
-            borderTopColor: "#F1F3F2"
+            flexDirection: "row",
+            height: 50,
+            width: "80%",
+            justifyContent: "center",
+            display: "flex"
           }}
-        >
-          <View style={{ marginBottom: -30 }}>
-            <SearchBarWrapper
-              onSearchChange={searchKey => {
-                this.setState({ searchKey });
-                console.log(searchKey);
-              }}
-              sevenDaysPress={() => {
-                this.setState({ checkDays: 7 });
-                this.buttonPress(0);
-              }}
-              thirtyDaysPress={() => {
-                this.setState({ checkDays: 30 });
-                this.buttonPress(1);
-              }}
-              sixtyDaysPress={() => {
-                this.setState({ checkDays: 60 });
-                this.buttonPress(2);
-              }}
-              ninetyDaysPress={() => {
-                this.setState({ checkDays: 90 });
-                this.buttonPress(3);
-              }}
-              allDaysPress={() => {
-                this.setState({ checkDays: null });
-                this.buttonPress(4);
-              }}
-              myReferralsPress={() => {
-                this.setState({ checkDays: null });
-                this.buttonPress(5);
-              }}
-              myConstabularyPress={() => {
-                this.setState({ checkDays: null });
-                this.buttonPress(6);
-              }}
-              nationalReferralsPress={() => {
-                this.setState({ checkDays: null });
-                this.buttonPress(7);
-              }}
-              sevenDays={sevenDays}
-              thirtyDays={thirtyDays}
-              sixtyDays={sixtyDays}
-              ninetyDays={ninetyDays}
-              allDays={allDays}
-              myReferrals={myReferrals}
-              myConstabulary={myConstabulary}
-              nationalReferrals={nationalReferrals}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              height: 50,
-              width: "80%",
-              justifyContent: "center",
-              display: "flex"
-            }}
-          />
-          {filteredArray.map(status => {
-            console.log(status);
-            console.log(Object.keys(status)[0]);
-            return (
-              <View>
+        />
+        {filteredArray.map(status => {
+          return (
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  height: 35,
+                  borderTopWidth: 2,
+                  borderTopColor: colors.lightGrey
+                }}
+              >
                 <View
                   style={{
-                    flexDirection: "row",
-                    height: 35,
-                    borderTopWidth: 2,
-                    borderTopColor: colors.lightGrey
+                    backgroundColor: colors.grey,
+                    width: "100%"
                   }}
                 >
-                  <View
+                  <Text
                     style={{
-                      backgroundColor: colors.grey,
-                      width: "100%"
+                      fontSize: 20,
+                      color: colors.darkGrey,
+                      marginTop: 5,
+                      color: "white",
+                      marginLeft: 25,
+                      textTransform: "uppercase"
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        color: colors.darkGrey,
-                        marginTop: 5,
-                        color: "white",
-                        marginLeft: 25,
-                        textTransform: "uppercase"
-                      }}
-                    >
-                      {Object.keys(status)[0]}
-                    </Text>
-                  </View>
+                    {Object.keys(status)}
+                  </Text>
                 </View>
-                {activeCases.filter(caseDetails => {
-                  {
-                    if (caseDetails.Referral__r) {
-                      return (
-                        <BookingDetails
-                          caseDetails={caseDetails}
-                          onPress={() =>
-                            this.props.navigation.navigate("Case", {
-                              caseDetails
-                            })
-                          }
-                        />
-                      );
-                    }
-                  }
-                  {
-                    /* return (
-                    <BookingDetails
-                      caseDetails={caseDetails}
-                      onPress={() =>
-                        this.props.navigation.navigate("Case", {
-                          caseDetails
-                        })
-                      }
-                    />
-                  ); */
-                  }
-                })}
               </View>
-            );
-          })}
-        </View>
-      </ScrollView>
+              {Object.values(status)[0].map(caseDetails => {
+                return (
+                  <BookingDetails
+                    caseDetails={caseDetails}
+                    onPress={() =>
+                      this.props.navigation.navigate("Case", {
+                        caseDetails
+                      })
+                    }
+                  />
+                );
+              })}
+            </View>
+          );
+        })}
+      </View>
     );
   }
 }
