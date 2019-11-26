@@ -137,7 +137,7 @@ export default class VerifyMobile extends Component {
         enabled
         style={{ flex: 1, padding: 40, marginTop: 40 }}
       >
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Formik
             initialValues={{ code: mobileNumber }}
             onSubmit={values => {

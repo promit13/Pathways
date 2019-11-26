@@ -68,8 +68,8 @@ export default class Pathways extends Component {
               style={{
                 color: colors.darkGrey,
                 fontSize: 20,
-                marginHorizontal: 60,
-                marginBottom: 30
+                marginBottom: 30,
+                paddingHorizontal: 20
               }}
             >
               Welcome to Pathway, please select the recovery pathway you wish to
@@ -78,26 +78,24 @@ export default class Pathways extends Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("Preview")}
               style={{
-                height: 80,
+                paddingVertical: 20,
+                justifyContent: "space-between",
                 display: "flex",
                 flexDirection: "row",
                 borderWidth: 2,
                 borderColor: colors.grey,
-                alignSelf: "center",
                 borderBottomWidth: 2,
                 borderLeftWidth: 0,
-                borderRightWidth: 0
+                borderRightWidth: 0,
+                paddingHorizontal: 30
               }}
             >
               <Text
                 style={{
                   fontSize: 20,
                   color: colors.darkGrey,
-                  flex: 4,
                   display: "flex",
-                  justifyContent: "center",
-                  marginLeft: 60,
-                  marginTop: 24
+                  justifyContent: "center"
                 }}
               >
                 Domestic Abuse Pathway
@@ -107,7 +105,6 @@ export default class Pathways extends Component {
                 resizeMode="contain"
                 style={{
                   display: "flex",
-                  flex: 1,
                   alignSelf: "center",
                   height: 25
                 }}

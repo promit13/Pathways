@@ -20,9 +20,7 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    marginHorizontal: 10,
-    marginTop: 10,
-    marginBottom: 10
+    marginHorizontal: 10
   }
 };
 export default class SearchBarWrapper extends Component {

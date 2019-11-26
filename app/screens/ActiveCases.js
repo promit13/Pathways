@@ -175,15 +175,15 @@ class ActiveCases extends React.Component {
     if (loadScreen) return <LoadScreen text="Please wait" />;
     console.log(filteredArray);
     return (
-      <View
-        style={{
-          borderBottomWidth: 2,
-          borderBottomColor: "#F1F3F2",
-          borderTopWidth: 2,
-          borderTopColor: "#F1F3F2"
-        }}
-      >
-        <View style={{ marginBottom: -30 }}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View
+          style={{
+            borderBottomWidth: 2,
+            borderBottomColor: "#F1F3F2",
+            borderTopWidth: 2,
+            borderTopColor: "#F1F3F2"
+          }}
+        >
           <SearchBarWrapper
             onSearchChange={searchKey => {
               this.setState({ searchKey });
@@ -230,63 +230,59 @@ class ActiveCases extends React.Component {
             myConstabulary={myConstabulary}
             nationalReferrals={nationalReferrals}
           />
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            height: 50,
-            width: "80%",
-            justifyContent: "center",
-            display: "flex"
-          }}
-        />
-        {filteredArray.map(status => {
-          return (
-            <View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  height: 35,
-                  borderTopWidth: 2,
-                  borderTopColor: colors.lightGrey
-                }}
-              >
+          <View
+            style={{
+              height: 20
+            }}
+          />
+          {filteredArray.map(status => {
+            return (
+              <View>
                 <View
                   style={{
-                    backgroundColor: colors.grey,
-                    width: "100%"
+                    flexDirection: "row",
+                    height: 35,
+                    borderTopWidth: 2,
+                    borderTopColor: colors.lightGrey
                   }}
                 >
-                  <Text
+                  <View
                     style={{
-                      fontSize: 20,
-                      color: colors.darkGrey,
-                      marginTop: 5,
-                      color: "white",
-                      marginLeft: 25,
-                      textTransform: "uppercase"
+                      backgroundColor: colors.grey,
+                      width: "100%"
                     }}
                   >
-                    {Object.keys(status)}
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: colors.darkGrey,
+                        marginTop: 5,
+                        color: "white",
+                        marginLeft: 25,
+                        textTransform: "uppercase"
+                      }}
+                    >
+                      {Object.keys(status)}
+                    </Text>
+                  </View>
                 </View>
+                {Object.values(status)[0].map(caseDetails => {
+                  return (
+                    <BookingDetails
+                      caseDetails={caseDetails}
+                      onPress={() =>
+                        this.props.navigation.navigate("Case", {
+                          caseDetails
+                        })
+                      }
+                    />
+                  );
+                })}
               </View>
-              {Object.values(status)[0].map(caseDetails => {
-                return (
-                  <BookingDetails
-                    caseDetails={caseDetails}
-                    onPress={() =>
-                      this.props.navigation.navigate("Case", {
-                        caseDetails
-                      })
-                    }
-                  />
-                );
-              })}
-            </View>
-          );
-        })}
-      </View>
+            );
+          })}
+        </View>
+      </ScrollView>
     );
   }
 }
