@@ -34,7 +34,7 @@ export default class CompletedReferrals extends React.Component {
               marginLeft: 25
             }}
           >
-            COMPLETED REFERRALS
+            CONTACT MADE
           </Text>
         </View>
       </ScrollView>

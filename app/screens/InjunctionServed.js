@@ -63,7 +63,7 @@ export default class InjunctionServed extends React.Component {
               marginLeft: 25
             }}
           >
-            INJUNCTION SERVED
+            LIVE
           </Text>
         </View>
       </ScrollView>

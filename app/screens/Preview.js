@@ -175,7 +175,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: completedCasesArray,
-                arrayTitle: "Completed"
+                arrayTitle: "CONTACT MADE"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -194,7 +194,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: injunctionServedArray,
-                arrayTitle: "Injunction Served"
+                arrayTitle: "LIVE"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -213,7 +213,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: criticalPathwayArray,
-                arrayTitle: "Critical Pathway"
+                arrayTitle: "COMPLETED"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -232,7 +232,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: casesFallenArray,
-                arrayTitle: "Cases Fallen"
+                arrayTitle: "CLOSED"
               });
             }}
             style={styles.listItemContainerStyle}

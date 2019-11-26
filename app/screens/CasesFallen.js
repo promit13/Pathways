@@ -34,7 +34,7 @@ export default class CasesFallen extends React.Component {
               marginLeft: 25
             }}
           >
-            CASES FALLEN THROUGH
+            CLOSED
           </Text>
         </View>
       </ScrollView>

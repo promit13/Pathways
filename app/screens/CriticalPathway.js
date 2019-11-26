@@ -34,7 +34,7 @@ export default class CriticalPathway extends React.Component {
               marginLeft: 25
             }}
           >
-            ON A CRITICAL PATHWAY
+            COMPLETED
           </Text>
         </View>
       </ScrollView>
