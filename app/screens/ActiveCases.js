@@ -1,25 +1,9 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ImageBackground,
-  Image,
-  ScrollView,
-  Switch,
-  Alert
-} from "react-native";
-import { Button, Input, Icon, Avatar, Rating } from "react-native-elements";
-import cases from "../../data/cases";
-import DateTimePicker from "react-native-modal-datetime-picker";
+import { View, Text, ScrollView, SafeAreaView } from "react-native";
 import moment from "moment";
 import { withNavigation } from "react-navigation";
-import logo from "../../assets/logo-shadow.png";
-import UserDetails from "../components/UserDetails";
 import colors from "../style";
 import axios from "axios";
-import { Dropdown } from "react-native-material-dropdown";
 import BookingDetails from "../components/BookingDetails";
 import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
@@ -175,15 +159,16 @@ class ActiveCases extends React.Component {
     if (loadScreen) return <LoadScreen text="Please wait" />;
     console.log(filteredArray);
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            borderBottomWidth: 2,
-            borderBottomColor: "#F1F3F2",
-            borderTopWidth: 2,
-            borderTopColor: "#F1F3F2"
-          }}
-        >
+      <SafeAreaView
+        forceInset={{ bottom: "always" }}
+        style={{
+          borderBottomWidth: 2,
+          borderBottomColor: "#F1F3F2",
+          borderTopWidth: 2,
+          borderTopColor: "#F1F3F2"
+        }}
+      >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <SearchBarWrapper
             onSearchChange={searchKey => {
               this.setState({ searchKey });
@@ -281,8 +266,8 @@ class ActiveCases extends React.Component {
               </View>
             );
           })}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }

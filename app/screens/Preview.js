@@ -1,8 +1,35 @@
 import React from "react";
-import { Image, Text, View, ScrollView, TouchableOpacity } from "react-native";
+import {
+  Image,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  SafeAreaView
+} from "react-native";
 import axios from "axios";
+import { Icon } from "react-native-elements";
 import colors from "../style";
 import LoadScreen from "../components/LoadScreen";
+
+const { width, height } = Dimensions.get("window");
+
+const itemListName = [
+  "Active Cases",
+  "Contact Made",
+  "Live",
+  "Completed",
+  "Closed"
+];
+
+const imageList = [
+  "../../assets/user.png",
+  "../../assets/tick.png",
+  "../../assets/injunction.png",
+  "../../assets/logo-circle.png",
+  "../../assets/cross.png"
+];
 
 const styles = {
   listItemContainerStyle: {
@@ -11,7 +38,7 @@ const styles = {
     alignContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    height: 80,
+    paddingVertical: 10,
     borderColor: colors.grey,
     borderWidth: 2,
     borderBottomWidth: 0,
@@ -100,8 +127,11 @@ export default class Profile extends React.Component {
     } = this.state;
     if (loadScreen) return <LoadScreen text="Please wait" />;
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ flex: 1, marginTop: 80 }}>
+      <SafeAreaView
+        forceInset={{ bottom: "always", top: "never" }}
+        style={{ flex: 1, marginTop: 80 }}
+      >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Image
             source={require("../../assets/path-logo.png")}
             style={{
@@ -114,7 +144,7 @@ export default class Profile extends React.Component {
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate("NewCase")}
             style={{
-              height: 60,
+              width: width - 40,
               display: "flex",
               flexDirection: "row",
               borderWidth: 2,
@@ -122,24 +152,23 @@ export default class Profile extends React.Component {
               alignSelf: "center",
               marginBottom: 30,
               marginHorizontal: 20,
-              alignContent: "center",
-              justifyContent: "center"
+              justifyContent: "space-between",
+              paddingVertical: 10,
+              paddingHorizontal: 20,
+              alignItems: "center"
             }}
           >
             <Text
               style={{
                 fontSize: 20,
                 color: colors.darkGrey,
-                flex: 4,
                 display: "flex",
-                marginTop: 16,
-                justifyContent: "center",
-                marginLeft: 20
+                justifyContent: "center"
               }}
             >
               Start a new referral
             </Text>
-            <Image
+            {/* <Image
               source={require("../../assets/plus.png")}
               resizeMode="contain"
               style={{
@@ -149,7 +178,8 @@ export default class Profile extends React.Component {
                 height: 25,
                 width: 25
               }}
-            />
+            /> */}
+            <Icon name="plus" type="entypo" color={colors.accent} size={40} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -174,8 +204,8 @@ export default class Profile extends React.Component {
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
-                casesArray: completedCasesArray,
-                arrayTitle: "Completed"
+                casesArray: criticalPathwayArray,
+                arrayTitle: "Contact Made"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -187,14 +217,14 @@ export default class Profile extends React.Component {
             />
             <Text style={styles.listItemTextStyle}>Contact Made</Text>
             <Text style={styles.listItemCountStyle}>
-              {completedCasesArray.length}
+              {criticalPathwayArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: injunctionServedArray,
-                arrayTitle: "Injunction Served"
+                arrayTitle: "Live"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -212,8 +242,8 @@ export default class Profile extends React.Component {
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
-                casesArray: criticalPathwayArray,
-                arrayTitle: "Critical Pathway"
+                casesArray: completedCasesArray,
+                arrayTitle: "Completed"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -225,14 +255,14 @@ export default class Profile extends React.Component {
             />
             <Text style={styles.listItemTextStyle}>Completed</Text>
             <Text style={styles.listItemCountStyle}>
-              {criticalPathwayArray.length}
+              {completedCasesArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: casesFallenArray,
-                arrayTitle: "Cases Fallen"
+                arrayTitle: "Closed"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -247,8 +277,8 @@ export default class Profile extends React.Component {
               {casesFallenArray.length}
             </Text>
           </TouchableOpacity>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
