@@ -48,7 +48,6 @@ const add = require("../assets/add.png");
 const search = require("../assets/search2.png");
 
 const HomeStack = createStackNavigator({
-  NewCase,
   Pathways,
   Preview,
   ActiveCases,
@@ -129,8 +128,7 @@ const SignedIn = createBottomTabNavigator(
               style={{
                 height: moderateScale(30),
                 width: moderateScale(30),
-
-                color: "red"
+                tintColor
               }}
             />
           );
@@ -142,7 +140,7 @@ const SignedIn = createBottomTabNavigator(
               style={{
                 height: moderateScale(30),
                 width: moderateScale(30),
-                color: "red"
+                tintColor
               }}
             />
           );
@@ -154,7 +152,7 @@ const SignedIn = createBottomTabNavigator(
               style={{
                 height: moderateScale(30),
                 width: moderateScale(30),
-                color: "red"
+                tintColor
               }}
             />
           );
@@ -164,7 +162,7 @@ const SignedIn = createBottomTabNavigator(
     tabBarOptions: {
       header: null,
       activeTintColor: colors.accent,
-      inactiveTintColor: "#fff",
+      inactiveTintColor: colors.grey,
       activeBackgroundColor: "transparent",
       inactiveBackgroundColor: "transparent",
       style: {
