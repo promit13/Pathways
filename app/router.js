@@ -48,9 +48,9 @@ const add = require("../assets/add.png");
 const search = require("../assets/search2.png");
 
 const HomeStack = createStackNavigator({
-  NewCase,
   Pathways,
   Preview,
+  NewCase,
   ActiveCases,
   ProfileUpdate,
   CriticalPathway,
@@ -170,8 +170,9 @@ const SignedIn = createBottomTabNavigator(
       style: {
         height: 80,
         backgroundColor: "colors.grey",
-        paddingVertical: 5
-      }, // set to 65 for ios
+        paddingVertical: 5,
+        paddingHorizontal: 50
+      },
       tabStyle: {
         flexDirection: "column",
         alignItems: "center",

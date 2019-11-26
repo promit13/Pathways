@@ -228,7 +228,7 @@ export default class NewCase extends React.Component {
                 )}
                 <CheckBox
                   title="THE VICTIM HAS GIVEN CONSENT TO BE REFERRED"
-                  checked={props.values.checkbox}
+                  checked={values.checkbox}
                   containerStyle={{
                     marginTop: 20,
                     backgroundColor: "transparent",
