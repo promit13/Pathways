@@ -1,19 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
-  ImageBackground,
+  SafeAreaView,
   ScrollView,
-  FlatList,
   Image,
   StyleSheet
 } from "react-native";
-import { Avatar, Button, Input, Icon, CheckBox } from "react-native-elements";
-import firebase from "react-native-firebase";
+import { Button, CheckBox } from "react-native-elements";
 import colors from "../style";
-import DateTimePicker from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { TextInputMask } from "react-native-masked-text";
@@ -47,9 +43,10 @@ export default class NewCase extends React.Component {
 
   render() {
     const { checkBoxChecked, showError, errorMessage } = this.state;
+    console.log(checkBoxChecked);
     return (
-      <ScrollView>
-        <View>
+      <SafeAreaView>
+        <ScrollView>
           <Image
             source={require("../../assets/path-logo.png")}
             style={{
@@ -83,7 +80,7 @@ export default class NewCase extends React.Component {
             onSubmit={values => {
               console.log(values);
               this.onContinue(values);
-              // this.props.navigation.navigate("RepeatReferrals");
+              // this.props.navigation.navigate("Questions");
             }}
             validationSchema={yup.object().shape({
               name: yup
@@ -98,8 +95,8 @@ export default class NewCase extends React.Component {
                 .string()
                 .email()
                 .required("Please enter a safe email address"),
-              message: yup.string().required("Please enter messages/notes"),
-              checkbox: yup.boolean().required("Must accept conditions")
+              message: yup.string().required("Please enter messages/notes")
+              // checkbox: yup.boolean().required("Must accept conditions")
             })}
           >
             {({
@@ -248,35 +245,22 @@ export default class NewCase extends React.Component {
                 {showError && (
                   <ErrorMessage errorMessage={errorMessage} marginLeft={40} />
                 )}
-                <TouchableOpacity
+                <Button
                   onPress={handleSubmit}
-                  // () => this.props.navigation.navigate("Questions")
-                  // () => this.props.navigation.navigate("RepeatReferrals")
-                  // () => firebase.auth().signOut()
-                  style={{
+                  title="Contiue"
+                  buttonStyle={{
                     marginHorizontal: 40,
                     marginTop: 20,
                     color: "white",
                     height: 45,
                     backgroundColor: colors.accent
                   }}
-                >
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      marginTop: 12,
-                      color: "white",
-                      fontSize: 17
-                    }}
-                  >
-                    Continue
-                  </Text>
-                </TouchableOpacity>
+                />
               </View>
             )}
           </Formik>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
