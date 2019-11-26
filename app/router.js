@@ -134,9 +134,9 @@ const SignedIn = createBottomTabNavigator(
             // />
             <View
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 40 / 2,
+                width: 30,
+                height: 30,
+                borderRadius: 30 / 2,
                 borderWidth: 1,
                 borderColor: focused ? colors.accent : colors.grey,
                 backgroundColor: "white",
@@ -145,6 +145,7 @@ const SignedIn = createBottomTabNavigator(
             >
               <Icon
                 name="home"
+                size={20}
                 type="entypo"
                 color={focused ? colors.accent : colors.grey}
               />
@@ -155,9 +156,9 @@ const SignedIn = createBottomTabNavigator(
           return (
             <View
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 40 / 2,
+                width: 30,
+                height: 30,
+                borderRadius: 30 / 2,
                 borderWidth: 1,
                 borderColor: focused ? colors.accent : colors.grey,
                 backgroundColor: "white",
@@ -166,6 +167,7 @@ const SignedIn = createBottomTabNavigator(
             >
               <Icon
                 name="plus"
+                size={20}
                 type="entypo"
                 color={focused ? colors.accent : colors.grey}
               />
@@ -176,9 +178,9 @@ const SignedIn = createBottomTabNavigator(
           return (
             <View
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 40 / 2,
+                width: 30,
+                height: 30,
+                borderRadius: 30 / 2,
                 borderWidth: 1,
                 borderColor: focused ? colors.accent : colors.grey,
                 backgroundColor: "white",
@@ -187,6 +189,7 @@ const SignedIn = createBottomTabNavigator(
             >
               <Icon
                 name="search"
+                size={20}
                 type="evilicon"
                 color={focused ? colors.accent : colors.grey}
               />
@@ -197,8 +200,8 @@ const SignedIn = createBottomTabNavigator(
     }),
     tabBarOptions: {
       header: null,
-      activeTintColor: colors.accent,
-      inactiveTintColor: colors.grey,
+      activeTintColor: "transparent",
+      inactiveTintColor: "transparent",
       activeBackgroundColor: "transparent",
       inactiveBackgroundColor: "transparent",
       style: {
