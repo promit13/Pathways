@@ -123,38 +123,73 @@ const SignedIn = createBottomTabNavigator(
         const { routeName } = navigation.state;
         if (routeName === "Home") {
           return (
-            <Image
-              source={home}
+            // <Image
+            //   source={home}
+            //   style={{
+            //     height: moderateScale(30),
+            //     width: moderateScale(30),
+            //     tintColor
+            //   }}
+            // />
+            <View
               style={{
-                height: moderateScale(30),
-                width: moderateScale(30),
-                tintColor
+                width: 40,
+                height: 40,
+                borderRadius: 40 / 2,
+                borderWidth: 1,
+                borderColor: focused ? colors.accent : colors.grey,
+                backgroundColor: "white",
+                justifyContent: "center"
               }}
-            />
+            >
+              <Icon
+                name="home"
+                type="entypo"
+                color={focused ? colors.accent : colors.grey}
+              />
+            </View>
           );
         }
         if (routeName === "Add") {
           return (
-            <Image
-              source={add}
+            <View
               style={{
-                height: moderateScale(30),
-                width: moderateScale(30),
-                tintColor
+                width: 40,
+                height: 40,
+                borderRadius: 40 / 2,
+                borderWidth: 1,
+                borderColor: focused ? colors.accent : colors.grey,
+                backgroundColor: "white",
+                justifyContent: "center"
               }}
-            />
+            >
+              <Icon
+                name="plus"
+                type="entypo"
+                color={focused ? colors.accent : colors.grey}
+              />
+            </View>
           );
         }
         if (routeName === "Search") {
           return (
-            <Image
-              source={search}
+            <View
               style={{
-                height: moderateScale(30),
-                width: moderateScale(30),
-                tintColor
+                width: 40,
+                height: 40,
+                borderRadius: 40 / 2,
+                borderWidth: 1,
+                borderColor: focused ? colors.accent : colors.grey,
+                backgroundColor: "white",
+                justifyContent: "center"
               }}
-            />
+            >
+              <Icon
+                name="search"
+                type="evilicon"
+                color={focused ? colors.accent : colors.grey}
+              />
+            </View>
           );
         }
       }
