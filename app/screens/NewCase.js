@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   SafeAreaView,
+  AsyncStorage,
   ScrollView,
   Image,
   StyleSheet
@@ -23,10 +24,6 @@ export default class NewCase extends React.Component {
     showError: true,
     errorMessage: ""
   };
-
-  componentDidMount() {
-    console.log(new Date());
-  }
 
   onContinue = values => {
     console.log(values);
@@ -246,8 +243,8 @@ export default class NewCase extends React.Component {
                   <ErrorMessage errorMessage={errorMessage} marginLeft={40} />
                 )}
                 <Button
-                  // onPress={handleSubmit}
-                  onPress={() => this.onContinue()}
+                  onPress={handleSubmit}
+                  // onPress={() => this.onContinue()}
                   // onPress={() => firebase.auth().signOut()}
                   title="Contiue"
                   buttonStyle={{
@@ -274,21 +271,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     borderColor: colors.darkGrey,
     width: "80%",
-    alignSelf: "center",
-    paddingLeft: 20
-  },
-  notes: {
-    height: 120,
-    borderWidth: 2,
-    borderColor: colors.darkGrey,
-    width: "80%",
-    alignSelf: "center",
-    paddingTop: 10,
-    textAlign: "left",
-    paddingLeft: 20
+    fontSize: 16,
+    padding: 10,
+    alignSelf: "center"
   },
   textErrorStyle: {
-    fontSize: 10,
+    fontSize: 12,
     color: "red",
     marginLeft: 45
   }

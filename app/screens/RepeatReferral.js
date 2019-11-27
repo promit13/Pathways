@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import axios from "axios";
 import colors from "../style";
+import { ModalLoading } from "../components/LoadScreen";
 
 const createReferralApi = "http://localhost:8675/createReferral";
 const createTriageApi = "http://localhost:8675/createTriage";
@@ -28,37 +29,28 @@ export default class RepeatReferrals extends React.Component {
     headerTintColor: "#fff"
   };
 
+  state = {
+    loadscreen: false
+  };
+
   createTriageAndReferral = check => {
-    const { userDetails, referralId } = this.props.navigation.state.params;
+    this.setState({ loadscreen: true });
+    const { userDetails } = this.props.navigation.state.params;
     console.log(userDetails);
     this.setState({ loadscreen: true });
     const api = check ? createTriageApi : createReferralApi;
     console.log(api);
     axios
-      .post(api, {
-        name: "Promit",
-        dob: "2019-10-30",
-        phone: "07521949880",
-        safeContactNumber: "07521949880",
-        safeEmail: "test@test.com",
-        message: "This is test message",
-        status: "new",
-        dateOfInstruction: "2019-10-30",
-        referralSource: "App Referral",
-        referrerContactName: "0034J000009BhuzQAC",
-        referralId,
-        referrerOrganisation: "0014J00000Bavt9QAB",
-        recentIncident: "Yes",
-        pastIncident: "No",
-        bailCondition: "Yes",
-        protectiveInjunction: "Yes"
-      })
+      .post(api, userDetails)
       .then(res => {
         console.log(res);
         this.setState({ loadscreen: false });
         this.props.navigation.navigate("ThankYou");
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.setState({ loadscreen: false });
+        console.log(err);
+      });
   };
 
   render() {
@@ -89,6 +81,7 @@ export default class RepeatReferrals extends React.Component {
         >
           <Text style={styles.textStyle}>NO - THIS IS NOT THE SAME VICTIM</Text>
         </TouchableOpacity>
+        {this.state.loadscreen && <ModalLoading text="Please wait" />}
       </ScrollView>
     );
   }

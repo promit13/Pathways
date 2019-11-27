@@ -139,7 +139,7 @@ export default class VerifyMobile extends Component {
       >
         <ScrollView showsVerticalScrollIndicator={false}>
           <Formik
-            initialValues={{ code: `+44${mobileNumber}` }}
+            initialValues={{ code: mobileNumber }}
             onSubmit={values => {
               this.registerMobile(values);
             }}

@@ -4,10 +4,12 @@ import {
   ScrollView,
   View,
   TouchableOpacity,
+  AsyncStorage,
   Image
 } from "react-native";
 import { Text } from "react-native-elements";
 import axios from "axios";
+import moment from "moment";
 import RNPickerSelect from "react-native-picker-select";
 import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
@@ -64,92 +66,104 @@ export default class Questions extends React.Component {
     recentAbuse: null,
     pastAbuse: null,
     bailCondition: null,
-    requireInjunction: null
+    requireInjunction: null,
+    organisationId: "",
+    userId: ""
   };
 
-  createTriageAndReferral = () => {
+  componentDidMount = async () => {
+    const contactData = await AsyncStorage.getItem("userDetails");
+    const jsonObjectData = JSON.parse(contactData);
+    const { AccountId, Id } = jsonObjectData;
+    this.setState({ organisationId: AccountId, userId: Id });
+  };
+
+  createTriageAndReferral = details => {
     axios
-      .post(createReferralApi, {
-        name: "Pro",
-        dob: "2019-10-30",
-        phone: "07521949880",
-        safeContactNumber: "07521949880",
-        safeEmail: "test@test.com",
-        message: "This is test message",
-        status: "new",
-        dateOfInstruction: "2019-10-30",
-        referralSource: "App Referral",
-        referrerContactName: "0034J000009BhuzQAC",
-        referrerOrganisation: "0014J00000Bavt9QAB",
-        recentIncident: "Yes",
-        pastIncident: "No",
-        bailCondition: "Yes",
-        protectiveInjunction: "Yes"
-      })
+      .post(createReferralApi, details)
       .then(res => {
         console.log(res);
         this.setState({ loadscreen: false });
         this.props.navigation.navigate("ThankYou");
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.setState({ loadscreen: false });
+        console.log(err);
+      });
   };
 
   searchAccountAndReferral = () => {
     const { userDetails } = this.props.navigation.state.params;
     console.log(userDetails);
     this.setState({ loadscreen: true });
+    const {
+      recentAbuse,
+      pastAbuse,
+      bailCondition,
+      requireInjunction,
+      organisationId,
+      userId
+    } = this.state;
+    if (
+      recentAbuse === null ||
+      pastAbuse === null ||
+      bailCondition === null ||
+      requireInjunction === null
+    ) {
+      console.log("check");
+      return this.setState({
+        errorMessage: "Please answer all the question above",
+        errorMessageVisible: true,
+        loadscreen: false
+      });
+    }
+    const date = new Date();
+    const formattedDate = moment(date).format("YYYY-MM-DD");
+    console.log(formattedDate);
+    const {
+      name,
+      dob,
+      phone,
+      safeContactNumber,
+      safeEmail,
+      message
+    } = userDetails;
+    const details = {
+      name,
+      dob,
+      phone,
+      safeContactNumber,
+      safeEmail,
+      message,
+      status: "New",
+      dateOfInstruction: formattedDate,
+      referralSource: "App Referral",
+      referrerContactName: userId,
+      referrerOrganisation: organisationId,
+      recentIncident: recentAbuse,
+      pastIncident: pastAbuse,
+      bailCondition,
+      protectiveInjunction: requireInjunction
+    };
     axios
-      .post(getAccountApi, {
-        name: "Pro",
-        dob: "2019-10-30",
-        phone: "07521949880",
-        safeContactNumber: "07521949880",
-        safeEmail: "test@test.com",
-        message: "This is test message",
-        status: "new",
-        dateOfInstruction: "2019-10-30",
-        referralSource: "App Referral",
-        referrerContactName: "0034J000009BhuzQAC",
-        referrerOrganisation: "0014J00000Bavt9QAB",
-        recentIncident: "Yes",
-        pastIncident: "No",
-        bailCondition: "Yes",
-        protectiveInjunction: "Yes"
-      })
+      .post(getAccountApi, details)
       .then(res => {
-        this.setState({ loadscreen: false });
         console.log(res);
         console.log(res.data.length);
         if (res.data.length > 0) {
+          this.setState({ loadscreen: false });
           const referralId = res.data[0].Id;
           this.props.navigation.navigate("RepeatReferrals", {
-            userDetails,
-            referralId
+            userDetails: { ...details, referralId }
           });
         } else {
-          this.createTriageAndReferral();
+          this.createTriageAndReferral(details);
         }
       })
-      .catch(err => console.log(err));
-    // const {
-    //   recentAbuse,
-    //   pastAbuse,
-    //   bailCondition,
-    //   requireInjunction
-    // } = this.state;
-    // if (
-    //   recentAbuse === null ||
-    //   pastAbuse === null ||
-    //   bailCondition === null ||
-    //   requireInjunction === null
-    // ) {
-    //   console.log("check");
-    //   return this.setState({
-    //     errorMessage: "Please answer all the question above",
-    //     errorMessageVisible: true,
-    //     loadscreen: false
-    //   });
-    // }
+      .catch(err => {
+        this.setState({ loadscreen: false });
+        console.log(err);
+      });
   };
 
   renderQuestions = () => {
