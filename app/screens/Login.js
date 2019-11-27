@@ -100,13 +100,13 @@ export default class Login extends Component {
   registerUser = values => {
     const { code } = values;
     axios
-      .post(getAccountApi, { id: "0014J00000A4eBgQAJ" })
+      .post(getAccountApi, { id: "0014J00000Bavt9QAB" })
       .then(accountResponse => {
         console.log(accountResponse);
         const { Phone } = accountResponse.data[0];
         console.log(Phone);
         axios
-          .post(getCustomTokenApi, { uid: "0014J00000A4eBgQAJ" })
+          .post(getCustomTokenApi, { uid: "0014J00000Bavt9QAB" })
           .then(response => {
             console.log(response);
             console.log(response.data);
@@ -118,7 +118,7 @@ export default class Login extends Component {
                 console.log(res.user._user.uid);
                 const userDetails = {
                   userVerified: true,
-                  userId: "0014J00000A4eBgQAJ",
+                  userId: "0014J00000Bavt9QAB",
                   phoneVerified: false,
                   pin: 0,
                   pinSet: false,

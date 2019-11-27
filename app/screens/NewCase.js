@@ -9,18 +9,24 @@ import {
   StyleSheet
 } from "react-native";
 import { Button, CheckBox } from "react-native-elements";
-import colors from "../style";
+import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
+import moment from "moment";
 import { TextInputMask } from "react-native-masked-text";
+import firebase from "react-native-firebase";
+import colors from "../style";
 import ErrorMessage from "../components/Error";
-
 export default class NewCase extends React.Component {
   state = {
     checkBoxChecked: false,
     showError: true,
     errorMessage: ""
   };
+
+  componentDidMount() {
+    console.log(new Date());
+  }
 
   onContinue = values => {
     console.log(values);
@@ -46,7 +52,7 @@ export default class NewCase extends React.Component {
     console.log(checkBoxChecked);
     return (
       <SafeAreaView>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Image
             source={require("../../assets/path-logo.png")}
             style={{
@@ -129,16 +135,10 @@ export default class NewCase extends React.Component {
                 <TextInputMask
                   type={"datetime"}
                   options={{
-                    format: "DD/MM/YYYY"
+                    format: "YYYY-MM-DD"
                   }}
                   placeholderTextColor={colors.darkGrey}
-                  placeholder="DATE OF BIRTH ( DD/MM/YYYY )"
-                  // value={this.state.dt}
-                  // onChangeText={text => {
-                  //   this.setState({
-                  //     dt: text
-                  //   });
-                  // }}
+                  placeholder="DATE OF BIRTH ( YYYY-MM-DD )"
                   onChangeText={handleChange("dob")}
                   onBlur={handleBlur("dob")}
                   value={values.dob}
@@ -246,7 +246,9 @@ export default class NewCase extends React.Component {
                   <ErrorMessage errorMessage={errorMessage} marginLeft={40} />
                 )}
                 <Button
-                  onPress={handleSubmit}
+                  // onPress={handleSubmit}
+                  onPress={() => this.onContinue()}
+                  // onPress={() => firebase.auth().signOut()}
                   title="Contiue"
                   buttonStyle={{
                     marginHorizontal: 40,

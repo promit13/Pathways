@@ -20,9 +20,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Block typedef callback parameter to getUserPropertiesWithCallback:.
-typedef void (^FIRAInteropUserPropertiesCallback)(NSDictionary<NSString *, id> *userProperties);
-
 /// Connector for bridging communication between Firebase SDKs and FirebaseAnalytics API.
 @protocol FIRAnalyticsInterop
 
@@ -42,9 +39,6 @@ typedef void (^FIRAInteropUserPropertiesCallback)(NSDictionary<NSString *, id> *
 
 /// Returns the maximum number of user properties.
 - (NSInteger)maxUserProperties:(NSString *)origin;
-
-/// Returns the user properties to a callback function.
-- (void)getUserPropertiesWithCallback:(FIRAInteropUserPropertiesCallback)callback;
 
 /// Logs events.
 - (void)logEventWithOrigin:(NSString *)origin

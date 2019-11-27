@@ -1,34 +1,19 @@
 import React from "react";
-import {
-  Image,
-  Text,
-  Dimensions,
-  View,
-  ScrollView,
-  StyleSheet,
-  Platform,
-  TouchableOpacity
-} from "react-native";
+import { View } from "react-native";
 import {
   createBottomTabNavigator,
   createAppContainer,
-  createStackNavigator,
-  SafeAreaView,
-  createDrawerNavigator
+  createStackNavigator
 } from "react-navigation";
 import { Icon } from "react-native-elements";
 import { moderateScale } from "react-native-size-matters";
 import colors from "./style";
 import Preview from "./screens/Preview";
 import Login from "./screens/Login";
-import Pathway from "../assets/pathway.png";
 import AuthLoadingScreen from "./screens/AuthLoadingScreen";
 import Pathways from "./screens/Pathways";
-import logoText from "../assets/logo-text.png";
 import ActiveCases from "./screens/ActiveCases";
 import NewCase from "./screens/NewCase";
-import firebase from "react-native-firebase";
-var { height, width } = Dimensions.get("window");
 import ThankYou from "./screens/ThankYou";
 import CriticalPathway from "./screens/CriticalPathway";
 import RepeatReferrals from "./screens/RepeatReferral";
@@ -43,45 +28,63 @@ import InjunctionServed from "./screens/InjunctionServed";
 import CasesFallen from "./screens/CasesFallen";
 import PdfViewer from "./screens/PdfViewer";
 
-const home = require("../assets/home.png");
-const add = require("../assets/add.png");
-const search = require("../assets/search2.png");
+const HomeStack = createStackNavigator(
+  {
+    Pathways,
+    Preview,
+    NewCase,
+    ActiveCases,
+    ProfileUpdate,
+    CriticalPathway,
+    CompletedReferrals,
+    InjunctionServed,
+    CasesFallen,
+    ThankYou,
+    Case,
+    PdfViewer,
+    RepeatReferrals,
+    ThankYou
+  },
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+);
 
-const HomeStack = createStackNavigator({
-  Pathways,
-  Preview,
-  NewCase,
-  ActiveCases,
-  ProfileUpdate,
-  CriticalPathway,
-  CompletedReferrals,
-  InjunctionServed,
-  CasesFallen,
-  ThankYou,
-  Case,
-  PdfViewer,
-  RepeatReferrals,
-  ThankYou
-});
+const AddStack = createStackNavigator(
+  {
+    NewCase,
+    Questions,
+    RepeatReferrals,
+    ThankYou,
+    Preview
+  },
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+);
 
-const AddStack = createStackNavigator({
-  NewCase,
-  Questions,
-  RepeatReferrals,
-  ThankYou,
-  Preview
-});
-
-const SearchStack = createStackNavigator({
-  ActiveCases
-});
+const SearchStack = createStackNavigator(
+  {
+    ActiveCases
+  },
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+);
 
 const SignedOut = createStackNavigator(
   {
     Login
   },
   {
-    navigationOptions: {
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
       header: null
     }
   }
@@ -93,7 +96,8 @@ const RegisterMobile = createStackNavigator(
     ActivateDevice
   },
   {
-    navigationOptions: {
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
       header: null
     }
   }
@@ -103,7 +107,8 @@ const RegisterPin = createStackNavigator(
     PinRegistration
   },
   {
-    navigationOptions: {
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
       header: null
     }
   }
@@ -119,6 +124,7 @@ const SignedIn = createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false,
       // tabBarLabel: navigation.state.routeName,
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
@@ -244,6 +250,9 @@ const MainStackNavigator = createStackNavigator(
     AuthLoadingScreen
   },
   {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    },
     initialRouteName: "AuthLoadingScreen",
     headerMode: "none"
   }

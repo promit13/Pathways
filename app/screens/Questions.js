@@ -1,15 +1,13 @@
 import React from "react";
 import {
-  KeyboardAvoidingView,
   StyleSheet,
   ScrollView,
   View,
   TouchableOpacity,
-  Image,
-  Platform
+  Image
 } from "react-native";
-import { Text, Button } from "react-native-elements";
-import firebase from "react-native-firebase";
+import { Text } from "react-native-elements";
+import axios from "axios";
 import RNPickerSelect from "react-native-picker-select";
 import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
@@ -45,10 +43,12 @@ const pickerSelectStyles = StyleSheet.create({
   }
 });
 const pickerItems = [
-  { label: "Yes", value: true },
-  { label: "No", value: false }
+  { label: "Yes", value: "Yes" },
+  { label: "No", value: "No" }
 ];
 
+const createReferralApi = "http://localhost:8675/createReferral";
+const getAccountApi = "http://localhost:8675/searchAccount";
 export default class Questions extends React.Component {
   static navigationOptions = {
     headerStyle: {
@@ -67,36 +67,89 @@ export default class Questions extends React.Component {
     requireInjunction: null
   };
 
-  registerAnswers = () => {
+  createTriageAndReferral = () => {
+    axios
+      .post(createReferralApi, {
+        name: "Pro",
+        dob: "2019-10-30",
+        phone: "07521949880",
+        safeContactNumber: "07521949880",
+        safeEmail: "test@test.com",
+        message: "This is test message",
+        status: "new",
+        dateOfInstruction: "2019-10-30",
+        referralSource: "App Referral",
+        referrerContactName: "0034J000009BhuzQAC",
+        referrerOrganisation: "0014J00000Bavt9QAB",
+        recentIncident: "Yes",
+        pastIncident: "No",
+        bailCondition: "Yes",
+        protectiveInjunction: "Yes"
+      })
+      .then(res => {
+        console.log(res);
+        this.setState({ loadscreen: false });
+        this.props.navigation.navigate("ThankYou");
+      })
+      .catch(err => console.log(err));
+  };
+
+  searchAccountAndReferral = () => {
     const { userDetails } = this.props.navigation.state.params;
     console.log(userDetails);
     this.setState({ loadscreen: true });
-    const {
-      recentAbuse,
-      pastAbuse,
-      bailCondition,
-      requireInjunction
-    } = this.state;
-    if (
-      recentAbuse === null ||
-      pastAbuse === null ||
-      bailCondition === null ||
-      requireInjunction === null
-    ) {
-      console.log("check");
-      return this.setState({
-        errorMessage: "Please answer all the question above",
-        errorMessageVisible: true,
-        loadscreen: false
-      });
-    }
-    this.props.navigation.navigate("RepeatReferrals");
-    // const userDetails = {
+    axios
+      .post(getAccountApi, {
+        name: "Pro",
+        dob: "2019-10-30",
+        phone: "07521949880",
+        safeContactNumber: "07521949880",
+        safeEmail: "test@test.com",
+        message: "This is test message",
+        status: "new",
+        dateOfInstruction: "2019-10-30",
+        referralSource: "App Referral",
+        referrerContactName: "0034J000009BhuzQAC",
+        referrerOrganisation: "0014J00000Bavt9QAB",
+        recentIncident: "Yes",
+        pastIncident: "No",
+        bailCondition: "Yes",
+        protectiveInjunction: "Yes"
+      })
+      .then(res => {
+        this.setState({ loadscreen: false });
+        console.log(res);
+        console.log(res.data.length);
+        if (res.data.length > 0) {
+          const referralId = res.data[0].Id;
+          this.props.navigation.navigate("RepeatReferrals", {
+            userDetails,
+            referralId
+          });
+        } else {
+          this.createTriageAndReferral();
+        }
+      })
+      .catch(err => console.log(err));
+    // const {
     //   recentAbuse,
     //   pastAbuse,
     //   bailCondition,
     //   requireInjunction
-    // };
+    // } = this.state;
+    // if (
+    //   recentAbuse === null ||
+    //   pastAbuse === null ||
+    //   bailCondition === null ||
+    //   requireInjunction === null
+    // ) {
+    //   console.log("check");
+    //   return this.setState({
+    //     errorMessage: "Please answer all the question above",
+    //     errorMessageVisible: true,
+    //     loadscreen: false
+    //   });
+    // }
   };
 
   renderQuestions = () => {
@@ -175,7 +228,7 @@ export default class Questions extends React.Component {
 
           <TouchableOpacity
             onPress={
-              () => this.registerAnswers()
+              () => this.searchAccountAndReferral()
               // () => this.props.navigation.navigate("Questions")
               // () => this.props.navigation.navigate("RepeatReferrals")
               // firebase.auth().signOut()
