@@ -113,6 +113,7 @@ export default class ActivateDevice extends Component {
         <SmoothPinCodeInput
           ref={this.pinInput}
           codeLength={6}
+          autoFocus={true}
           value={code}
           onTextChange={code => this.setState({ code })}
           onFulfill={codeInput => this.checkCode(codeInput)}
