@@ -27,6 +27,8 @@ export default class Pathways extends Component {
   componentDidMount = async () => {
     const pin = await AsyncStorage.getItem("pin");
     console.log(pin);
+    // const { user } = this.props.navigation.state.params;
+    // console.log(user);
     this.setState({ pin });
   };
 
@@ -69,7 +71,8 @@ export default class Pathways extends Component {
                 color: colors.darkGrey,
                 fontSize: 20,
                 marginBottom: 30,
-                paddingHorizontal: 20
+                paddingHorizontal: 20,
+                marginLeft: 10
               }}
             >
               Welcome to Pathway, please select the recovery pathway you wish to
@@ -125,6 +128,7 @@ export default class Pathways extends Component {
                 color: "crimson"
               }}
               restrictToNumbers="true"
+              autoFocus={true}
               value={code}
               onTextChange={code => this.setState({ code, showError: false })}
               onFulfill={codeInput => {

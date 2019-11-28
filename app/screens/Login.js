@@ -26,8 +26,8 @@ import colors from "../style";
 
 var { height, width } = Dimensions.get("window");
 
-const getAccountApi = "http://localhost:8675/getAccount";
-const getCustomTokenApi = "http://localhost:8675/getCustomToken";
+const getAccountApi = "http://167.71.142.150:8675/getAccount";
+const getCustomTokenApi = "http://167.71.142.150:8675/getCustomToken";
 
 // const text = [
 //   " to Pathway, please enter your activation code to verify your device. Your activation code can be found in your welcome email.",
@@ -104,13 +104,22 @@ export default class Login extends Component {
       .then(async accountResponse => {
         console.log(accountResponse.data);
         const contactData = accountResponse.data;
-        if (contactData.errorCode === "NOT_FOUND") {
-          return this.setState({
-            loading: false,
-            showError: true,
-            errorMessage: "Invaild code. Please try again."
-          });
+        if (contactData.errorCode) {
+          if (contactData.errorCode === "NOT_FOUND") {
+            return this.setState({
+              loading: false,
+              showError: true,
+              errorMessage: "Invaild code. Please try again."
+            });
+          } else {
+            return this.setState({
+              loading: false,
+              showError: true,
+              errorMessage: `Error: ${contactData.errorCode} `
+            });
+          }
         }
+
         await AsyncStorage.setItem("userDetails", JSON.stringify(contactData));
 
         const { Phone } = contactData;

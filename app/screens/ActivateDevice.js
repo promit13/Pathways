@@ -14,7 +14,7 @@ import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
 import colors from "../style";
 
-const checkVerificationCodeApi = "http://localhost:8675/checkVerificationCode";
+const checkVerificationCodeApi = "http://167.71.142.150:8675/checkVerificationCode";
 
 export default class ActivateDevice extends Component {
   static navigationOptions = {
@@ -113,6 +113,7 @@ export default class ActivateDevice extends Component {
         <SmoothPinCodeInput
           ref={this.pinInput}
           codeLength={6}
+          autoFocus={true}
           value={code}
           onTextChange={code => this.setState({ code })}
           onFulfill={codeInput => this.checkCode(codeInput)}

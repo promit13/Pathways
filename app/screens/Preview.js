@@ -59,10 +59,11 @@ const styles = {
   }
 };
 
+let awaitingCasesArray = [];
+let contactingCasesArray = [];
+let contactMadeCasesArray = [];
+let liveCasesArray = [];
 let completedCasesArray = [];
-let injunctionServedArray = [];
-let criticalPathwayArray = [];
-let casesFallenArray = [];
 
 export default class Profile extends React.Component {
   static navigationOptions = {
@@ -70,44 +71,48 @@ export default class Profile extends React.Component {
   };
 
   state = {
-    activeCasesArray: [],
+    awaitingCasesArray: [],
+    contactingCasesArray: [],
+    contactMadeCasesArray: [],
+    liveCasesArray: [],
     completedCasesArray: [],
-    injunctionServedArray: [],
-    criticalPathwayArray: [],
-    casesFallenArray: [],
     loadScreen: true
   };
 
   componentDidMount() {
-    axios.get("http://localhost:8675/referrals").then(res => {
+    axios.get("http://167.71.142.150:8675/referrals").then(res => {
       console.log(res.data.records);
       const { records } = res.data;
       records.map((record, index) => {
+        if (record.Triage_Status__c === "Awaiting to be Contacted") {
+          awaitingCasesArray.push(record);
+        }
+        if (record.Triage_Status__c === "Contacting") {
+          contactingCasesArray.push(record);
+        }
         if (record.Triage_Status__c === "Contact Made") {
+          contactMadeCasesArray.push(record);
+        }
+        if (record.Triage_Status__c === "Live") {
+          liveCasesArray.push(record);
+        }
+        if (record.Triage_Status__c === "Completed") {
           completedCasesArray.push(record);
-        }
-        if (record.Triage_Status__c === "Contact Made") {
-          injunctionServedArray.push(record);
-        }
-        if (record.Triage_Status__c === "Contact Made") {
-          criticalPathwayArray.push(record);
-        }
-        if (record.Triage_Status__c === "Fallen") {
-          casesFallenArray.push(record);
         }
         if (index === records.length - 1) {
           this.setState({
+            awaitingCasesArray,
+            contactingCasesArray,
+            contactMadeCasesArray,
+            liveCasesArray,
             completedCasesArray,
-            injunctionServedArray,
-            criticalPathwayArray,
-            casesFallenArray,
-            activeCasesArray: records,
             loadScreen: false
           });
+          awaitingCasesArray = [];
+          contactingCasesArray = [];
+          contactMadeCasesArray = [];
+          liveCasesArray = [];
           completedCasesArray = [];
-          injunctionServedArray = [];
-          criticalPathwayArray = [];
-          casesFallenArray = [];
         }
       });
       // this.setState({
@@ -118,11 +123,11 @@ export default class Profile extends React.Component {
 
   render() {
     const {
-      activeCasesArray,
+      awaitingCasesArray,
+      contactingCasesArray,
+      contactMadeCasesArray,
+      liveCasesArray,
       completedCasesArray,
-      injunctionServedArray,
-      criticalPathwayArray,
-      casesFallenArray,
       loadScreen
     } = this.state;
     if (loadScreen) return <LoadScreen text="Please wait" />;
@@ -185,8 +190,8 @@ export default class Profile extends React.Component {
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
-                casesArray: activeCasesArray,
-                activeCaseCheck: true
+                casesArray: awaitingCasesArray,
+                arrayTitle: "Awaiting to be contacted"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -200,14 +205,14 @@ export default class Profile extends React.Component {
               Awaiting to be contacted
             </Text>
             <Text style={styles.listItemCountStyle}>
-              {activeCasesArray.length}
+              {awaitingCasesArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
-                casesArray: criticalPathwayArray,
-                arrayTitle: "Contact Made"
+                casesArray: contactingCasesArray,
+                arrayTitle: "Contacting"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -219,13 +224,13 @@ export default class Profile extends React.Component {
             />
             <Text style={styles.listItemTextStyle}>Contacting</Text>
             <Text style={styles.listItemCountStyle}>
-              {criticalPathwayArray.length}
+              {contactingCasesArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
-                casesArray: injunctionServedArray,
+                casesArray: liveCasesArray,
                 arrayTitle: "Live"
               });
             }}
@@ -238,7 +243,26 @@ export default class Profile extends React.Component {
             />
             <Text style={styles.listItemTextStyle}>Live</Text>
             <Text style={styles.listItemCountStyle}>
-              {injunctionServedArray.length}
+              {liveCasesArray.length}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("ActiveCases", {
+                casesArray: contactMadeCasesArray,
+                arrayTitle: "Contact made"
+              });
+            }}
+            style={styles.listItemContainerStyle}
+          >
+            <Image
+              source={require("../../assets/logo-circle.png")}
+              resizeMode="contain"
+              style={{ flex: 1, color: colors.accent }}
+            />
+            <Text style={styles.listItemTextStyle}>Contact made</Text>
+            <Text style={styles.listItemCountStyle}>
+              {contactMadeCasesArray.length}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -251,32 +275,13 @@ export default class Profile extends React.Component {
             style={styles.listItemContainerStyle}
           >
             <Image
-              source={require("../../assets/logo-circle.png")}
-              resizeMode="contain"
-              style={{ flex: 1, color: colors.accent }}
-            />
-            <Text style={styles.listItemTextStyle}>Contact made</Text>
-            <Text style={styles.listItemCountStyle}>
-              {completedCasesArray.length}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate("ActiveCases", {
-                casesArray: casesFallenArray,
-                arrayTitle: "Closed"
-              });
-            }}
-            style={styles.listItemContainerStyle}
-          >
-            <Image
               source={require("../../assets/cross.png")}
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
             <Text style={styles.listItemTextStyle}>Completed</Text>
             <Text style={styles.listItemCountStyle}>
-              {casesFallenArray.length}
+              {completedCasesArray.length}
             </Text>
           </TouchableOpacity>
         </ScrollView>

@@ -34,6 +34,7 @@ const HomeStack = createStackNavigator(
     Pathways,
     Preview,
     NewCase,
+    Questions,
     ActiveCases,
     ProfileUpdate,
     CriticalPathway,
@@ -43,8 +44,7 @@ const HomeStack = createStackNavigator(
     ThankYou,
     Case,
     PdfViewer,
-    RepeatReferrals,
-    ThankYou
+    RepeatReferrals
   },
   {
     defaultNavigationOptions: {
@@ -70,7 +70,8 @@ const AddStack = createStackNavigator(
 
 const SearchStack = createStackNavigator(
   {
-    Search,
+    // Search,
+    ActiveCases,
     Case,
     PdfViewer
   },

@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  AsyncStorage
+} from "react-native";
 import moment from "moment";
 import { withNavigation } from "react-navigation";
 import colors from "../style";
@@ -9,6 +15,12 @@ import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
 
 const titles = ["Awaiting to be Contacted"];
+const allTitles = [
+  "Awaiting to be Contacted",
+  "Contacting",
+  "Contact Made",
+  "Live"
+];
 class ActiveCases extends React.Component {
   static navigationOptions = {
     // title: "Register",
@@ -35,17 +47,26 @@ class ActiveCases extends React.Component {
     myConstabulary: false,
     nationalReferrals: false,
     checkDays: null,
-    loadScreen: true
+    loadScreen: true,
+    accountId: "",
+    myId: ""
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const contactData = await AsyncStorage.getItem("userDetails");
+    const jsonObjectData = JSON.parse(contactData);
+    const { AccountId, Id } = jsonObjectData;
+    console.log(jsonObjectData);
+    console.log(AccountId, Id);
     if (this.props.navigation.state.params === undefined) {
-      axios.get("http://localhost:8675/referrals").then(res => {
+      axios.get("http://167.71.142.150:8675/referrals").then(res => {
         console.log(res.data.records);
         this.setState({
           activeCases: res.data.records,
           activeCaseCheck: true,
-          loadScreen: false
+          loadScreen: false,
+          accountId: AccountId,
+          myId: Id
         });
       });
     } else {
@@ -59,10 +80,12 @@ class ActiveCases extends React.Component {
         activeCases: casesArray,
         activeCaseCheck,
         arrayTitle,
-        loadScreen: false
+        loadScreen: false,
+        accountId: AccountId,
+        myId: Id
       });
     }
-  }
+  };
 
   buttonPress = i => {
     const {
@@ -103,7 +126,9 @@ class ActiveCases extends React.Component {
       myConstabulary,
       nationalReferrals,
       checkDays,
-      loadScreen
+      loadScreen,
+      accountId,
+      myId
     } = this.state;
     let filteredArray = [];
     const todayDate = new Date();
@@ -112,16 +137,18 @@ class ActiveCases extends React.Component {
       const isBetween = moment(item.CreatedDate).isBetween(toDate, todayDate);
       if (checkDays === null) {
         if (myReferrals) {
+          console.log(myId);
+          console.log(item.Referrer_Contact_Name__c);
           return (
             item.Referral__r &&
-            item.Referral__r.Unique_ID__c === "myUniqueId" &&
+            item.Referral__r.Referrer_Contact_Name__c === myId &&
             item.Referral__r.Name.includes(this.state.searchKey)
           );
         }
         if (myConstabulary) {
           return (
             item.Referral__r &&
-            item.Referral__r.Referrer_Organisation__c === "myConstabulary" &&
+            item.Referral__r.Referrer_Organisation__c === accountId &&
             item.Referral__r.Name.includes(this.state.searchKey)
           );
         }
@@ -137,7 +164,7 @@ class ActiveCases extends React.Component {
       );
     });
     if (activeCaseCheck) {
-      titles.map(title => {
+      allTitles.map(title => {
         const filteredTitle = searchFilteredArray.filter(caseDetails => {
           return caseDetails.Triage_Status__c === title;
         });
