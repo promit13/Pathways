@@ -7,7 +7,6 @@ import io.invertase.firebase.RNFirebasePackage;
 import org.wonday.pdf.RCTPdfView;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.rnfs.RNFSPackage;
-import com.airbnb.android.react.maps.MapsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -55,7 +54,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
             new RCTPdfView(),
             new RNFetchBlobPackage(),
             new RNFSPackage(),
-            new MapsPackage(),
             new AsyncStoragePackage(),
             new VectorIconsPackage(),
             new RNGestureHandlerPackage(),

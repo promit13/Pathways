@@ -4,17 +4,20 @@ import {
   Text,
   TextInput,
   SafeAreaView,
+  AsyncStorage,
   ScrollView,
   Image,
   StyleSheet
 } from "react-native";
 import { Button, CheckBox } from "react-native-elements";
-import colors from "../style";
+import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
+import moment from "moment";
 import { TextInputMask } from "react-native-masked-text";
+import firebase from "react-native-firebase";
+import colors from "../style";
 import ErrorMessage from "../components/Error";
-
 export default class NewCase extends React.Component {
   state = {
     checkBoxChecked: false,
@@ -47,7 +50,7 @@ export default class NewCase extends React.Component {
     console.log(checkBoxChecked);
     return (
       <SafeAreaView>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Image
             source={require("../../assets/path-logo.png")}
             style={{
@@ -94,6 +97,7 @@ export default class NewCase extends React.Component {
                 .required("Please enter a safe contact number"),
               safeEmail: yup
                 .string()
+                .label("Safe email")
                 .email()
                 .required("Please enter a safe email address"),
               message: yup.string().required("Please enter messages/notes")
@@ -130,16 +134,10 @@ export default class NewCase extends React.Component {
                 <TextInputMask
                   type={"datetime"}
                   options={{
-                    format: "DD/MM/YYYY"
+                    format: "YYYY-MM-DD"
                   }}
                   placeholderTextColor={colors.darkGrey}
-                  placeholder="DATE OF BIRTH ( DD/MM/YYYY )"
-                  // value={this.state.dt}
-                  // onChangeText={text => {
-                  //   this.setState({
-                  //     dt: text
-                  //   });
-                  // }}
+                  placeholder="DATE OF BIRTH ( YYYY-MM-DD )"
                   onChangeText={handleChange("dob")}
                   onBlur={handleBlur("dob")}
                   value={values.dob}
@@ -258,6 +256,8 @@ export default class NewCase extends React.Component {
                 )}
                 <Button
                   onPress={handleSubmit}
+                  // onPress={() => this.onContinue()}
+                  // onPress={() => firebase.auth().signOut()}
                   title="Contiue"
                   buttonStyle={{
                     marginHorizontal: 40,
@@ -283,21 +283,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     borderColor: colors.darkGrey,
     width: "80%",
-    alignSelf: "center",
-    paddingLeft: 20
-  },
-  notes: {
-    height: 120,
-    borderWidth: 2,
-    borderColor: colors.darkGrey,
-    width: "80%",
-    alignSelf: "center",
-    paddingTop: 10,
-    textAlign: "left",
-    paddingLeft: 20
+    fontSize: 16,
+    padding: 10,
+    alignSelf: "center"
   },
   textErrorStyle: {
-    fontSize: 10,
+    fontSize: 16,
+    marginTop: 10,
+    marginBottom: 20,
     color: "red",
     marginLeft: 45
   }

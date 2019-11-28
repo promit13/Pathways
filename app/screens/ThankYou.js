@@ -4,6 +4,19 @@ import colors from "../style";
 
 import { Formik } from "formik";
 
+const styles = {
+  textStyle: {
+    color: colors.darkGrey,
+    fontSize: 20,
+    marginBottom: 10
+  },
+  buttonStyle: {
+    backgroundColor: colors.accent,
+    paddingVertical: 10,
+    justifyContent: "center",
+    marginTop: 30
+  }
+};
 export default class ThankYou extends React.Component {
   static navigationOptions = {
     headerStyle: {
@@ -25,60 +38,39 @@ export default class ThankYou extends React.Component {
           }}
         />
         <View style={{ marginHorizontal: 40 }}>
-          <Text
-            style={{
-              color: colors.darkGrey,
-              fontSize: 30,
-
-              marginBottom: 10
-            }}
-          >
-            Thank You!
-          </Text>
-          <Text style={{ fontSize: 20, color: colors.darkGrey }}>
+          <Text style={[styles.textStyle, { fontSize: 30 }]}>Thank You!</Text>
+          <Text style={styles.textStyle}>
             Your referral has been successfully submitted.
           </Text>
           <Text
-            style={{
-              fontSize: 20,
-              color: colors.darkGrey,
-              fontWeight: "700",
-              marginTop: 20,
-              marginBottom: 10
-            }}
+            style={[
+              styles.textStyle,
+              {
+                fontWeight: "700",
+                marginTop: 20
+              }
+            ]}
           >
             What happens next?
           </Text>
-          <Text
-            style={{ fontSize: 20, color: colors.darkGrey, marginBottom: 10 }}
+          <Text style={styles.textStyle}>
+            {`One of our support team will be in contact shortly.\n\nPlease share this information with the victim and let them know they will be receiving a call from an 0800 number.`}
+          </Text>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Preview")}
+            style={styles.buttonStyle}
           >
-            One of our support team will be in contact shortly.
-          </Text>
-          <Text style={{ fontSize: 20, color: colors.darkGrey }}>
-            Please share this information with the victim and let them know they
-            will be receiving a call from an 0800 number.
-          </Text>
+            <Text
+              style={{
+                fontSize: 17,
+                textAlign: "center",
+                color: "white"
+              }}
+            >
+              DONE
+            </Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("Home")}
-          style={{
-            marginHorizontal: 35,
-            backgroundColor: colors.accent,
-            height: 45,
-            marginTop: 30
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 17,
-              textAlign: "center",
-              marginTop: 13,
-              color: "white"
-            }}
-          >
-            DONE
-          </Text>
-        </TouchableOpacity>
       </ScrollView>
     );
   }

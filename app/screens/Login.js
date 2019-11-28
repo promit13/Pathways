@@ -73,9 +73,9 @@ const styles = StyleSheet.create({
     alignContent: "center"
   },
   textErrorStyle: {
-    fontSize: 10,
+    fontSize: 12,
     color: "red",
-    marginLeft: 40
+    marginTop: 5
   }
 });
 
@@ -88,7 +88,6 @@ export default class Login extends Component {
     fcmToken: "",
     showError: false,
     errorMessage: "",
-    mobileNumber: "",
     loading: false
   };
 
@@ -100,13 +99,24 @@ export default class Login extends Component {
   registerUser = values => {
     const { code } = values;
     axios
-      .post(getAccountApi, { id: "0014J00000A4eBgQAJ" })
-      .then(accountResponse => {
-        console.log(accountResponse);
-        const { Phone } = accountResponse.data[0];
+      // .post(getAccountApi, { id: "0034J00000AnUldQAF" })
+      .post(getAccountApi, { id: code })
+      .then(async accountResponse => {
+        console.log(accountResponse.data);
+        const contactData = accountResponse.data;
+        if (contactData.errorCode === "NOT_FOUND") {
+          return this.setState({
+            loading: false,
+            showError: true,
+            errorMessage: "Invaild code. Please try again."
+          });
+        }
+        await AsyncStorage.setItem("userDetails", JSON.stringify(contactData));
+
+        const { Phone } = contactData;
         console.log(Phone);
         axios
-          .post(getCustomTokenApi, { uid: "0014J00000A4eBgQAJ" })
+          .post(getCustomTokenApi, { uid: code })
           .then(response => {
             console.log(response);
             console.log(response.data);
@@ -118,7 +128,7 @@ export default class Login extends Component {
                 console.log(res.user._user.uid);
                 const userDetails = {
                   userVerified: true,
-                  userId: "0014J00000A4eBgQAJ",
+                  userId: code,
                   phoneVerified: false,
                   pin: 0,
                   pinSet: false,
@@ -173,8 +183,7 @@ export default class Login extends Component {
   };
 
   render() {
-    const { showError, errorMessage, mobileNumber, loading } = this.state;
-    console.log(mobileNumber);
+    const { showError, errorMessage, loading } = this.state;
     return (
       <KeyboardAvoidingView
         behavior="padding"
@@ -183,7 +192,7 @@ export default class Login extends Component {
       >
         <ScrollView showsVerticalScrollIndicator={false}>
           <Formik
-            initialValues={{ code: mobileNumber }}
+            initialValues={{ code: "" }}
             onSubmit={values => {
               this.setState({ loading: true });
               this.registerUser(values);
