@@ -14,6 +14,7 @@ import RNPickerSelect from "react-native-picker-select";
 import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
 import colors from "../style";
+import axios from "axios";
 
 const styles = StyleSheet.create({
   dayTextStyle: {
@@ -84,12 +85,19 @@ export default class Questions extends React.Component {
       requireInjunction === null
     ) {
       console.log("check");
+      axios.post("/triage", {
+        recentAbuse,
+        pastAbuse,
+        bailCondition,
+        requireInjunction
+      });
       return this.setState({
         errorMessage: "Please answer all the question above",
         errorMessageVisible: true,
         loadscreen: false
       });
     }
+    this.setState({ loadscreen: false });
     this.props.navigation.navigate("RepeatReferrals");
     // const userDetails = {
     //   recentAbuse,

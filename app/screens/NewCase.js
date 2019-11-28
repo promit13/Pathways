@@ -38,7 +38,8 @@ export default class NewCase extends React.Component {
     headerStyle: {
       backgroundColor: colors.accent
     },
-    headerTintColor: "#fff"
+    headerTintColor: "#fff",
+    gesturesEnabled: false
   };
 
   render() {
@@ -152,7 +153,12 @@ export default class NewCase extends React.Component {
                 {touched.dob && errors.dob && (
                   <Text style={styles.textErrorStyle}>{errors.dob}</Text>
                 )}
-                <TextInput
+                <TextInputMask
+                  type={"cel-phone"}
+                  options={{
+                    maskType: "INTERNATIONAL",
+                    withDDD: false
+                  }}
                   onChangeText={handleChange("phone")}
                   keyboardType="phone-pad"
                   onBlur={handleBlur("phone")}
@@ -169,7 +175,12 @@ export default class NewCase extends React.Component {
                 {touched.phone && errors.phone && (
                   <Text style={styles.textErrorStyle}>{errors.phone}</Text>
                 )}
-                <TextInput
+                <TextInputMask
+                  type={"cel-phone"}
+                  options={{
+                    maskType: "INTERNATIONAL",
+                    withDDD: false
+                  }}
                   onChangeText={handleChange("safeContactNumber")}
                   onBlur={handleBlur("safeContactNumber")}
                   keyboardType="phone-pad"

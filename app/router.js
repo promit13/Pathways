@@ -64,26 +64,42 @@ const HomeStack = createStackNavigator({
   ThankYou
 });
 
-const AddStack = createStackNavigator({
-  NewCase,
-  Questions,
-  RepeatReferrals,
-  ThankYou,
-  Preview
-});
+const AddStack = createStackNavigator(
+  {
+    NewCase,
+    Questions,
+    RepeatReferrals,
+    ThankYou,
+    Preview
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false
+    })
+  }
+);
 
-const SearchStack = createStackNavigator({
-  ActiveCases
-});
+const SearchStack = createStackNavigator(
+  {
+    ActiveCases,
+    Case,
+    PdfViewer
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false
+    })
+  }
+);
 
 const SignedOut = createStackNavigator(
   {
     Login
   },
   {
-    navigationOptions: {
-      header: null
-    }
+    defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false
+    })
   }
 );
 
@@ -93,9 +109,10 @@ const RegisterMobile = createStackNavigator(
     ActivateDevice
   },
   {
-    navigationOptions: {
+    defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false,
       header: null
-    }
+    })
   }
 );
 const RegisterPin = createStackNavigator(
@@ -103,9 +120,10 @@ const RegisterPin = createStackNavigator(
     PinRegistration
   },
   {
-    navigationOptions: {
+    defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false,
       header: null
-    }
+    })
   }
 );
 // const Stack1 = ({ navigation }) => <MapStack navigation={navigation} screenProps={{ rootNavigation: navigation.user }} />;
@@ -245,7 +263,10 @@ const MainStackNavigator = createStackNavigator(
   },
   {
     initialRouteName: "AuthLoadingScreen",
-    headerMode: "none"
+    headerMode: "none",
+    defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false
+    })
   }
 );
 
