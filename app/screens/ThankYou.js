@@ -57,7 +57,7 @@ export default class ThankYou extends React.Component {
             {`One of our support team will be in contact shortly.\n\nPlease share this information with the victim and let them know they will be receiving a call from an 0800 number.`}
           </Text>
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("Home")}
+            onPress={() => this.props.navigation.navigate("Preview")}
             style={styles.buttonStyle}
           >
             <Text

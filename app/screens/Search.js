@@ -8,8 +8,13 @@ import BookingDetails from "../components/BookingDetails";
 import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
 
-const titles = ["Awaiting to be Contacted"];
-class ActiveCases extends React.Component {
+const titles = [
+  "Awaiting to be Contacted",
+  "Contacting",
+  "Contact Made",
+  "Live"
+];
+class Search extends React.Component {
   static navigationOptions = {
     // title: "Register",
     // headerTitleStyle: {
@@ -264,4 +269,4 @@ class ActiveCases extends React.Component {
     );
   }
 }
-export default withNavigation(ActiveCases);
+export default withNavigation(Search);

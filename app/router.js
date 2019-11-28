@@ -9,6 +9,7 @@ import { Icon } from "react-native-elements";
 import { moderateScale } from "react-native-size-matters";
 import colors from "./style";
 import Preview from "./screens/Preview";
+import Search from "./screens/Search";
 import Login from "./screens/Login";
 import AuthLoadingScreen from "./screens/AuthLoadingScreen";
 import Pathways from "./screens/Pathways";
@@ -69,7 +70,9 @@ const AddStack = createStackNavigator(
 
 const SearchStack = createStackNavigator(
   {
-    ActiveCases
+    Search,
+    Case,
+    PdfViewer
   },
   {
     defaultNavigationOptions: {
@@ -113,6 +116,7 @@ const RegisterPin = createStackNavigator(
     }
   }
 );
+
 // const Stack1 = ({ navigation }) => <MapStack navigation={navigation} screenProps={{ rootNavigation: navigation.user }} />;
 // Stack1.router = MapStack.router;
 
@@ -254,7 +258,10 @@ const MainStackNavigator = createStackNavigator(
       gesturesEnabled: false
     },
     initialRouteName: "AuthLoadingScreen",
-    headerMode: "none"
+    headerMode: "none",
+    defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false
+    })
   }
 );
 

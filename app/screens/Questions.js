@@ -26,10 +26,13 @@ const styles = StyleSheet.create({
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
+    marginTop: 10,
+    paddingLeft: 20,
     paddingVertical: 12,
     borderWidth: 1,
-    borderColor: "transparent",
+    borderColor: colors.accent,
     borderRadius: 4,
+    borderWidth: 2,
     color: "black",
     paddingRight: 30 // to ensure the text is never behind the icon
   },
@@ -111,6 +114,12 @@ export default class Questions extends React.Component {
       requireInjunction === null
     ) {
       console.log("check");
+      axios.post("/triage", {
+        recentAbuse,
+        pastAbuse,
+        bailCondition,
+        requireInjunction
+      });
       return this.setState({
         errorMessage: "Please answer all the question above",
         errorMessageVisible: true,
@@ -228,11 +237,11 @@ export default class Questions extends React.Component {
               fontSize: 20,
               fontWeight: "300",
               color: colors.accent,
-              marginTop: 30,
-              marginBottom: 30
+              marginVertical: 30
             }}
           >
-            We now need to learn a little bit more about you.
+            We now need to learn more about the case. Please select an answer
+            for each question to continue.
           </Text>
           {this.renderQuestions()}
           {errorMessageVisible && (
@@ -249,7 +258,7 @@ export default class Questions extends React.Component {
             }
             style={{
               marginHorizontal: 40,
-              marginTop: 20,
+              marginTop: 10,
               color: "white",
               height: 45,
               backgroundColor: colors.accent

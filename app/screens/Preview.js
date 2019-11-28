@@ -196,7 +196,9 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Active cases</Text>
+            <Text style={styles.listItemTextStyle}>
+              Awaiting to be contacted
+            </Text>
             <Text style={styles.listItemCountStyle}>
               {activeCasesArray.length}
             </Text>
@@ -215,7 +217,7 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Contact Made</Text>
+            <Text style={styles.listItemTextStyle}>Contacting</Text>
             <Text style={styles.listItemCountStyle}>
               {criticalPathwayArray.length}
             </Text>
@@ -253,7 +255,7 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Completed</Text>
+            <Text style={styles.listItemTextStyle}>Contact made</Text>
             <Text style={styles.listItemCountStyle}>
               {completedCasesArray.length}
             </Text>
@@ -272,7 +274,7 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Closed</Text>
+            <Text style={styles.listItemTextStyle}>Completed</Text>
             <Text style={styles.listItemCountStyle}>
               {casesFallenArray.length}
             </Text>
