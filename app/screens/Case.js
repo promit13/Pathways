@@ -173,7 +173,9 @@ export default class Case extends React.Component {
           <React.Fragment>
             <Text style={styles.textHeaderStyle}>DOCUMENTS</Text>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("PdfViewer")}
+              onPress={() => this.props.navigation.navigate("PdfViewer", {
+                documentUrl: caseDetails.Court_Injunction_url
+              })}
               style={[
                 styles.viewBoxStyle,
                 {
