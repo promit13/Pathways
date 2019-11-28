@@ -52,8 +52,8 @@ const pickerItems = [
   { label: "No", value: "No" }
 ];
 
-const createReferralApi = "http://localhost:8675/createReferral";
-const getAccountApi = "http://localhost:8675/searchAccount";
+const createReferralApi = "http://167.71.142.150:8675/createReferral";
+const getAccountApi = "http://167.71.142.150:8675/searchAccount";
 export default class Questions extends React.Component {
   static navigationOptions = {
     headerStyle: {

@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  AsyncStorage
+} from "react-native";
 import moment from "moment";
 import { withNavigation } from "react-navigation";
 import colors from "../style";
@@ -43,9 +49,14 @@ class Search extends React.Component {
     loadScreen: true
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const contactData = await AsyncStorage.getItem("userDetails");
+    const jsonObjectData = JSON.parse(contactData);
+    const { AccountId, Id } = jsonObjectData;
+    console.log(jsonObjectData);
+    console.log(AccountId, Id);
     if (this.props.navigation.state.params === undefined) {
-      axios.get("http://localhost:8675/referrals").then(res => {
+      axios.get("http://167.71.142.150:8675/referrals").then(res => {
         console.log(res.data.records);
         this.setState({
           activeCases: res.data.records,
@@ -67,7 +78,7 @@ class Search extends React.Component {
         loadScreen: false
       });
     }
-  }
+  };
 
   buttonPress = i => {
     const {

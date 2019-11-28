@@ -79,7 +79,7 @@ export default class Profile extends React.Component {
   };
 
   componentDidMount() {
-    axios.get("http://localhost:8675/referrals").then(res => {
+    axios.get("http://167.71.142.150:8675/referrals").then(res => {
       console.log(res.data.records);
       const { records } = res.data;
       records.map((record, index) => {
@@ -186,7 +186,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: activeCasesArray,
-                activeCaseCheck: true
+                arrayTitle: "Awaiting to be contacted"
               });
             }}
             style={styles.listItemContainerStyle}

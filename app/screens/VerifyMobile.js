@@ -19,7 +19,7 @@ import { ModalLoading } from "../components/LoadScreen";
 
 var { height, width } = Dimensions.get("window");
 
-const getVerificationCodeApi = "http://localhost:8675/getVerificationCode";
+const getVerificationCodeApi = "http://167.71.142.150:8675/getVerificationCode";
 
 // const text = [
 //   "Welcome to Pathway, please enter your activation code to verify your device. Your activation code can be found in your welcome email.",

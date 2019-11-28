@@ -15,6 +15,12 @@ import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
 
 const titles = ["Awaiting to be Contacted"];
+const allTitles = [
+  "Awaiting to be Contacted",
+  "Contacting",
+  "Contact Made",
+  "Live"
+];
 class ActiveCases extends React.Component {
   static navigationOptions = {
     // title: "Register",
@@ -53,7 +59,7 @@ class ActiveCases extends React.Component {
     console.log(jsonObjectData);
     console.log(AccountId, Id);
     if (this.props.navigation.state.params === undefined) {
-      axios.get("http://localhost:8675/referrals").then(res => {
+      axios.get("http://167.71.142.150:8675/referrals").then(res => {
         console.log(res.data.records);
         this.setState({
           activeCases: res.data.records,
@@ -158,7 +164,7 @@ class ActiveCases extends React.Component {
       );
     });
     if (activeCaseCheck) {
-      titles.map(title => {
+      allTitles.map(title => {
         const filteredTitle = searchFilteredArray.filter(caseDetails => {
           return caseDetails.Triage_Status__c === title;
         });
