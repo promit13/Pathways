@@ -134,10 +134,10 @@ export default class NewCase extends React.Component {
                 <TextInputMask
                   type={"datetime"}
                   options={{
-                    format: "YYYY-MM-DD"
+                    format: "DD-MM-YYYY"
                   }}
                   placeholderTextColor={colors.darkGrey}
-                  placeholder="DATE OF BIRTH ( YYYY-MM-DD )"
+                  placeholder="DATE OF BIRTH ( DD-MM-YYYY )"
                   onChangeText={handleChange("dob")}
                   onBlur={handleBlur("dob")}
                   value={values.dob}
