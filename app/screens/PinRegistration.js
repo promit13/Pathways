@@ -135,6 +135,7 @@ export default class PinRegistration extends Component {
             }}
             restrictToNumbers="true"
             value={code}
+            autoFocus={true}
             onTextChange={code => this.setState({ code, showError: false })}
             onFulfill={codeInput => {
               reconfirmCode

@@ -40,7 +40,8 @@ class Search extends React.Component {
     myConstabulary: false,
     nationalReferrals: false,
     checkDays: null,
-    loadScreen: true
+    loadScreen: true,
+    isHidden: false
   };
 
   componentDidMount() {
