@@ -128,9 +128,12 @@ export default class Questions extends React.Component {
       safeEmail,
       message
     } = userDetails;
+    var res = dob.split("/");
+    const splitDate = new Date(res[2], res[1] - 1, res[0]);
+    const newDOB = moment(splitDate).format("YYYY-MM-DD");
     const details = {
       name,
-      dob,
+      dob: newDOB,
       phone,
       safeContactNumber,
       safeEmail,

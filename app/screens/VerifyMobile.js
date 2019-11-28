@@ -88,17 +88,13 @@ export default class VerifyMobile extends Component {
     mobileNumber: ""
   };
 
-  componentDidMount = () => {};
-
-  registerMobile = values => {
+  registerMobile = code => {
     this.setState({ loading: true });
     const { user } = this.props.navigation.state.params;
-    console.log("REGISTER MOBILE NUMBER");
-    console.log(values);
-    const { code } = values;
+    console.log("REGISTER MOBILE NUMBER", code);
     axios
       .post(getVerificationCodeApi, {
-        mobileNumber: code
+        mobileNumber: `+44${code}`
       })
       .then(response => {
         console.log(response);
@@ -138,127 +134,96 @@ export default class VerifyMobile extends Component {
         style={{ flex: 1, padding: 40, marginTop: 40 }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Formik
-            initialValues={{ code: mobileNumber }}
-            onSubmit={values => {
-              this.registerMobile(values);
-            }}
-            validationSchema={yup.object().shape({
-              code: yup.string().required("Please enter your mobile number")
-            })}
-          >
-            {({
-              values,
-              handleChange,
-              errors,
-              setFieldTouched,
-              touched,
-              isValid,
-              handleSubmit
-            }) => (
-              <Fragment>
-                <Image
-                  source={require("../../assets/path-logo.png")}
+          <View>
+            <Image
+              source={require("../../assets/path-logo.png")}
+              style={{
+                alignSelf: "center",
+                marginTop: 20,
+                color: colors.accent,
+                marginBottom: 20
+              }}
+            />
+            <Text
+              style={{
+                color: colors.darkGrey,
+                fontSize: 20,
+                marginBottom: 20
+              }}
+            >
+              {text[2]}
+            </Text>
+
+            <Text style={styles.textInputStyle}>{mobileNumber}</Text>
+            {loading && <ModalLoading text="Please wait..." />}
+            <TouchableOpacity
+              style={{ marginTop: 20 }}
+              onPress={() => this.registerMobile(mobileNumber)}
+              underlayColor="#fff"
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "white",
+                  backgroundColor: colors.accent,
+                  paddingTop: 12,
+                  fontSize: 17,
+                  height: 45
+                }}
+              >
+                ACTIVATE
+              </Text>
+            </TouchableOpacity>
+            <View>
+              <Text
+                style={{
+                  color: colors.darkGrey,
+                  fontSize: 20,
+                  marginTop: 20
+                }}
+              >
+                If you have not received a code please click button below.
+              </Text>
+              <TouchableOpacity
+                onPress={() => this.registerMobile(mobileNumber)}
+              >
+                <Text
                   style={{
-                    alignSelf: "center",
-                    marginTop: 20,
-                    color: colors.accent,
-                    marginBottom: 20
+                    color: colors.darkGrey,
+                    fontSize: 20,
+                    marginTop: 10
+                  }}
+                >
+                  Click here
+                </Text>
+                <View
+                  style={{
+                    backgroundColor: colors.darkGrey,
+                    height: 1,
+                    width: 90
                   }}
                 />
-                <Text
-                  style={{
-                    color: colors.darkGrey,
-                    fontSize: 20,
-                    marginBottom: 20
-                  }}
-                >
-                  {text[2]}
-                </Text>
-                <View>
-                  <TextInput
-                    style={styles.textInputStyle}
-                    value={values.code}
-                    onChangeText={handleChange("code")}
-                    placeholder="MOBILE NUMBER (+447*********)"
-                    onBlur={() => setFieldTouched("code")}
-                  />
-                </View>
-                {touched.code && errors.code && (
-                  <Text style={styles.textErrorStyle}>{errors.code}</Text>
-                )}
-                {showError && (
-                  <ErrorMessage errorMessage={errorMessage} marginTop={5} />
-                )}
-                {loading && <ModalLoading text="Please wait..." />}
-                <TouchableOpacity
-                  style={{ marginTop: 20 }}
-                  onPress={handleSubmit}
-                  underlayColor="#fff"
-                >
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      color: "white",
-                      backgroundColor: colors.accent,
-                      paddingTop: 12,
-                      fontSize: 17,
-                      height: 45
-                    }}
-                  >
-                    ACTIVATE
-                  </Text>
-                </TouchableOpacity>
-                <View>
-                  <Text
-                    style={{
-                      color: colors.darkGrey,
-                      fontSize: 20,
-                      marginTop: 20
-                    }}
-                  >
-                    If you have not received a code please click button below.
-                  </Text>
-                  <TouchableOpacity onPress={() => this.registerMobile(values)}>
-                    <Text
-                      style={{
-                        color: colors.darkGrey,
-                        fontSize: 20,
-                        marginTop: 10
-                      }}
-                    >
-                      Click here
-                    </Text>
-                    <View
-                      style={{
-                        backgroundColor: colors.darkGrey,
-                        height: 1,
-                        width: 90
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-                <Text
-                  style={{
-                    color: colors.darkGrey,
-                    fontSize: 20,
-                    marginTop: 20
-                  }}
-                >
-                  {text[3]}
-                </Text>
-                <Text
-                  style={{
-                    color: colors.darkGrey,
-                    fontSize: 20,
-                    marginBottom: 20
-                  }}
-                >
-                  https://socialdynamics.org/apply
-                </Text>
-              </Fragment>
-            )}
-          </Formik>
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                color: colors.darkGrey,
+                fontSize: 20,
+                marginTop: 20
+              }}
+            >
+              {text[3]}
+            </Text>
+            <Text
+              style={{
+                color: colors.darkGrey,
+                fontSize: 20,
+                marginBottom: 20
+              }}
+            >
+              https://socialdynamics.org/apply
+            </Text>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     );

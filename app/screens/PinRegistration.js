@@ -45,7 +45,7 @@ export default class PinRegistration extends Component {
 
   pinInput = React.createRef();
 
-  checkCode = code => {
+  checkCode = async code => {
     const { user } = this.props.navigation.state.params;
     const { initialCode } = this.state;
     console.log(user);
@@ -59,14 +59,14 @@ export default class PinRegistration extends Component {
         initialCode: ""
       });
     } else {
+      await AsyncStorage.setItem("pin", code);
       this.setState({ loading: true });
       firebase
         .firestore()
         .collection("users")
         .doc(user.userId)
         .update({ pinSet: true, pin: code })
-        .then(async () => {
-          await AsyncStorage.setItem("pin", code);
+        .then(() => {
           this.setState({
             showError: false,
             errorMessage: "",

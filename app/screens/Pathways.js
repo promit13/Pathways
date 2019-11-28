@@ -27,6 +27,8 @@ export default class Pathways extends Component {
   componentDidMount = async () => {
     const pin = await AsyncStorage.getItem("pin");
     console.log(pin);
+    // const { user } = this.props.navigation.state.params;
+    // console.log(user);
     this.setState({ pin });
   };
 

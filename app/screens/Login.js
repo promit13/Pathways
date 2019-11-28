@@ -113,8 +113,8 @@ export default class Login extends Component {
         }
         await AsyncStorage.setItem("userDetails", JSON.stringify(contactData));
 
-        const { Phone } = contactData;
-        console.log(Phone);
+        const { MobilePhone } = contactData;
+        console.log(MobilePhone);
         axios
           .post(getCustomTokenApi, { uid: code })
           .then(response => {
@@ -132,7 +132,7 @@ export default class Login extends Component {
                   phoneVerified: false,
                   pin: 0,
                   pinSet: false,
-                  phone: Phone,
+                  phone: MobilePhone,
                   messagingToken: this.state.fcmToken
                 };
                 firebase

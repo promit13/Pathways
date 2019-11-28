@@ -132,10 +132,10 @@ export default class NewCase extends React.Component {
                 <TextInputMask
                   type={"datetime"}
                   options={{
-                    format: "YYYY-MM-DD"
+                    format: "DD/MM/YYYY"
                   }}
                   placeholderTextColor={colors.darkGrey}
-                  placeholder="DATE OF BIRTH ( YYYY-MM-DD )"
+                  placeholder="DATE OF BIRTH ( DD/MM/YYYY )"
                   onChangeText={handleChange("dob")}
                   onBlur={handleBlur("dob")}
                   value={values.dob}
@@ -244,8 +244,8 @@ export default class NewCase extends React.Component {
                 )}
                 <Button
                   // onPress={handleSubmit}
-                  // onPress={() => this.onContinue()}
-                  onPress={() => firebase.auth().signOut()}
+                  onPress={() => this.onContinue(values)}
+                  // onPress={() => firebase.auth().signOut()}
                   title="Contiue"
                   buttonStyle={{
                     marginHorizontal: 40,
