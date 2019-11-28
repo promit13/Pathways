@@ -243,9 +243,9 @@ export default class NewCase extends React.Component {
                   <ErrorMessage errorMessage={errorMessage} marginLeft={40} />
                 )}
                 <Button
-                  onPress={handleSubmit}
+                  // onPress={handleSubmit}
                   // onPress={() => this.onContinue()}
-                  // onPress={() => firebase.auth().signOut()}
+                  onPress={() => firebase.auth().signOut()}
                   title="Contiue"
                   buttonStyle={{
                     marginHorizontal: 40,

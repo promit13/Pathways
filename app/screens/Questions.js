@@ -232,7 +232,7 @@ export default class Questions extends React.Component {
               marginBottom: 30
             }}
           >
-            Perfect! We now need to learn a little bit more about you.
+            We now need to learn a little bit more about you.
           </Text>
           {this.renderQuestions()}
           {errorMessageVisible && (

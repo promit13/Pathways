@@ -83,13 +83,13 @@ export default class Profile extends React.Component {
       console.log(res.data.records);
       const { records } = res.data;
       records.map((record, index) => {
-        if (record.Triage_Status__c === "Completed") {
+        if (record.Triage_Status__c === "Contact Made") {
           completedCasesArray.push(record);
         }
-        if (record.Triage_Status__c === "Served") {
+        if (record.Triage_Status__c === "Contact Made") {
           injunctionServedArray.push(record);
         }
-        if (record.Triage_Status__c === "Critical") {
+        if (record.Triage_Status__c === "Contact Made") {
           criticalPathwayArray.push(record);
         }
         if (record.Triage_Status__c === "Fallen") {

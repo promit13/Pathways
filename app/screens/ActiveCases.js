@@ -12,9 +12,7 @@ const titles = [
   "Awaiting to be Contacted",
   "Contacting",
   "Contact Made",
-  "Live",
-  "Completed",
-  "Closed"
+  "Live"
 ];
 class ActiveCases extends React.Component {
   static navigationOptions = {

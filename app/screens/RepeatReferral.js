@@ -67,7 +67,7 @@ export default class RepeatReferrals extends React.Component {
         />
 
         <Text style={{ fontSize: 20, color: colors.darkGrey, margin: 40 }}>
-          {`The victim is already in the system with a matchin name and date of birth.\n\nPlease ask the victim if they have been referred before to their knowledge.\n\nIf the victim is not sure please click NO.`}
+          {`The victim is already in the system with a matching name and date of birth.\n\nPlease ask the victim if they have been referred before to their knowledge.\n\nIf the victim is not sure please click NO.`}
         </Text>
         <TouchableOpacity
           onPress={() => this.createTriageAndReferral(true)}
