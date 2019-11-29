@@ -169,35 +169,41 @@ export default class Case extends React.Component {
             </TouchableOpacity>
           </View>
         )}
-        <Text style={styles.textHeaderStyle}>DOCUMENTS</Text>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("PdfViewer")}
-          style={[
-            styles.viewBoxStyle,
-            {
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "flex-start"
-            }
-          ]}
-        >
-          <Text style={[styles.textBoxStyle, { flex: 4 }]}>
-            Test
+        {caseDetails.Court_Injunction_url &&
+          <React.Fragment>
+            <Text style={styles.textHeaderStyle}>DOCUMENTS</Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate("PdfViewer", {
+                documentUrl: caseDetails.Court_Injunction_url
+              })}
+              style={[
+                styles.viewBoxStyle,
+                {
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start"
+                }
+              ]}
+            >
+              <Text style={[styles.textBoxStyle, { flex: 4 }]}>
+                Test
             {/* {status} */}
-          </Text>
-          <Icon
-            name="angle-right"
-            type="font-awesome"
-            size={40}
-            iconStyle={{
-              flex: 1,
-              alignSelf: "flex-end",
-              justifySelf: "center",
-              color: colors.darkGrey
-            }}
-          />
-        </TouchableOpacity>
+              </Text>
+              <Icon
+                name="angle-right"
+                type="font-awesome"
+                size={40}
+                iconStyle={{
+                  flex: 1,
+                  alignSelf: "flex-end",
+                  justifySelf: "center",
+                  color: colors.darkGrey
+                }}
+              />
+            </TouchableOpacity>
+          </React.Fragment>
+        }
       </ScrollView>
     );
   }
