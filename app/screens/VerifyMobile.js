@@ -194,13 +194,13 @@ export default class VerifyMobile extends Component {
                     marginTop: 10
                   }}
                 >
-                  Click here
+                  Resend code
                 </Text>
                 <View
                   style={{
                     backgroundColor: colors.darkGrey,
                     height: 1,
-                    width: 90
+                    width: 120
                   }}
                 />
               </TouchableOpacity>

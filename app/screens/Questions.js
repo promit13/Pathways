@@ -135,7 +135,8 @@ export default class Questions extends React.Component {
       phone,
       safeContactNumber,
       safeEmail,
-      message
+      message,
+      clientConsent
     } = userDetails;
     var res = dob.split("/");
     const splitDate = new Date(res[2], res[1] - 1, res[0]);
@@ -147,6 +148,7 @@ export default class Questions extends React.Component {
       safeContactNumber,
       safeEmail,
       message,
+      clientConsent,
       status: "New",
       dateOfInstruction: formattedDate,
       referralSource: "App Referral",

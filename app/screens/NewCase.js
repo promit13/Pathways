@@ -30,11 +30,13 @@ export default class NewCase extends React.Component {
     if (!this.state.checkBoxChecked) {
       this.setState({
         showError: true,
-        errorMessage: "Please check the consent from victim"
+        errorMessage: "In order to proceed, please get consent from the victim."
       });
       return;
     }
-    this.props.navigation.navigate("Questions", { userDetails: values });
+    this.props.navigation.navigate("Questions", {
+      userDetails: { ...values, clientConsent: "Yes" }
+    });
   };
 
   static navigationOptions = {
@@ -151,12 +153,12 @@ export default class NewCase extends React.Component {
                 {touched.dob && errors.dob && (
                   <Text style={styles.textErrorStyle}>{errors.dob}</Text>
                 )}
-                <TextInputMask
-                  type={"cel-phone"}
-                  options={{
-                    maskType: "INTERNATIONAL",
-                    withDDD: false
-                  }}
+                <TextInput
+                  // type={"cel-phone"}
+                  // options={{
+                  //   maskType: "INTERNATIONAL",
+                  //   withDDD: false
+                  // }}
                   onChangeText={handleChange("phone")}
                   keyboardType="phone-pad"
                   onBlur={handleBlur("phone")}
@@ -173,12 +175,12 @@ export default class NewCase extends React.Component {
                 {touched.phone && errors.phone && (
                   <Text style={styles.textErrorStyle}>{errors.phone}</Text>
                 )}
-                <TextInputMask
-                  type={"cel-phone"}
-                  options={{
-                    maskType: "INTERNATIONAL",
-                    withDDD: false
-                  }}
+                <TextInput
+                  // type={"cel-phone"}
+                  // options={{
+                  //   maskType: "INTERNATIONAL",
+                  //   withDDD: false
+                  // }}
                   onChangeText={handleChange("safeContactNumber")}
                   onBlur={handleBlur("safeContactNumber")}
                   keyboardType="phone-pad"
@@ -255,9 +257,9 @@ export default class NewCase extends React.Component {
                   <ErrorMessage errorMessage={errorMessage} marginLeft={40} />
                 )}
                 <Button
-                  onPress={handleSubmit}
+                  // onPress={handleSubmit}
                   // onPress={() => this.onContinue()}
-                  // onPress={() => firebase.auth().signOut()}
+                  onPress={() => firebase.auth().signOut()}
                   title="Contiue"
                   buttonStyle={{
                     marginHorizontal: 40,

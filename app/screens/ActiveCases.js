@@ -13,6 +13,7 @@ import axios from "axios";
 import BookingDetails from "../components/BookingDetails";
 import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const titles = ["Awaiting to be Contacted"];
 const allTitles = [
@@ -38,12 +39,12 @@ class ActiveCases extends React.Component {
     activeCaseCheck: false,
     arrayTitle: "",
     searchKey: "",
-    sevenDays: false,
+    sevenDays: true,
     thirtyDays: false,
     sixtyDays: false,
     ninetyDays: false,
     allDays: false,
-    myReferrals: false,
+    myReferrals: true,
     myConstabulary: false,
     nationalReferrals: false,
     checkDays: null,
@@ -87,6 +88,31 @@ class ActiveCases extends React.Component {
     }
   };
 
+  // buttonPress = i => {
+  //   const {
+  //     sevenDays,
+  //     thirtyDays,
+  //     sixtyDays,
+  //     ninetyDays,
+  //     allDays,
+  //     myReferrals,
+  //     myConstabulary,
+  //     nationalReferrals
+  //   } = this.state;
+  //   this.setState({
+  //     sevenDays: sevenDays || i === 0 ? !this.state.sevenDays : false,
+  //     thirtyDays: thirtyDays || i === 1 ? !this.state.thirtyDays : false,
+  //     sixtyDays: sixtyDays || i === 2 ? !this.state.sixtyDays : false,
+  //     ninetyDays: ninetyDays || i === 3 ? !this.state.ninetyDays : false,
+  //     allDays: allDays || i === 4 ? !this.state.allDays : false,
+  //     myReferrals: myReferrals || i === 5 ? !this.state.myReferrals : false,
+  //     myConstabulary:
+  //       myConstabulary || i === 6 ? !this.state.myConstabulary : false,
+  //     nationalReferrals:
+  //       nationalReferrals || i === 7 ? !this.state.nationalReferrals : false
+  //   });
+  // };
+
   buttonPress = i => {
     const {
       sevenDays,
@@ -99,17 +125,81 @@ class ActiveCases extends React.Component {
       nationalReferrals
     } = this.state;
     this.setState({
-      sevenDays: sevenDays || i === 0 ? !this.state.sevenDays : false,
-      thirtyDays: thirtyDays || i === 1 ? !this.state.thirtyDays : false,
-      sixtyDays: sixtyDays || i === 2 ? !this.state.sixtyDays : false,
-      ninetyDays: ninetyDays || i === 3 ? !this.state.ninetyDays : false,
-      allDays: allDays || i === 4 ? !this.state.allDays : false,
-      myReferrals: myReferrals || i === 5 ? !this.state.myReferrals : false,
+      sevenDays:
+        i === 1 || i === 2 || i === 3 || i === 4
+          ? false
+          : sevenDays || i === 5 || i === 6 || i === 7
+          ? sevenDays
+          : !this.state.sevenDays,
+      thirtyDays:
+        i === 0 || i === 2 || i === 3 || i === 4
+          ? false
+          : thirtyDays || i === 5 || i === 6 || i === 7
+          ? thirtyDays
+          : !this.state.thirtyDays,
+      sixtyDays:
+        i === 0 || i === 1 || i === 3 || i === 4
+          ? false
+          : sixtyDays || i === 5 || i === 6 || i === 7
+          ? sixtyDays
+          : !this.state.sixtyDays,
+      ninetyDays:
+        i === 0 || i === 1 || i === 2 || i === 4
+          ? false
+          : ninetyDays || i === 5 || i === 6 || i === 7
+          ? ninetyDays
+          : !this.state.ninetyDays,
+      allDays:
+        i === 0 || i === 1 || i === 2 || i === 3
+          ? false
+          : allDays || i === 5 || i === 6 || i === 7
+          ? allDays
+          : !this.state.allDays,
+      myReferrals:
+        i === 6 || i === 7
+          ? false
+          : myReferrals || i === 0 || i === 1 || i === 2 || i === 3 || i === 4
+          ? myReferrals
+          : !this.state.myReferrals,
       myConstabulary:
-        myConstabulary || i === 6 ? !this.state.myConstabulary : false,
+        i === 5 || i === 7
+          ? false
+          : myConstabulary ||
+            i === 0 ||
+            i === 1 ||
+            i === 2 ||
+            i === 3 ||
+            i === 4
+          ? myConstabulary
+          : !this.state.myConstabulary,
       nationalReferrals:
-        nationalReferrals || i === 7 ? !this.state.nationalReferrals : false
+        i === 5 || i === 6
+          ? false
+          : nationalReferrals ||
+            i === 0 ||
+            i === 1 ||
+            i === 2 ||
+            i === 3 ||
+            i === 4
+          ? nationalReferrals
+          : !this.state.nationalReferrals
     });
+  };
+
+  renderContent = status => {
+    const casesList = Object.values(status)[0].map(caseDetails => {
+      return (
+        <BookingDetails
+          caseDetails={caseDetails}
+          onPress={() =>
+            this.props.navigation.navigate("Case", {
+              caseDetails
+            })
+          }
+        />
+      );
+    });
+    return casesList;
   };
 
   render() {
@@ -125,43 +215,51 @@ class ActiveCases extends React.Component {
       myReferrals,
       myConstabulary,
       nationalReferrals,
-      checkDays,
+      // checkDays,
       loadScreen,
       accountId,
       myId
     } = this.state;
+    const checkDays = sevenDays ? 7 : thirtyDays ? 30 : sixtyDays ? 60 : 90;
     let filteredArray = [];
     const todayDate = new Date();
     const toDate = moment(todayDate).subtract(checkDays, "d");
     const searchFilteredArray = activeCases.filter(item => {
-      const isBetween = moment(item.CreatedDate).isBetween(toDate, todayDate);
-      if (checkDays === null) {
-        if (myReferrals) {
-          console.log(myId);
-          console.log(item.Referrer_Contact_Name__c);
-          return (
-            item.Referral__r &&
-            item.Referral__r.Referrer_Contact_Name__c === myId &&
-            item.Referral__r.Name.includes(this.state.searchKey)
-          );
-        }
-        if (myConstabulary) {
-          return (
-            item.Referral__r &&
-            item.Referral__r.Referrer_Organisation__c === accountId &&
-            item.Referral__r.Name.includes(this.state.searchKey)
-          );
-        }
+      const isBetween = allDays
+        ? true
+        : moment(item.CreatedDate).isBetween(toDate, todayDate);
+      console.log(isBetween, checkDays);
+      // if (checkDays === null) {
+
+      if (myReferrals) {
         return (
           item.Referral__r &&
+          item.Referral__r.Referrer_Contact_Name__c === myId &&
+          isBetween &&
           item.Referral__r.Name.includes(this.state.searchKey)
         );
       }
+      if (myConstabulary) {
+        console.log("my consta");
+        return (
+          item.Referral__r &&
+          item.Referral__r.Referrer_Organisation__c === accountId &&
+          isBetween &&
+          item.Referral__r.Name.includes(this.state.searchKey)
+        );
+      }
+      console.log("national");
       return (
         item.Referral__r &&
         isBetween &&
-        item.Referral__r.Name.includes(this.state.searchKey) //startsWith
+        item.Referral__r.Name.includes(this.state.searchKey)
       );
+      //  }
+      // return (
+      //   item.Referral__r &&
+      //   isBetween &&
+      //   item.Referral__r.Name.includes(this.state.searchKey) //startsWith
+      // );
     });
     if (activeCaseCheck) {
       allTitles.map(title => {
@@ -195,35 +293,35 @@ class ActiveCases extends React.Component {
               console.log(searchKey);
             }}
             sevenDaysPress={() => {
-              this.setState({ checkDays: 7 });
+              // this.setState({ checkDays: 7 });
               this.buttonPress(0);
             }}
             thirtyDaysPress={() => {
-              this.setState({ checkDays: 30 });
+              // this.setState({ checkDays: 30 });
               this.buttonPress(1);
             }}
             sixtyDaysPress={() => {
-              this.setState({ checkDays: 60 });
+              // this.setState({ checkDays: 60 });
               this.buttonPress(2);
             }}
             ninetyDaysPress={() => {
-              this.setState({ checkDays: 90 });
+              // this.setState({ checkDays: 90 });
               this.buttonPress(3);
             }}
             allDaysPress={() => {
-              this.setState({ checkDays: null });
+              // this.setState({ checkDays: null });
               this.buttonPress(4);
             }}
             myReferralsPress={() => {
-              this.setState({ checkDays: null });
+              // this.setState({ checkDays: null });
               this.buttonPress(5);
             }}
             myConstabularyPress={() => {
-              this.setState({ checkDays: null });
+              // this.setState({ checkDays: null });
               this.buttonPress(6);
             }}
             nationalReferralsPress={() => {
-              this.setState({ checkDays: null });
+              // this.setState({ checkDays: null });
               this.buttonPress(7);
             }}
             sevenDays={sevenDays}
@@ -243,7 +341,7 @@ class ActiveCases extends React.Component {
           {filteredArray.map(status => {
             return (
               <View>
-                <View
+                <TouchableOpacity
                   style={{
                     flexDirection: "row",
                     height: 35,
@@ -270,8 +368,10 @@ class ActiveCases extends React.Component {
                       {Object.keys(status)}
                     </Text>
                   </View>
-                </View>
-                {Object.values(status)[0].map(caseDetails => {
+                </TouchableOpacity>
+                {/* {this.renderContent(i + 1, episodeValue)} */}
+                {this.renderContent(status)}
+                {/* {Object.values(status)[0].map(caseDetails => {
                   return (
                     <BookingDetails
                       caseDetails={caseDetails}
@@ -282,7 +382,7 @@ class ActiveCases extends React.Component {
                       }
                     />
                   );
-                })}
+                })} */}
               </View>
             );
           })}

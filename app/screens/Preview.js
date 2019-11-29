@@ -6,7 +6,8 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  SafeAreaView
+  SafeAreaView,
+  AsyncStorage
 } from "react-native";
 import axios from "axios";
 import { Icon } from "react-native-elements";
@@ -76,10 +77,17 @@ export default class Profile extends React.Component {
     contactMadeCasesArray: [],
     liveCasesArray: [],
     completedCasesArray: [],
-    loadScreen: true
+    loadScreen: true,
+    myId: "",
+    organisationId: ""
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const contactData = await AsyncStorage.getItem("userDetails");
+    const jsonObjectData = JSON.parse(contactData);
+    const { AccountId, Id } = jsonObjectData;
+    console.log(jsonObjectData);
+    console.log(AccountId, Id);
     axios.get("http://167.71.142.150:8675/referrals").then(res => {
       console.log(res.data.records);
       const { records } = res.data;
@@ -106,6 +114,8 @@ export default class Profile extends React.Component {
             contactMadeCasesArray,
             liveCasesArray,
             completedCasesArray,
+            myId: Id,
+            organisationId: AccountId,
             loadScreen: false
           });
           awaitingCasesArray = [];
@@ -119,7 +129,7 @@ export default class Profile extends React.Component {
       //   activeCases: res.data.records
       // });
     });
-  }
+  };
 
   render() {
     const {
@@ -128,7 +138,9 @@ export default class Profile extends React.Component {
       contactMadeCasesArray,
       liveCasesArray,
       completedCasesArray,
-      loadScreen
+      loadScreen,
+      myId,
+      organisationId
     } = this.state;
     if (loadScreen) return <LoadScreen text="Please wait" />;
     return (
@@ -205,7 +217,14 @@ export default class Profile extends React.Component {
               Awaiting to be contacted
             </Text>
             <Text style={styles.listItemCountStyle}>
-              {awaitingCasesArray.length}
+              {
+                awaitingCasesArray.filter(item => {
+                  return (
+                    item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId
+                  );
+                }).length
+              }
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -224,7 +243,12 @@ export default class Profile extends React.Component {
             />
             <Text style={styles.listItemTextStyle}>Contacting</Text>
             <Text style={styles.listItemCountStyle}>
-              {contactingCasesArray.length}
+              {
+                contactingCasesArray.filter(item => {
+                  item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId;
+                }).length
+              }
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -243,7 +267,12 @@ export default class Profile extends React.Component {
             />
             <Text style={styles.listItemTextStyle}>Live</Text>
             <Text style={styles.listItemCountStyle}>
-              {liveCasesArray.length}
+              {
+                liveCasesArray.filter(item => {
+                  item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId;
+                }).length
+              }
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -262,7 +291,12 @@ export default class Profile extends React.Component {
             />
             <Text style={styles.listItemTextStyle}>Contact made</Text>
             <Text style={styles.listItemCountStyle}>
-              {contactMadeCasesArray.length}
+              {
+                contactMadeCasesArray.filter(item => {
+                  item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId;
+                }).length
+              }
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -281,7 +315,12 @@ export default class Profile extends React.Component {
             />
             <Text style={styles.listItemTextStyle}>Completed</Text>
             <Text style={styles.listItemCountStyle}>
-              {completedCasesArray.length}
+              {
+                completedCasesArray.filter(item => {
+                  item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId;
+                }).length
+              }
             </Text>
           </TouchableOpacity>
         </ScrollView>
