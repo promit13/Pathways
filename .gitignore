@@ -39,12 +39,12 @@ buck-out
 # Watchman
 .watchmanconfig
 
-# # Android
-# .idea
-# .gradle
-# local.properties
-# *.iml
-# /android/
+# Android
+.idea
+.gradle
+local.properties
+*.iml
+/android/
 
 # Node
 node_modules
@@ -89,3 +89,7 @@ RNTester/Pods/*
 # react-native-codegen
 /ReactCommon/fabric/components/rncore/
 /schema-rncore.json
+
+# Visual studio
+.vscode
+.vs
