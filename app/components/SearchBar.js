@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
-import { Avatar, Icon } from "react-native-elements";
+import { moderateScale } from "react-native-size-matters";
 import colors from "../style";
-import { Dropdown } from "react-native-material-dropdown";
 import SearchBar from "react-native-material-design-searchbar";
 
 const styles = {
   touchableStyle: {
-    paddingVertical: 20,
-    marginRight: 5,
+    paddingVertical: moderateScale(20),
+    marginRight: moderateScale(5),
     justifyContent: "center",
     flex: 1
   },
@@ -20,7 +19,7 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    marginHorizontal: 10
+    marginHorizontal: moderateScale(10)
   }
 };
 export default class SearchBarWrapper extends Component {

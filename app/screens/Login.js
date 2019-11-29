@@ -8,16 +8,14 @@ import {
   StyleSheet,
   Dimensions,
   View,
+  Platform,
   Image,
   ScrollView,
-  ImageBackground,
   KeyboardAvoidingView
 } from "react-native";
 import { Formik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
-import { Button, Icon } from "react-native-elements";
-import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 import firebase from "react-native-firebase";
 import { getFcmToken } from "../utils/FcmToken";
 import ErrorMessage from "../components/Error";
@@ -196,7 +194,7 @@ export default class Login extends Component {
     return (
       <KeyboardAvoidingView
         behavior="padding"
-        enabled
+        behavior={Platform.OS === "android" ? "" : "padding"}
         style={{ flex: 1, padding: 40, marginTop: 40 }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>

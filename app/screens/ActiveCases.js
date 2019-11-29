@@ -4,6 +4,8 @@ import {
   Text,
   ScrollView,
   SafeAreaView,
+  Platform,
+  KeyboardAvoidingView,
   AsyncStorage
 } from "react-native";
 import moment from "moment";
@@ -277,8 +279,18 @@ class ActiveCases extends React.Component {
     if (loadScreen) return <LoadScreen text="Please wait" />;
     console.log(filteredArray);
     return (
-      <SafeAreaView
-        forceInset={{ bottom: "always" }}
+      // <SafeAreaView
+      //   forceInset={{ bottom: "always" }}
+      //   style={{
+      //     borderBottomWidth: 2,
+      //     borderBottomColor: "#F1F3F2",
+      //     borderTopWidth: 2,
+      //     borderTopColor: "#F1F3F2"
+      //   }}
+      // >
+      <KeyboardAvoidingView
+        behavior="padding"
+        behavior={Platform.OS === "android" ? "" : "padding"}
         style={{
           borderBottomWidth: 2,
           borderBottomColor: "#F1F3F2",
@@ -387,7 +399,7 @@ class ActiveCases extends React.Component {
             );
           })}
         </ScrollView>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   }
 }

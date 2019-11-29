@@ -10,12 +10,9 @@ import {
   StyleSheet
 } from "react-native";
 import { Button, CheckBox } from "react-native-elements";
-import axios from "axios";
 import { Formik } from "formik";
 import * as yup from "yup";
-import moment from "moment";
 import { TextInputMask } from "react-native-masked-text";
-import firebase from "react-native-firebase";
 import colors from "../style";
 import ErrorMessage from "../components/Error";
 export default class NewCase extends React.Component {
@@ -229,7 +226,7 @@ export default class NewCase extends React.Component {
                     styles.container,
                     { borderBottomWidth: 2, height: 60 }
                   ]}
-                  multiline="true"
+                  multiline={true}
                 />
                 {touched.message && errors.message && (
                   <Text style={styles.textErrorStyle}>{errors.message}</Text>
@@ -254,12 +251,12 @@ export default class NewCase extends React.Component {
                   }
                 />
                 {showError && (
-                  <ErrorMessage errorMessage={errorMessage} marginLeft={40} />
+                  <ErrorMessage errorMessage={errorMessage} marginLeft={20} />
                 )}
                 <Button
-                  // onPress={handleSubmit}
+                  onPress={handleSubmit}
                   // onPress={() => this.onContinue()}
-                  onPress={() => firebase.auth().signOut()}
+                  // onPress={() => firebase.auth().signOut()}
                   title="Contiue"
                   buttonStyle={{
                     marginHorizontal: 40,
