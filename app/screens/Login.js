@@ -36,7 +36,7 @@ const getCustomTokenApi = "http://167.71.142.150:8675/getCustomToken";
 
 const text = [
   " Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
-  "If you do not have a welcome email please call 0800 1017 110. If you wish to apply to become a referrer please go to:"
+  "If you do not have a welcome email please email support@socialdynamics.org. If you wish to apply to become a referrer please go to:"
 ];
 
 const styles = StyleSheet.create({
@@ -217,77 +217,77 @@ export default class Login extends Component {
               isValid,
               handleSubmit
             }) => (
-              <Fragment>
-                <Image
-                  source={require("../../assets/path-logo.png")}
-                  style={{
-                    alignSelf: "center",
-                    marginTop: 20,
-                    color: colors.accent,
-                    marginBottom: 20
-                  }}
-                />
-                <Text
-                  style={{
-                    color: colors.darkGrey,
-                    fontSize: 20,
-                    marginBottom: 20
-                  }}
-                >
-                  {text[0]}
-                </Text>
-                <View>
-                  <TextInput
-                    style={styles.textInputStyle}
-                    value={values.code}
-                    onChangeText={handleChange("code")}
-                    placeholder="ACTIVATION CODE"
-                    onBlur={() => setFieldTouched("code")}
+                <Fragment>
+                  <Image
+                    source={require("../../assets/path-logo.png")}
+                    style={{
+                      alignSelf: "center",
+                      marginTop: 20,
+                      color: colors.accent,
+                      marginBottom: 20
+                    }}
                   />
-                </View>
-                {touched.code && errors.code && (
-                  <Text style={styles.textErrorStyle}>{errors.code}</Text>
-                )}
-                {showError && <ErrorMessage errorMessage={errorMessage} />}
-                {loading && <ModalLoading text="Please wait ..." />}
-                <TouchableOpacity
-                  style={{ marginTop: 20 }}
-                  onPress={handleSubmit}
-                  underlayColor="#fff"
-                >
                   <Text
                     style={{
-                      textAlign: "center",
-                      color: "white",
-                      backgroundColor: colors.accent,
-                      paddingTop: 12,
-                      fontSize: 17,
-                      height: 45
+                      color: colors.darkGrey,
+                      fontSize: 20,
+                      marginBottom: 20
                     }}
                   >
-                    AUTHORISE
+                    {text[0]}
                   </Text>
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    color: colors.darkGrey,
-                    fontSize: 20,
-                    marginTop: 20
-                  }}
-                >
-                  {text[1]}
+                  <View>
+                    <TextInput
+                      style={styles.textInputStyle}
+                      value={values.code}
+                      onChangeText={handleChange("code")}
+                      placeholder="ACTIVATION CODE"
+                      onBlur={() => setFieldTouched("code")}
+                    />
+                  </View>
+                  {touched.code && errors.code && (
+                    <Text style={styles.textErrorStyle}>{errors.code}</Text>
+                  )}
+                  {showError && <ErrorMessage errorMessage={errorMessage} />}
+                  {loading && <ModalLoading text="Please wait ..." />}
+                  <TouchableOpacity
+                    style={{ marginTop: 20 }}
+                    onPress={handleSubmit}
+                    underlayColor="#fff"
+                  >
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        color: "white",
+                        backgroundColor: colors.accent,
+                        paddingTop: 12,
+                        fontSize: 17,
+                        height: 45
+                      }}
+                    >
+                      AUTHORISE
+                  </Text>
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      color: colors.darkGrey,
+                      fontSize: 20,
+                      marginTop: 20
+                    }}
+                  >
+                    {text[1]}
+                  </Text>
+                  <Text
+                    style={{
+                      color: colors.darkGrey,
+                      fontSize: 20,
+                      marginBottom: 20
+                    }}
+                  >
+                    https://socialdynamics.org/apply
                 </Text>
-                <Text
-                  style={{
-                    color: colors.darkGrey,
-                    fontSize: 20,
-                    marginBottom: 20
-                  }}
-                >
-                  https://socialdynamics.org/apply
-                </Text>
-              </Fragment>
-            )}
+                </Fragment>
+              )}
           </Formik>
         </ScrollView>
       </KeyboardAvoidingView>
