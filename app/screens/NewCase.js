@@ -3,21 +3,22 @@ import {
   View,
   Text,
   TextInput,
-  SafeAreaView,
-  AsyncStorage,
   ScrollView,
+  Platform,
   Image,
+  KeyboardAvoidingView,
   StyleSheet
 } from "react-native";
 import { Button, CheckBox } from "react-native-elements";
 import { Formik } from "formik";
+import firebase from "react-native-firebase";
 import * as yup from "yup";
 import { TextInputMask } from "react-native-masked-text";
 import colors from "../style";
 import ErrorMessage from "../components/Error";
 export default class NewCase extends React.Component {
   state = {
-    checkBoxChecked: false,
+    checkBoxChecked: true,
     showError: true,
     errorMessage: ""
   };
@@ -48,7 +49,10 @@ export default class NewCase extends React.Component {
     const { checkBoxChecked, showError, errorMessage } = this.state;
     console.log(checkBoxChecked);
     return (
-      <SafeAreaView>
+      <KeyboardAvoidingView
+        behavior="padding"
+        behavior={Platform.OS === "android" ? "" : "padding"}
+      >
         <ScrollView showsVerticalScrollIndicator={false}>
           <Image
             source={require("../../assets/path-logo.png")}
@@ -151,11 +155,6 @@ export default class NewCase extends React.Component {
                   <Text style={styles.textErrorStyle}>{errors.dob}</Text>
                 )}
                 <TextInput
-                  // type={"cel-phone"}
-                  // options={{
-                  //   maskType: "INTERNATIONAL",
-                  //   withDDD: false
-                  // }}
                   onChangeText={handleChange("phone")}
                   keyboardType="phone-pad"
                   onBlur={handleBlur("phone")}
@@ -173,11 +172,6 @@ export default class NewCase extends React.Component {
                   <Text style={styles.textErrorStyle}>{errors.phone}</Text>
                 )}
                 <TextInput
-                  // type={"cel-phone"}
-                  // options={{
-                  //   maskType: "INTERNATIONAL",
-                  //   withDDD: false
-                  // }}
                   onChangeText={handleChange("safeContactNumber")}
                   onBlur={handleBlur("safeContactNumber")}
                   keyboardType="phone-pad"
@@ -224,7 +218,7 @@ export default class NewCase extends React.Component {
                   placeholderTextColor={colors.darkGrey}
                   style={[
                     styles.container,
-                    { borderBottomWidth: 2, height: 60 }
+                    { borderBottomWidth: 2, height: 100 }
                   ]}
                   multiline={true}
                 />
@@ -270,7 +264,7 @@ export default class NewCase extends React.Component {
             )}
           </Formik>
         </ScrollView>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   }
 }

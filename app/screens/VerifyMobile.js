@@ -19,7 +19,7 @@ import { ModalLoading } from "../components/LoadScreen";
 
 var { height, width } = Dimensions.get("window");
 
-const getVerificationCodeApi = "http://167.71.142.150:8675/getVerificationCode";
+const getVerificationCodeApi = "http://167.99.90.138:8675/getVerificationCode";
 
 // const text = [
 //   "Welcome to Pathway, please enter your activation code to verify your device. Your activation code can be found in your welcome email.",
@@ -189,20 +189,20 @@ export default class VerifyMobile extends Component {
               >
                 <Text
                   style={{
-                    color: colors.darkGrey,
-                    fontSize: 20,
+                    color: "blue",
+                    fontSize: 16,
                     marginTop: 10
                   }}
                 >
                   Resend code
                 </Text>
-                <View
+                {/* <View
                   style={{
                     backgroundColor: colors.darkGrey,
                     height: 1,
                     width: 120
                   }}
-                />
+                /> */}
               </TouchableOpacity>
             </View>
             <Text

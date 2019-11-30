@@ -52,8 +52,8 @@ const pickerItems = [
   { label: "No", value: "No" }
 ];
 
-const createReferralApi = "http://167.71.142.150:8675/createReferral";
-const getAccountApi = "http://167.71.142.150:8675/searchAccount";
+const createReferralApi = "http://167.99.90.138:8675/createReferral";
+const getAccountApi = "http://167.99.90.138:8675/searchAccount";
 export default class Questions extends React.Component {
   static navigationOptions = {
     headerStyle: {
@@ -149,7 +149,6 @@ export default class Questions extends React.Component {
       safeEmail,
       message,
       clientConsent,
-      status: "New",
       dateOfInstruction: formattedDate,
       referralSource: "App Referral",
       referrerContactName: userId,
@@ -226,7 +225,10 @@ export default class Questions extends React.Component {
   render() {
     const { errorMessageVisible, errorMessage, loadscreen } = this.state;
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 30 }}
+      >
         <View style={{ flex: 1, paddingHorizontal: 35 }}>
           <Image
             source={require("../../assets/path-logo.png")}

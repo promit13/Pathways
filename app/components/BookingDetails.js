@@ -19,13 +19,19 @@ const BookingDetails = ({ onPress, caseDetails }) => (
         justifyContent: "center"
       }}
     >
-      <View style={{ display: "flex", flexDirection: "column", flex: 8 }}>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 8,
+          justifyContent: "center"
+        }}
+      >
         <Text
           style={{
             color: colors.darkGrey,
             flex: 10,
             fontSize: 20,
-            marginTop: 2,
             marginLeft: 18
           }}
         >

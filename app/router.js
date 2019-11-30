@@ -70,8 +70,8 @@ const AddStack = createStackNavigator(
 
 const SearchStack = createStackNavigator(
   {
-    // Search,
-    ActiveCases,
+    Search,
+    // ActiveCases,
     Case,
     PdfViewer
   },

@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   View,
+  Linking,
   Platform,
   Image,
   ScrollView,
@@ -17,15 +18,14 @@ import { Formik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
 import firebase from "react-native-firebase";
-import { getFcmToken } from "../utils/FcmToken";
 import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
 import colors from "../style";
 
 var { height, width } = Dimensions.get("window");
 
-const getAccountApi = "http://167.71.142.150:8675/getAccount";
-const getCustomTokenApi = "http://167.71.142.150:8675/getCustomToken";
+const getAccountApi = "http://167.99.90.138:8675/getAccount";
+const getCustomTokenApi = "http://167.99.90.138:8675/getCustomToken";
 
 // const text = [
 //   " to Pathway, please enter your activation code to verify your device. Your activation code can be found in your welcome email.",
@@ -36,7 +36,8 @@ const getCustomTokenApi = "http://167.71.142.150:8675/getCustomToken";
 
 const text = [
   " Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
-  "If you do not have a welcome email please call 0800 1017 110. If you wish to apply to become a referrer please go to:"
+  "If you do not have a welcome email, please email us at:",
+  "If you wish to apply to become a referrer please go to:"
 ];
 
 const styles = StyleSheet.create({
@@ -89,10 +90,10 @@ export default class Login extends Component {
     loading: false
   };
 
-  componentDidMount = async () => {
-    const fcmToken = await getFcmToken();
-    this.setState({ fcmToken });
-  };
+  // componentDidMount = async () => {
+  //   const fcmToken = await getFcmToken();
+  //   this.setState({ fcmToken });
+  // };
 
   registerUser = values => {
     const { code } = values;
@@ -139,8 +140,8 @@ export default class Login extends Component {
                   phoneVerified: false,
                   pin: 0,
                   pinSet: false,
-                  phone: Phone,
-                  messagingToken: this.state.fcmToken
+                  phone: Phone
+                  // messagingToken: this.state.fcmToken
                 };
                 firebase
                   .firestore()
@@ -187,6 +188,12 @@ export default class Login extends Component {
         });
         console.log(er);
       });
+  };
+
+  sendEmail = () => {
+    Linking.openURL(
+      "mailto:support@socialdynamics.org?subject=PATHWAYS&body=Description"
+    );
   };
 
   render() {
@@ -277,7 +284,44 @@ export default class Login extends Component {
                 >
                   {text[1]}
                 </Text>
+                <TouchableOpacity onPress={() => this.sendEmail()}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginTop: 10,
+                      color: "blue"
+                    }}
+                  >
+                    support@socialdynamics.org
+                  </Text>
+                </TouchableOpacity>
                 <Text
+                  style={{
+                    color: colors.darkGrey,
+                    fontSize: 20,
+                    marginTop: 20
+                  }}
+                >
+                  {text[2]}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    Linking.openURL("https://socialdynamics.org").catch(err =>
+                      console.log("An error occurred", err)
+                    );
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "blue",
+                      fontSize: 16,
+                      marginTop: 10
+                    }}
+                  >
+                    https://socialdynamics.org/apply
+                  </Text>
+                </TouchableOpacity>
+                {/* <Text
                   style={{
                     color: colors.darkGrey,
                     fontSize: 20,
@@ -285,7 +329,7 @@ export default class Login extends Component {
                   }}
                 >
                   https://socialdynamics.org/apply
-                </Text>
+                </Text> */}
               </Fragment>
             )}
           </Formik>

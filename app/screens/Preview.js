@@ -88,43 +88,48 @@ export default class Profile extends React.Component {
     const { AccountId, Id } = jsonObjectData;
     console.log(jsonObjectData);
     console.log(AccountId, Id);
-    axios.get("http://167.71.142.150:8675/referrals").then(res => {
-      console.log(res.data.records);
-      const { records } = res.data;
-      records.map((record, index) => {
-        if (record.Triage_Status__c === "Awaiting to be Contacted") {
-          awaitingCasesArray.push(record);
-        }
-        if (record.Triage_Status__c === "Contacting") {
-          contactingCasesArray.push(record);
-        }
-        if (record.Triage_Status__c === "Contact Made") {
-          contactMadeCasesArray.push(record);
-        }
-        if (record.Triage_Status__c === "Live") {
-          liveCasesArray.push(record);
-        }
-        if (record.Triage_Status__c === "Completed") {
-          completedCasesArray.push(record);
-        }
-        if (index === records.length - 1) {
-          this.setState({
-            awaitingCasesArray,
-            contactingCasesArray,
-            contactMadeCasesArray,
-            liveCasesArray,
-            completedCasesArray,
-            myId: Id,
-            organisationId: AccountId,
-            loadScreen: false
+    axios.get("http://167.99.90.138:8675/referrals").then(res => {
+      axios
+        .get("http://167.99.90.138:8675/convertedAccounts")
+        .then(completedRecords => {
+          console.log(completedRecords.data);
+          console.log(res.data.records);
+          const { records } = res.data;
+          records.map((record, index) => {
+            if (record.Triage_Status__c === "Awaiting to be Contacted") {
+              awaitingCasesArray.push(record);
+            }
+            if (record.Triage_Status__c === "Contacting") {
+              contactingCasesArray.push(record);
+            }
+            if (record.Triage_Status__c === "Contact Made") {
+              contactMadeCasesArray.push(record);
+            }
+            if (record.Triage_Status__c === "Live") {
+              liveCasesArray.push(record);
+            }
+            // if (record.Triage_Status__c === "Completed") {
+            //   completedCasesArray.push(record);
+            // }
+            if (index === records.length - 1) {
+              this.setState({
+                awaitingCasesArray,
+                contactingCasesArray,
+                contactMadeCasesArray,
+                liveCasesArray,
+                completedCasesArray: completedRecords.data,
+                myId: Id,
+                organisationId: AccountId,
+                loadScreen: false
+              });
+              awaitingCasesArray = [];
+              contactingCasesArray = [];
+              contactMadeCasesArray = [];
+              liveCasesArray = [];
+              completedCasesArray = [];
+            }
           });
-          awaitingCasesArray = [];
-          contactingCasesArray = [];
-          contactMadeCasesArray = [];
-          liveCasesArray = [];
-          completedCasesArray = [];
-        }
-      });
+        });
       // this.setState({
       //   activeCases: res.data.records
       // });
@@ -198,7 +203,6 @@ export default class Profile extends React.Component {
             /> */}
             <Icon name="plus" type="entypo" color={colors.accent} size={40} />
           </TouchableOpacity>
-
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
@@ -245,8 +249,10 @@ export default class Profile extends React.Component {
             <Text style={styles.listItemCountStyle}>
               {
                 contactingCasesArray.filter(item => {
-                  item.Referral__r &&
-                    item.Referral__r.Referrer_Contact_Name__c === myId;
+                  return (
+                    item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId
+                  );
                 }).length
               }
             </Text>
@@ -255,7 +261,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: liveCasesArray,
-                arrayTitle: "Live"
+                arrayTitle: "Processing"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -265,12 +271,14 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Live</Text>
+            <Text style={styles.listItemTextStyle}>Processing</Text>
             <Text style={styles.listItemCountStyle}>
               {
                 liveCasesArray.filter(item => {
-                  item.Referral__r &&
-                    item.Referral__r.Referrer_Contact_Name__c === myId;
+                  return (
+                    item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId
+                  );
                 }).length
               }
             </Text>
@@ -279,7 +287,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: contactMadeCasesArray,
-                arrayTitle: "Contact made"
+                arrayTitle: "Referred to Agency"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -289,12 +297,14 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Contact made</Text>
+            <Text style={styles.listItemTextStyle}>Referred to Agency</Text>
             <Text style={styles.listItemCountStyle}>
               {
                 contactMadeCasesArray.filter(item => {
-                  item.Referral__r &&
-                    item.Referral__r.Referrer_Contact_Name__c === myId;
+                  return (
+                    item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId
+                  );
                 }).length
               }
             </Text>
@@ -303,7 +313,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: completedCasesArray,
-                arrayTitle: "Completed"
+                arrayTitle: "Not Referred"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -313,12 +323,14 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Completed</Text>
+            <Text style={styles.listItemTextStyle}>Not Referred</Text>
             <Text style={styles.listItemCountStyle}>
               {
                 completedCasesArray.filter(item => {
-                  item.Referral__r &&
-                    item.Referral__r.Referrer_Contact_Name__c === myId;
+                  return (
+                    item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId
+                  );
                 }).length
               }
             </Text>

@@ -133,7 +133,14 @@ export default class Case extends React.Component {
               textTransform: "uppercase"
             }}
           >
-            {caseDetails.Triage_Status__c}
+            {/* {caseDetails.Triage_Status__c} */}
+            {caseDetails.Triage_Status__c === "Live"
+              ? "Processing"
+              : caseDetails.Triage_Status__c === "Completed"
+              ? "Not Referred"
+              : caseDetails.Triage_Status__c === "Contact Made"
+              ? "Referred to Agency"
+              : caseDetails.Triage_Status__c}
           </Text>
         </View>
         {caseDetails.Recovery_Pathway__r && (
@@ -169,13 +176,15 @@ export default class Case extends React.Component {
             </TouchableOpacity>
           </View>
         )}
-        {caseDetails.Court_Injunction_url &&
+        {caseDetails.Court_Injunction_url ? (
           <React.Fragment>
-            <Text style={styles.textHeaderStyle}>DOCUMENTS</Text>
+            {/* <Text style={styles.textHeaderStyle}>DOCUMENTS</Text> */}
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("PdfViewer", {
-                documentUrl: caseDetails.Court_Injunction_url
-              })}
+              onPress={() =>
+                this.props.navigation.navigate("PdfViewer", {
+                  documentUrl: caseDetails.Court_Injunction_url
+                })
+              }
               style={[
                 styles.viewBoxStyle,
                 {
@@ -187,8 +196,8 @@ export default class Case extends React.Component {
               ]}
             >
               <Text style={[styles.textBoxStyle, { flex: 4 }]}>
-                Test
-            {/* {status} */}
+                DOCUMENTS
+                {/* {status} */}
               </Text>
               <Icon
                 name="angle-right"
@@ -203,7 +212,24 @@ export default class Case extends React.Component {
               />
             </TouchableOpacity>
           </React.Fragment>
-        }
+        ) : (
+          <View
+            style={[
+              styles.viewBoxStyle,
+              {
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center"
+              }
+            ]}
+          >
+            <Text style={styles.textBoxStyle}>
+              No Injunction Served
+              {/* {status} */}
+            </Text>
+          </View>
+        )}
       </ScrollView>
     );
   }

@@ -4,8 +4,8 @@ import axios from "axios";
 import colors from "../style";
 import { ModalLoading } from "../components/LoadScreen";
 
-const createReferralApi = "http://167.71.142.150:8675/createReferral";
-const createTriageApi = "http://167.71.142.150:8675/createTriage";
+const createReferralApi = "http://167.99.90.138:8675/createReferral";
+const createTriageApi = "http://167.99.90.138:8675/createTriage";
 
 const styles = {
   touchableStyle: {

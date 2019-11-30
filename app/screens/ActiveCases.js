@@ -5,6 +5,7 @@ import {
   ScrollView,
   SafeAreaView,
   Platform,
+  TouchableOpacity,
   KeyboardAvoidingView,
   AsyncStorage
 } from "react-native";
@@ -15,22 +16,16 @@ import axios from "axios";
 import BookingDetails from "../components/BookingDetails";
 import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
-const titles = ["Awaiting to be Contacted"];
 const allTitles = [
   "Awaiting to be Contacted",
   "Contacting",
   "Contact Made",
-  "Live"
+  "Live",
+  "Completed"
 ];
 class ActiveCases extends React.Component {
   static navigationOptions = {
-    // title: "Register",
-    // headerTitleStyle: {
-    //   fontWeight: "bold",
-    //   fontSize: 20
-    // }
     headerStyle: {
       backgroundColor: colors.accent
     },
@@ -52,68 +47,29 @@ class ActiveCases extends React.Component {
     checkDays: null,
     loadScreen: true,
     accountId: "",
-    myId: ""
+    myId: "",
+    completedRecords: []
   };
 
   componentDidMount = async () => {
     const contactData = await AsyncStorage.getItem("userDetails");
     const jsonObjectData = JSON.parse(contactData);
     const { AccountId, Id } = jsonObjectData;
-    console.log(jsonObjectData);
-    console.log(AccountId, Id);
-    if (this.props.navigation.state.params === undefined) {
-      axios.get("http://167.71.142.150:8675/referrals").then(res => {
-        console.log(res.data.records);
-        this.setState({
-          activeCases: res.data.records,
-          activeCaseCheck: true,
-          loadScreen: false,
-          accountId: AccountId,
-          myId: Id
-        });
-      });
-    } else {
-      const {
-        casesArray,
-        activeCaseCheck,
-        arrayTitle
-      } = this.props.navigation.state.params;
-      console.log(casesArray);
-      this.setState({
-        activeCases: casesArray,
-        activeCaseCheck,
-        arrayTitle,
-        loadScreen: false,
-        accountId: AccountId,
-        myId: Id
-      });
-    }
+    const {
+      casesArray,
+      activeCaseCheck,
+      arrayTitle
+    } = this.props.navigation.state.params;
+    console.log(casesArray);
+    this.setState({
+      activeCases: casesArray,
+      activeCaseCheck,
+      arrayTitle,
+      loadScreen: false,
+      accountId: AccountId,
+      myId: Id
+    });
   };
-
-  // buttonPress = i => {
-  //   const {
-  //     sevenDays,
-  //     thirtyDays,
-  //     sixtyDays,
-  //     ninetyDays,
-  //     allDays,
-  //     myReferrals,
-  //     myConstabulary,
-  //     nationalReferrals
-  //   } = this.state;
-  //   this.setState({
-  //     sevenDays: sevenDays || i === 0 ? !this.state.sevenDays : false,
-  //     thirtyDays: thirtyDays || i === 1 ? !this.state.thirtyDays : false,
-  //     sixtyDays: sixtyDays || i === 2 ? !this.state.sixtyDays : false,
-  //     ninetyDays: ninetyDays || i === 3 ? !this.state.ninetyDays : false,
-  //     allDays: allDays || i === 4 ? !this.state.allDays : false,
-  //     myReferrals: myReferrals || i === 5 ? !this.state.myReferrals : false,
-  //     myConstabulary:
-  //       myConstabulary || i === 6 ? !this.state.myConstabulary : false,
-  //     nationalReferrals:
-  //       nationalReferrals || i === 7 ? !this.state.nationalReferrals : false
-  //   });
-  // };
 
   buttonPress = i => {
     const {
@@ -207,7 +163,6 @@ class ActiveCases extends React.Component {
   render() {
     const {
       activeCases,
-      activeCaseCheck,
       arrayTitle,
       sevenDays,
       thirtyDays,
@@ -217,7 +172,6 @@ class ActiveCases extends React.Component {
       myReferrals,
       myConstabulary,
       nationalReferrals,
-      // checkDays,
       loadScreen,
       accountId,
       myId
@@ -231,8 +185,6 @@ class ActiveCases extends React.Component {
         ? true
         : moment(item.CreatedDate).isBetween(toDate, todayDate);
       console.log(isBetween, checkDays);
-      // if (checkDays === null) {
-
       if (myReferrals) {
         return (
           item.Referral__r &&
@@ -256,38 +208,11 @@ class ActiveCases extends React.Component {
         isBetween &&
         item.Referral__r.Name.includes(this.state.searchKey)
       );
-      //  }
-      // return (
-      //   item.Referral__r &&
-      //   isBetween &&
-      //   item.Referral__r.Name.includes(this.state.searchKey) //startsWith
-      // );
     });
-    if (activeCaseCheck) {
-      allTitles.map(title => {
-        const filteredTitle = searchFilteredArray.filter(caseDetails => {
-          return caseDetails.Triage_Status__c === title;
-        });
-        const myReferrals = searchFilteredArray.filter(caseDetails => {
-          return caseDetails.Triage_Status__c === title;
-        });
-        return filteredArray.push({ [title]: filteredTitle });
-      });
-    } else {
-      filteredArray.push({ [arrayTitle]: searchFilteredArray });
-    }
+    filteredArray.push({ [arrayTitle]: searchFilteredArray });
     if (loadScreen) return <LoadScreen text="Please wait" />;
     console.log(filteredArray);
     return (
-      // <SafeAreaView
-      //   forceInset={{ bottom: "always" }}
-      //   style={{
-      //     borderBottomWidth: 2,
-      //     borderBottomColor: "#F1F3F2",
-      //     borderTopWidth: 2,
-      //     borderTopColor: "#F1F3F2"
-      //   }}
-      // >
       <KeyboardAvoidingView
         behavior="padding"
         behavior={Platform.OS === "android" ? "" : "padding"}
@@ -305,35 +230,27 @@ class ActiveCases extends React.Component {
               console.log(searchKey);
             }}
             sevenDaysPress={() => {
-              // this.setState({ checkDays: 7 });
               this.buttonPress(0);
             }}
             thirtyDaysPress={() => {
-              // this.setState({ checkDays: 30 });
               this.buttonPress(1);
             }}
             sixtyDaysPress={() => {
-              // this.setState({ checkDays: 60 });
               this.buttonPress(2);
             }}
             ninetyDaysPress={() => {
-              // this.setState({ checkDays: 90 });
               this.buttonPress(3);
             }}
             allDaysPress={() => {
-              // this.setState({ checkDays: null });
               this.buttonPress(4);
             }}
             myReferralsPress={() => {
-              // this.setState({ checkDays: null });
               this.buttonPress(5);
             }}
             myConstabularyPress={() => {
-              // this.setState({ checkDays: null });
               this.buttonPress(6);
             }}
             nationalReferralsPress={() => {
-              // this.setState({ checkDays: null });
               this.buttonPress(7);
             }}
             sevenDays={sevenDays}
@@ -351,9 +268,11 @@ class ActiveCases extends React.Component {
             }}
           />
           {filteredArray.map(status => {
+            const titleArray = Object.keys(status);
+            console.log(titleArray);
             return (
               <View>
-                <TouchableOpacity
+                <View
                   style={{
                     flexDirection: "row",
                     height: 35,
@@ -377,24 +296,11 @@ class ActiveCases extends React.Component {
                         textTransform: "uppercase"
                       }}
                     >
-                      {Object.keys(status)}
+                      {titleArray}
                     </Text>
                   </View>
-                </TouchableOpacity>
-                {/* {this.renderContent(i + 1, episodeValue)} */}
+                </View>
                 {this.renderContent(status)}
-                {/* {Object.values(status)[0].map(caseDetails => {
-                  return (
-                    <BookingDetails
-                      caseDetails={caseDetails}
-                      onPress={() =>
-                        this.props.navigation.navigate("Case", {
-                          caseDetails
-                        })
-                      }
-                    />
-                  );
-                })} */}
               </View>
             );
           })}

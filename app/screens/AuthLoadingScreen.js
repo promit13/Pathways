@@ -49,7 +49,7 @@ export default class AuthLoadingScreen extends React.Component {
     if (loading) return <ActivityIndicator />;
     if (currentUser) {
       console.log(currentUser);
-      if (user === null) return <ActivityIndicator />;
+      if (user === undefined) return <ActivityIndicator />;
       const { phoneVerified, pinSet } = user;
       if (!phoneVerified) {
         return this.props.navigation.navigate("RegisterMobile", {

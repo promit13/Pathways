@@ -204,7 +204,7 @@ export default class SearchBarWrapper extends Component {
                 }
               ]}
             >
-              My Constabulary
+              My Organisations
             </Text>
           </TouchableOpacity>
           <TouchableOpacity

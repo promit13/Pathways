@@ -14,7 +14,7 @@ import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
 import colors from "../style";
 
-const checkVerificationCodeApi = "http://167.71.142.150:8675/checkVerificationCode";
+const checkVerificationCodeApi = "http://167.99.90.138:8675/checkVerificationCode";
 
 export default class ActivateDevice extends Component {
   static navigationOptions = {
