@@ -243,15 +243,13 @@ export default class Login extends Component {
                 >
                   {text[0]}
                 </Text>
-                <View>
-                  <TextInput
-                    style={styles.textInputStyle}
-                    value={values.code}
-                    onChangeText={handleChange("code")}
-                    placeholder="ACTIVATION CODE"
-                    onBlur={() => setFieldTouched("code")}
-                  />
-                </View>
+                <TextInput
+                  style={styles.textInputStyle}
+                  value={values.code}
+                  onChangeText={handleChange("code")}
+                  placeholder="ACTIVATION CODE"
+                  onBlur={() => setFieldTouched("code")}
+                />
                 {touched.code && errors.code && (
                   <Text style={styles.textErrorStyle}>{errors.code}</Text>
                 )}
@@ -321,15 +319,6 @@ export default class Login extends Component {
                     https://socialdynamics.org/apply
                   </Text>
                 </TouchableOpacity>
-                {/* <Text
-                  style={{
-                    color: colors.darkGrey,
-                    fontSize: 20,
-                    marginBottom: 20
-                  }}
-                >
-                  https://socialdynamics.org/apply
-                </Text> */}
               </Fragment>
             )}
           </Formik>

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
+import firebase from 'react-native-firebase';
 import SmoothPinCodeInput from "react-native-smooth-pincode-input";
 import colors from "../style";
 import ErrorMessage from "../components/Error";
@@ -113,33 +114,35 @@ export default class Pathways extends Component {
                 }}
               />
             </TouchableOpacity>
+
+            <TouchableOpacity style={{ marginTop: 400 }} onPress={() => firebase.auth().signOut()} ><Text style={{ textAlign: 'center', }}>Not you? Log out</Text></TouchableOpacity>
           </View>
         ) : (
-          <View style={{ alignItems: "center", padding: 40 }}>
-            <Text style={[styles.textStyle, { marginBottom: 40 }]}>
-              Welcome back, please enter your PIN to access your account.
+            <View style={{ alignItems: "center", padding: 40 }}>
+              <Text style={[styles.textStyle, { marginBottom: 40 }]}>
+                Welcome back, please enter your PIN to access your account.
             </Text>
-            <SmoothPinCodeInput
-              textStyle={{
-                fontSize: 24,
-                color: "salmon"
-              }}
-              textStyleFocused={{
-                color: "crimson"
-              }}
-              restrictToNumbers="true"
-              autoFocus={true}
-              value={code}
-              onTextChange={code => this.setState({ code, showError: false })}
-              onFulfill={codeInput => {
-                this.checkCode(codeInput);
-              }}
-            />
-            {showError && (
-              <ErrorMessage errorMessage={errorMessage} marginTop={10} />
-            )}
-          </View>
-        )}
+              <SmoothPinCodeInput
+                textStyle={{
+                  fontSize: 24,
+                  color: "salmon"
+                }}
+                textStyleFocused={{
+                  color: "crimson"
+                }}
+                restrictToNumbers="true"
+                autoFocus={true}
+                value={code}
+                onTextChange={code => this.setState({ code, showError: false })}
+                onFulfill={codeInput => {
+                  this.checkCode(codeInput);
+                }}
+              />
+              {showError && (
+                <ErrorMessage errorMessage={errorMessage} marginTop={10} />
+              )}
+            </View>
+          )}
       </View>
     );
   }

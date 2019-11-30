@@ -13,6 +13,7 @@ import {
 import { Formik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
+import firebase from "react-native-firebase";
 import ErrorMessage from "../components/Error";
 import colors from "../style";
 import { ModalLoading } from "../components/LoadScreen";
@@ -30,9 +31,9 @@ const getVerificationCodeApi = "http://167.99.90.138:8675/getVerificationCode";
 
 const text = [
   "Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
-  "If you do not have a welcome email please call 0800 1017 110. If you wish to apply to become a referrer please go to:",
-  "Thank you. Please verify your mobile number.",
-  "If you are having difficulties completing the authorisation please call 0800 1017 110."
+  "If you wish to apply to become a referrer please go to:",
+  "Thank you! Please verify your mobile number.",
+  "If you are having difficulties completing the authorisation please email support@socialdynamics.org."
 ];
 
 const styles = StyleSheet.create({
@@ -223,6 +224,16 @@ export default class VerifyMobile extends Component {
             >
               https://socialdynamics.org/apply
             </Text>
+            <TouchableOpacity onPress={() => firebase.auth().signOut()}><Text
+              style={{
+                color: colors.darkGrey,
+                fontSize: 20,
+                marginTop: 20
+              }}
+            >
+              Not you? Log out
+            </Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

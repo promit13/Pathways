@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, Image, ScrollView, Linking, Platform } from "react-native";
 import { Icon } from "react-native-elements";
 import moment from "moment";
 import colors from "../style";
@@ -102,6 +102,16 @@ export default class Case extends React.Component {
               name="phone"
               type="font-awesome"
               size={30}
+              onPress={() => {
+                if (Platform.OS === 'android') {
+                  phoneNumber = `tel:${caseDetails.Referral__r.Phone}`;
+                }
+                else {
+                  phoneNumber = `telprompt:${caseDetails.Referral__r.Phone}`;
+                }
+
+                Linking.openURL(phoneNumber);
+              }}
               color={colors.darkGrey}
               iconStyle={{
                 flex: 1,
