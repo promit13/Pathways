@@ -46,7 +46,11 @@ const HomeStack = createStackNavigator(
     PdfViewer,
     RepeatReferrals
   },
-
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
 );
 
 const AddStack = createStackNavigator(
@@ -57,7 +61,11 @@ const AddStack = createStackNavigator(
     ThankYou,
     Preview
   },
-
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
 );
 
 const SearchStack = createStackNavigator(
@@ -67,7 +75,11 @@ const SearchStack = createStackNavigator(
     Case,
     PdfViewer
   },
-
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
 );
 
 const SignedOut = createStackNavigator(
@@ -76,6 +88,7 @@ const SignedOut = createStackNavigator(
   },
   {
     defaultNavigationOptions: {
+      gesturesEnabled: false,
       header: null
     }
   }
@@ -88,6 +101,7 @@ const RegisterMobile = createStackNavigator(
   },
   {
     defaultNavigationOptions: {
+      gesturesEnabled: false,
       header: null
     }
   }
@@ -98,6 +112,7 @@ const RegisterPin = createStackNavigator(
   },
   {
     defaultNavigationOptions: {
+      gesturesEnabled: false,
       header: null
     }
   }
@@ -114,6 +129,7 @@ const SignedIn = createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false,
       // tabBarLabel: navigation.state.routeName,
       tabBarIcon: ({ focused, horizontal, tintColor }) => {
         const { routeName } = navigation.state;
@@ -239,8 +255,14 @@ const MainStackNavigator = createStackNavigator(
     AuthLoadingScreen
   },
   {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    },
     initialRouteName: "AuthLoadingScreen",
     headerMode: "none",
+    defaultNavigationOptions: ({ navigation }) => ({
+      gesturesEnabled: false
+    })
   }
 );
 
