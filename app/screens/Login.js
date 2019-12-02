@@ -36,7 +36,7 @@ const getCustomTokenApi = "http://167.99.90.138:8675/getCustomToken";
 
 const text = [
   " Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
-  "If you do not have a welcome email, please email us at:",
+  "If you do not have a welcome email or have any issues, please email us at:",
   "If you wish to apply to become a referrer please go to:"
 ];
 
@@ -200,7 +200,7 @@ export default class Login extends Component {
     const { showError, errorMessage, loading } = this.state;
     return (
       <KeyboardAvoidingView
-        behavior="padding"
+        enabled
         behavior={Platform.OS === "android" ? "" : "padding"}
         style={{ flex: 1, padding: 40, marginTop: 40 }}
       >

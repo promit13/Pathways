@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView, Linking, Platform } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  Linking,
+  Platform
+} from "react-native";
 import { Icon } from "react-native-elements";
 import moment from "moment";
 import colors from "../style";
@@ -23,6 +31,13 @@ const styles = {
     color: colors.darkGrey,
     marginTop: 10,
     fontWeight: "600"
+  },
+  statusText: {
+    textAlign: "center",
+    alignSelf: "center",
+    color: "white",
+    fontSize: 25,
+    textTransform: "uppercase"
   }
 };
 export default class Case extends React.Component {
@@ -103,10 +118,9 @@ export default class Case extends React.Component {
               type="font-awesome"
               size={30}
               onPress={() => {
-                if (Platform.OS === 'android') {
+                if (Platform.OS === "android") {
                   phoneNumber = `tel:${caseDetails.Referral__r.Phone}`;
-                }
-                else {
+                } else {
                   phoneNumber = `telprompt:${caseDetails.Referral__r.Phone}`;
                 }
 
@@ -134,53 +148,39 @@ export default class Case extends React.Component {
             }
           ]}
         >
-          <Text
-            style={{
-              textAlign: "center",
-              alignSelf: "center",
-              color: "white",
-              fontSize: 25,
-              textTransform: "uppercase"
-            }}
-          >
+          <Text style={styles.statusText}>
             {/* {caseDetails.Triage_Status__c} */}
-            {caseDetails.Triage_Status__c === "Live"
-              ? "Processing"
-              : caseDetails.Triage_Status__c === "Completed"
-              ? "Not Referred"
+            {caseDetails.Triage_Status__c === "Unable to Contact"
+              ? "Unable to Contact"
               : caseDetails.Triage_Status__c === "Contact Made"
+              ? "Processing"
+              : caseDetails.Triage_Status__c === "Live" ||
+                caseDetails.Triage_Status__c === "Completed"
               ? "Referred to Agency"
+              : caseDetails.Triage_Status__c === "Awaiting to be Contacted" ||
+                caseDetails.Triage_Status__c === "Contacting"
+              ? "Contacting"
               : caseDetails.Triage_Status__c}
           </Text>
         </View>
         {caseDetails.Recovery_Pathway__r && (
           <View
             style={{
-              height: 105,
               marginTop: 20
             }}
           >
             <Text style={styles.textHeaderStyle}>RECOVERY PATHWAY</Text>
             <TouchableOpacity
-              style={{
-                alignContent: "center",
-                alignItems: "center",
-                marginTop: 10,
-                height: 60,
-                marginHorizontal: 20,
-                backgroundColor: colors.accent
-              }}
+              style={[
+                styles.viewBoxStyle,
+                {
+                  backgroundColor: colors.accent,
+                  justifyContent: "center",
+                  borderWidth: 0
+                }
+              ]}
             >
-              <Text
-                style={{
-                  textAlign: "center",
-                  alignSelf: "center",
-                  color: "white",
-                  fontSize: 25,
-                  marginTop: 14,
-                  textTransform: "uppercase"
-                }}
-              >
+              <Text style={styles.statusText}>
                 {caseDetails.Recovery_Pathway__r.StageName}
               </Text>
             </TouchableOpacity>

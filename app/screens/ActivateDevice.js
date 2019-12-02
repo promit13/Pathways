@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Dimensions,
   Image,
+  Platform,
   Alert,
   KeyboardAvoidingView
 } from "react-native";
@@ -14,7 +15,8 @@ import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
 import colors from "../style";
 
-const checkVerificationCodeApi = "http://167.99.90.138:8675/checkVerificationCode";
+const checkVerificationCodeApi =
+  "http://167.99.90.138:8675/checkVerificationCode";
 
 export default class ActivateDevice extends Component {
   static navigationOptions = {
@@ -24,6 +26,7 @@ export default class ActivateDevice extends Component {
   state = {
     code: "",
     error: false,
+    errorMessage: "",
     loading: false
   };
 
@@ -35,16 +38,16 @@ export default class ActivateDevice extends Component {
     console.log(code);
     axios
       .post(checkVerificationCodeApi, {
-        mobileNumber,
+        mobileNumber: `+44${mobileNumber}`,
         code
       })
       .then(respose => {
         console.log(respose);
-        const { status } = respose.data;
-        if (status === "pending") {
+        const { valid } = respose.data;
+        if (!valid) {
           this.setState({
             error: true,
-            errorMessage: "Wrong code",
+            errorMessage: "Please enter the correct code.",
             loading: false,
             code: ""
           });
@@ -83,11 +86,11 @@ export default class ActivateDevice extends Component {
   };
 
   render() {
-    const { code, error, loading } = this.state;
+    const { code, error, loading, errorMessage } = this.state;
     console.log(code);
     return (
       <KeyboardAvoidingView
-        behavior="padding"
+        behavior={Platform.OS === "android" ? "" : "padding"}
         enabled
         style={{ flex: 1, alignItems: "center", marginTop: 80 }}
       >
@@ -120,7 +123,7 @@ export default class ActivateDevice extends Component {
           onBackspace={this._focusePrevInput}
         />
         {loading && <ModalLoading text="Please wait" />}
-        {error && <ErrorMessage errorMessage="Wrong code" marginTop={10} />}
+        {error && <ErrorMessage errorMessage={errorMessage} marginTop={10} />}
       </KeyboardAvoidingView>
     );
   }

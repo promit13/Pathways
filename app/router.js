@@ -252,7 +252,8 @@ const MainStackNavigator = createStackNavigator(
     SignedOut,
     RegisterPin,
     SignedIn,
-    AuthLoadingScreen
+    AuthLoadingScreen,
+    Pathways
   },
   {
     defaultNavigationOptions: {

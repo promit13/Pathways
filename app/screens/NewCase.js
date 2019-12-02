@@ -50,7 +50,7 @@ export default class NewCase extends React.Component {
     console.log(checkBoxChecked);
     return (
       <KeyboardAvoidingView
-        behavior="padding"
+        enabled
         behavior={Platform.OS === "android" ? "" : "padding"}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -197,6 +197,7 @@ export default class NewCase extends React.Component {
                   onChangeText={handleChange("safeEmail")}
                   onBlur={handleBlur("safeEmail")}
                   value={values.safeEmail}
+                  keyboardType="email-address"
                   placeholder="SAFE EMAIL ADDRESS"
                   placeholderTextColor={colors.darkGrey}
                   style={[
@@ -250,7 +251,6 @@ export default class NewCase extends React.Component {
                 <Button
                   onPress={handleSubmit}
                   // onPress={() => this.onContinue()}
-                  // onPress={() => firebase.auth().signOut()}
                   title="Contiue"
                   buttonStyle={{
                     marginHorizontal: 40,

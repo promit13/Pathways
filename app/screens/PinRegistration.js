@@ -10,7 +10,8 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import SmoothPinCodeInput from "react-native-smooth-pincode-input";
-import firebase from "react-native-firebase";
+// import firebase from "react-native-firebase";
+import firebase from "../utils/firebase";
 import ErrorMessage from "../components/Error";
 import colors from "../style";
 import { ModalLoading } from "../components/LoadScreen";

@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   AsyncStorage
 } from "react-native";
+import _ from "lodash";
 import moment from "moment";
 import { withNavigation } from "react-navigation";
 import colors from "../style";
@@ -21,7 +22,9 @@ const allTitles = [
   "Contacting",
   "Contact Made",
   "Live",
-  "Completed"
+  "Completed",
+  "Unable to Contact",
+  "Not Referred"
 ];
 class Search extends React.Component {
   static navigationOptions = {
@@ -60,14 +63,20 @@ class Search extends React.Component {
       axios
         .get("http://167.99.90.138:8675/convertedAccounts")
         .then(completedRecords => {
+          const sortedCasesArray = _.reverse(
+            _.sortBy(res.data.records, o => o.CreatedDate)
+          );
+          const sortedCompletedArray = _.reverse(
+            _.sortBy(completedRecords.data, o => o.CreatedDate)
+          );
           console.log(res.data.records);
           this.setState({
-            activeCases: res.data.records,
+            activeCases: sortedCasesArray,
             activeCaseCheck: true,
             loadScreen: false,
             accountId: AccountId,
             myId: Id,
-            completedRecords: completedRecords.data
+            completedRecords: sortedCompletedArray
           });
         });
     });
@@ -317,12 +326,16 @@ class Search extends React.Component {
           />
           {filteredArray.map(status => {
             const titleArray =
-              Object.keys(status)[0] === "Live"
-                ? "Processing"
-                : Object.keys(status)[0] === "Completed"
-                ? "Not Referred"
-                : Object.keys(status)[0] === "Contact Made"
+              Object.keys(status)[0] === "Live" ||
+              Object.keys(status)[0] === "Completed"
                 ? "Referred to Agency"
+                : Object.keys(status)[0] === "Awaiting to be Contacted" ||
+                  Object.keys(status)[0] === "Contacting"
+                ? "Contacting"
+                : Object.keys(status)[0] === "Contact Made"
+                ? "Processing"
+                : Object.keys(status)[0] === "Unable to Contact"
+                ? "Unable to Contact"
                 : Object.keys(status)[0];
             console.log(titleArray);
             return (

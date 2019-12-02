@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  AsyncStorage,
   View,
   Image,
   ScrollView,
@@ -15,6 +16,7 @@ import * as yup from "yup";
 import axios from "axios";
 import firebase from "react-native-firebase";
 import ErrorMessage from "../components/Error";
+// import firebase from "../utils/firebase";
 import colors from "../style";
 import { ModalLoading } from "../components/LoadScreen";
 
@@ -58,7 +60,6 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   textInputStyle: {
-    flex: 1,
     height: 40,
     color: "black",
     fontSize: 18,
@@ -71,6 +72,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "red",
     marginLeft: 40
+  },
+  touchableStyle: {
+    marginVertical: 20,
+    alignItems: "center"
+  },
+  resetText: {
+    color: "blue",
+    textAlign: "center"
   }
 });
 
@@ -135,7 +144,7 @@ export default class VerifyMobile extends Component {
         style={{ flex: 1, padding: 40, marginTop: 40 }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View>
+          <View style={{ felx: 1 }}>
             <Image
               source={require("../../assets/path-logo.png")}
               style={{
@@ -224,15 +233,33 @@ export default class VerifyMobile extends Component {
             >
               https://socialdynamics.org/apply
             </Text>
-            <TouchableOpacity onPress={() => firebase.auth().signOut()}><Text
-              style={{
-                color: colors.darkGrey,
-                fontSize: 20,
-                marginTop: 20
+            <TouchableOpacity
+              style={styles.touchableStyle}
+              onPress={() => {
+                this.setState({ loading: true });
+                firebase
+                  .firestore()
+                  .collection("users")
+                  .doc(user.userId)
+                  .update({
+                    phoneVerified: false,
+                    pinSet: false,
+                    userVerified: false
+                  })
+                  .then(async () => {
+                    await AsyncStorage.getAllKeys((err, keys) => {
+                      AsyncStorage.multiRemove(keys);
+                    });
+                    this.setState({ loading: false });
+                    firebase.auth().signOut();
+                  })
+                  .catch(error => {
+                    this.setState({ loading: false });
+                    console.log(error);
+                  });
               }}
             >
-              Not you? Log out
-            </Text>
+              <Text style={styles.resetText}>Not you? Log out</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

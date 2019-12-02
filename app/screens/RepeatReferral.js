@@ -16,7 +16,7 @@ const styles = {
     marginTop: 20
   },
   textStyle: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: "center",
     color: "white"
   }
@@ -55,7 +55,10 @@ export default class RepeatReferrals extends React.Component {
 
   render() {
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 15 }}
+      >
         <Image
           source={require("../../assets/path-logo.png")}
           style={{

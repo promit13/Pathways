@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   AsyncStorage
 } from "react-native";
+import _ from "lodash";
 import moment from "moment";
 import { withNavigation } from "react-navigation";
 import colors from "../style";
@@ -61,8 +62,11 @@ class ActiveCases extends React.Component {
       arrayTitle
     } = this.props.navigation.state.params;
     console.log(casesArray);
+    const sortedCasesArray = _.reverse(
+      _.sortBy(casesArray, o => o.CreatedDate)
+    );
     this.setState({
-      activeCases: casesArray,
+      activeCases: sortedCasesArray,
       activeCaseCheck,
       arrayTitle,
       loadScreen: false,
@@ -214,7 +218,7 @@ class ActiveCases extends React.Component {
     console.log(filteredArray);
     return (
       <KeyboardAvoidingView
-        behavior="padding"
+        enabled
         behavior={Platform.OS === "android" ? "" : "padding"}
         style={{
           borderBottomWidth: 2,

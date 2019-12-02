@@ -64,6 +64,8 @@ let awaitingCasesArray = [];
 let contactingCasesArray = [];
 let contactMadeCasesArray = [];
 let liveCasesArray = [];
+let unableToContactCasesArray = [];
+let notReferredCasesArray = [];
 let completedCasesArray = [];
 
 export default class Profile extends React.Component {
@@ -77,12 +79,34 @@ export default class Profile extends React.Component {
     contactMadeCasesArray: [],
     liveCasesArray: [],
     completedCasesArray: [],
+    unableToContactCasesArray: [],
+    notReferredCasesArray: [],
     loadScreen: true,
+    refresh: true,
     myId: "",
     organisationId: ""
   };
 
-  componentDidMount = async () => {
+  componentDidMount() {
+    this.getDataFromServer();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.navigation.state.params === undefined) {
+      return;
+    } else {
+      console.log(
+        this.props.navigation.state.params.refresh,
+        prevState.refresh,
+        this.state.refresh
+      );
+      if (this.props.navigation.state.params.refresh === prevState.refresh) {
+        this.getDataFromServer();
+      }
+    }
+  }
+
+  getDataFromServer = async () => {
     const contactData = await AsyncStorage.getItem("userDetails");
     const jsonObjectData = JSON.parse(contactData);
     const { AccountId, Id } = jsonObjectData;
@@ -96,17 +120,24 @@ export default class Profile extends React.Component {
           console.log(res.data.records);
           const { records } = res.data;
           records.map((record, index) => {
-            if (record.Triage_Status__c === "Awaiting to be Contacted") {
+            if (
+              record.Triage_Status__c === "Awaiting to be Contacted" ||
+              record.Triage_Status__c === "Contcting"
+            ) {
               awaitingCasesArray.push(record);
             }
-            if (record.Triage_Status__c === "Contacting") {
-              contactingCasesArray.push(record);
+            if (record.Triage_Status__c === "Unable to Contact") {
+              unableToContactCasesArray.push(record);
             }
             if (record.Triage_Status__c === "Contact Made") {
               contactMadeCasesArray.push(record);
             }
             if (record.Triage_Status__c === "Live") {
-              liveCasesArray.push(record);
+              // liveCasesArray.push(record);
+              completedRecords.data.push(record);
+            }
+            if (record.Triage_Status__c === "Not Referred") {
+              notReferredCasesArray.push(record);
             }
             // if (record.Triage_Status__c === "Completed") {
             //   completedCasesArray.push(record);
@@ -114,19 +145,23 @@ export default class Profile extends React.Component {
             if (index === records.length - 1) {
               this.setState({
                 awaitingCasesArray,
-                contactingCasesArray,
+                unableToContactCasesArray,
                 contactMadeCasesArray,
-                liveCasesArray,
-                completedCasesArray: completedRecords.data,
+                liveCasesArray: completedRecords.data,
+                notReferredCasesArray,
                 myId: Id,
+                refresh:
+                  this.props.navigation.state.params === undefined
+                    ? this.state.refresh
+                    : !this.state.refresh,
                 organisationId: AccountId,
                 loadScreen: false
               });
               awaitingCasesArray = [];
-              contactingCasesArray = [];
+              unableToContactCasesArray = [];
               contactMadeCasesArray = [];
               liveCasesArray = [];
-              completedCasesArray = [];
+              notReferredCasesArray = [];
             }
           });
         });
@@ -139,10 +174,10 @@ export default class Profile extends React.Component {
   render() {
     const {
       awaitingCasesArray,
-      contactingCasesArray,
+      unableToContactCasesArray,
       contactMadeCasesArray,
       liveCasesArray,
-      completedCasesArray,
+      notReferredCasesArray,
       loadScreen,
       myId,
       organisationId
@@ -207,7 +242,7 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: awaitingCasesArray,
-                arrayTitle: "Awaiting to be contacted"
+                arrayTitle: "Contacting"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -217,9 +252,7 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>
-              Awaiting to be contacted
-            </Text>
+            <Text style={styles.listItemTextStyle}>Contacting</Text>
             <Text style={styles.listItemCountStyle}>
               {
                 awaitingCasesArray.filter(item => {
@@ -234,8 +267,8 @@ export default class Profile extends React.Component {
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
-                casesArray: contactingCasesArray,
-                arrayTitle: "Contacting"
+                casesArray: unableToContactCasesArray,
+                arrayTitle: "Unable to Contact"
               });
             }}
             style={styles.listItemContainerStyle}
@@ -245,36 +278,10 @@ export default class Profile extends React.Component {
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Contacting</Text>
+            <Text style={styles.listItemTextStyle}>Unable to Contact</Text>
             <Text style={styles.listItemCountStyle}>
               {
-                contactingCasesArray.filter(item => {
-                  return (
-                    item.Referral__r &&
-                    item.Referral__r.Referrer_Contact_Name__c === myId
-                  );
-                }).length
-              }
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              this.props.navigation.navigate("ActiveCases", {
-                casesArray: liveCasesArray,
-                arrayTitle: "Processing"
-              });
-            }}
-            style={styles.listItemContainerStyle}
-          >
-            <Image
-              source={require("../../assets/injunction.png")}
-              resizeMode="contain"
-              style={{ flex: 1, color: colors.accent }}
-            />
-            <Text style={styles.listItemTextStyle}>Processing</Text>
-            <Text style={styles.listItemCountStyle}>
-              {
-                liveCasesArray.filter(item => {
+                unableToContactCasesArray.filter(item => {
                   return (
                     item.Referral__r &&
                     item.Referral__r.Referrer_Contact_Name__c === myId
@@ -287,17 +294,17 @@ export default class Profile extends React.Component {
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: contactMadeCasesArray,
-                arrayTitle: "Referred to Agency"
+                arrayTitle: "Processing"
               });
             }}
             style={styles.listItemContainerStyle}
           >
             <Image
-              source={require("../../assets/logo-circle.png")}
+              source={require("../../assets/injunction.png")}
               resizeMode="contain"
               style={{ flex: 1, color: colors.accent }}
             />
-            <Text style={styles.listItemTextStyle}>Referred to Agency</Text>
+            <Text style={styles.listItemTextStyle}>Processing</Text>
             <Text style={styles.listItemCountStyle}>
               {
                 contactMadeCasesArray.filter(item => {
@@ -312,7 +319,33 @@ export default class Profile extends React.Component {
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("ActiveCases", {
-                casesArray: completedCasesArray,
+                casesArray: liveCasesArray,
+                arrayTitle: "Referred to Agency"
+              });
+            }}
+            style={styles.listItemContainerStyle}
+          >
+            <Image
+              source={require("../../assets/logo-circle.png")}
+              resizeMode="contain"
+              style={{ flex: 1, color: colors.accent }}
+            />
+            <Text style={styles.listItemTextStyle}>Referred to Agency</Text>
+            <Text style={styles.listItemCountStyle}>
+              {
+                liveCasesArray.filter(item => {
+                  return (
+                    item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId
+                  );
+                }).length
+              }
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate("ActiveCases", {
+                casesArray: notReferredCasesArray,
                 arrayTitle: "Not Referred"
               });
             }}
@@ -326,7 +359,7 @@ export default class Profile extends React.Component {
             <Text style={styles.listItemTextStyle}>Not Referred</Text>
             <Text style={styles.listItemCountStyle}>
               {
-                completedCasesArray.filter(item => {
+                notReferredCasesArray.filter(item => {
                   return (
                     item.Referral__r &&
                     item.Referral__r.Referrer_Contact_Name__c === myId
