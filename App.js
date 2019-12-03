@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   AsyncStorage,
   KeyboardAvoidingView,
+  ScrollView,
   Platform,
   Image
 } from "react-native";
@@ -20,7 +21,6 @@ import ErrorMessage from "./app/components/Error";
 import { ModalLoading } from "./app/components/LoadScreen";
 import colors from "./app/style/";
 import ModalMessage from "./app/components/ModalMessage";
-import { ScrollView } from "react-native-gesture-handler";
 
 const resetPinMessage =
   "An email will been send to your linked email account. Please check your email to find the code to reset your pin.";

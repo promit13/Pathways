@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import {
   TextInput,
   Text,
@@ -12,11 +12,8 @@ import {
   ScrollView,
   KeyboardAvoidingView
 } from "react-native";
-import { Formik } from "formik";
-import * as yup from "yup";
 import axios from "axios";
 import firebase from "react-native-firebase";
-import ErrorMessage from "../components/Error";
 // import firebase from "../utils/firebase";
 import colors from "../style";
 import { ModalLoading } from "../components/LoadScreen";
