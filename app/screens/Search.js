@@ -26,6 +26,20 @@ const allTitles = [
   "Unable to Contact",
   "Not Referred"
 ];
+
+const titlesToShowArray = [
+  "Contacting",
+  "Unable to Contact",
+  "Processing",
+  "Referred to Agency",
+  "Not Referred"
+];
+
+let contactingCasesArray = [];
+let contactMadeCasesArray = [];
+let liveCasesArray = [];
+let unableToContactCasesArray = [];
+let notReferredCasesArray = [];
 class Search extends React.Component {
   static navigationOptions = {
     headerStyle: {
@@ -57,26 +71,20 @@ class Search extends React.Component {
     const contactData = await AsyncStorage.getItem("userDetails");
     const jsonObjectData = JSON.parse(contactData);
     const { AccountId, Id } = jsonObjectData;
-    console.log(jsonObjectData);
-    console.log(AccountId, Id);
     axios.get("http://167.99.90.138:8675/referrals").then(res => {
       axios
         .get("http://167.99.90.138:8675/convertedAccounts")
         .then(completedRecords => {
+          const mergedArray = res.data.records.concat(completedRecords.data);
           const sortedCasesArray = _.reverse(
-            _.sortBy(res.data.records, o => o.CreatedDate)
+            _.sortBy(mergedArray, o => o.CreatedDate)
           );
-          const sortedCompletedArray = _.reverse(
-            _.sortBy(completedRecords.data, o => o.CreatedDate)
-          );
-          console.log(res.data.records);
           this.setState({
             activeCases: sortedCasesArray,
             activeCaseCheck: true,
             loadScreen: false,
             accountId: AccountId,
-            myId: Id,
-            completedRecords: sortedCompletedArray
+            myId: Id
           });
         });
     });
@@ -180,24 +188,8 @@ class Search extends React.Component {
     });
   };
 
-  renderCompletedCases = status => {
-    const casesList = status.map(caseDetails => {
-      return (
-        <BookingDetails
-          caseDetails={caseDetails}
-          onPress={() =>
-            this.props.navigation.navigate("Case", {
-              caseDetails
-            })
-          }
-        />
-      );
-    });
-    return casesList;
-  };
-
-  renderContent = (status, titleArray) => {
-    const casesList = Object.values(status)[0].map(caseDetails => {
+  renderContent = status => {
+    const casesList = status[0].map(caseDetails => {
       return (
         <BookingDetails
           caseDetails={caseDetails}
@@ -225,8 +217,7 @@ class Search extends React.Component {
       nationalReferrals,
       loadScreen,
       accountId,
-      myId,
-      completedRecords
+      myId
     } = this.state;
     const checkDays = sevenDays ? 7 : thirtyDays ? 30 : sixtyDays ? 60 : 90;
     let filteredArray = [];
@@ -245,7 +236,6 @@ class Search extends React.Component {
         );
       }
       if (myConstabulary) {
-        console.log("my consta");
         return (
           item.Referral__r &&
           item.Referral__r.Referrer_Organisation__c === accountId &&
@@ -253,27 +243,68 @@ class Search extends React.Component {
           item.Referral__r.Name.includes(this.state.searchKey)
         );
       }
-      console.log("national");
       return (
         item.Referral__r &&
         isBetween &&
         item.Referral__r.Name.includes(this.state.searchKey)
       );
     });
+
     allTitles.map(title => {
       const filteredTitle = searchFilteredArray.filter(caseDetails => {
         return caseDetails.Triage_Status__c === title;
       });
-      return filteredArray.push({ [title]: filteredTitle });
+      if (filteredTitle.length !== 0) {
+        if (title === "Awaiting to be Contacted" || title === "Contacting") {
+          return contactingCasesArray.push(filteredTitle);
+        }
+        if (title === "Contact Made") {
+          return contactMadeCasesArray.push(filteredTitle);
+        }
+        if (title === "Live" || title === "Completed") {
+          return liveCasesArray.push(filteredTitle);
+        }
+        if (title === "Unable to Contact") {
+          return unableToContactCasesArray.push(filteredTitle);
+        }
+        if (title === "Not Referred") {
+          return notReferredCasesArray.push(filteredTitle);
+        }
+      }
+    });
+
+    titlesToShowArray.map((title, index) => {
+      if (title === "Contacting") {
+        filteredArray.push({ [title]: contactingCasesArray });
+      }
+      if (title === "Unable to Contact") {
+        filteredArray.push({ [title]: unableToContactCasesArray });
+      }
+      if (title === "Processing") {
+        filteredArray.push({ [title]: contactMadeCasesArray });
+      }
+      if (title === "Referred to Agency") {
+        filteredArray.push({ [title]: liveCasesArray });
+      }
+      if (title === "Not Referred") {
+        filteredArray.push({ [title]: notReferredCasesArray });
+      }
+      if (index === titlesToShowArray.length - 1) {
+        contactingCasesArray = [];
+        unableToContactCasesArray = [];
+        contactMadeCasesArray = [];
+        liveCasesArray = [];
+        notReferredCasesArray = [];
+      }
     });
 
     if (loadScreen) return <LoadScreen text="Please wait" />;
-    console.log(filteredArray);
     return (
       <KeyboardAvoidingView
         behavior="padding"
         behavior={Platform.OS === "android" ? "" : "padding"}
         style={{
+          flex: 1,
           borderBottomWidth: 2,
           borderBottomColor: "#F1F3F2",
           borderTopWidth: 2,
@@ -284,7 +315,6 @@ class Search extends React.Component {
           <SearchBarWrapper
             onSearchChange={searchKey => {
               this.setState({ searchKey });
-              console.log(searchKey);
             }}
             sevenDaysPress={() => {
               this.buttonPress(0);
@@ -325,19 +355,8 @@ class Search extends React.Component {
             }}
           />
           {filteredArray.map(status => {
-            const titleArray =
-              Object.keys(status)[0] === "Live" ||
-              Object.keys(status)[0] === "Completed"
-                ? "Referred to Agency"
-                : Object.keys(status)[0] === "Awaiting to be Contacted" ||
-                  Object.keys(status)[0] === "Contacting"
-                ? "Contacting"
-                : Object.keys(status)[0] === "Contact Made"
-                ? "Processing"
-                : Object.keys(status)[0] === "Unable to Contact"
-                ? "Unable to Contact"
-                : Object.keys(status)[0];
-            console.log(titleArray);
+            const headerTitle = Object.keys(status)[0];
+            const arrayList = Object.values(status)[0];
             return (
               <View>
                 <View
@@ -364,13 +383,11 @@ class Search extends React.Component {
                         textTransform: "uppercase"
                       }}
                     >
-                      {titleArray}
+                      {headerTitle}
                     </Text>
                   </View>
                 </View>
-                {titleArray[0] === "Completed"
-                  ? this.renderCompletedCases(completedRecords)
-                  : this.renderContent(status)}
+                {arrayList.length === 0 ? null : this.renderContent(arrayList)}
               </View>
             );
           })}

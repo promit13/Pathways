@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import {
   Text,
-  Alert,
+  BackHandler,
   AsyncStorage,
-  StyleSheet,
+  ScrollView,
   Dimensions,
+  Platform,
   View,
   Image,
   KeyboardAvoidingView
@@ -44,7 +45,17 @@ export default class PinRegistration extends Component {
     reconfirmCode: false
   };
 
-  pinInput = React.createRef();
+  componentDidMount = async () => {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+  };
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+  }
+
+  onBackPress = () => {
+    return true;
+  };
 
   checkCode = async code => {
     const { user } = this.props.navigation.state.params;
@@ -102,57 +113,68 @@ export default class PinRegistration extends Component {
     } = this.state;
     return (
       <KeyboardAvoidingView
-        behavior="padding"
+        behavior={Platform.OS === "android" ? "" : "padding"}
         enabled
-        style={{ padding: 40, flex: 1, alignItems: "center", marginTop: 40 }}
+        style={{
+          paddingHorizontal: 40,
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: 40,
+          paddingBottom: 40
+        }}
       >
-        <Image
-          source={require("../../assets/path-logo.png")}
-          style={{
-            alignSelf: "center",
-            marginTop: 20,
-            color: colors.accent,
-            marginBottom: 20
-          }}
-        />
-        <Text style={styles.textStyle}>
-          {reconfirmCode ? text[1] : text[0]}
-        </Text>
-        <View
-          style={{
-            alignContent: "center",
-            alignItems: "center",
-            alignSelf: "center",
-            marginTop: 20
-          }}
-        >
-          <SmoothPinCodeInput
-            textStyle={{
-              fontSize: 24,
-              color: "salmon"
-            }}
-            textStyleFocused={{
-              color: "crimson"
-            }}
-            restrictToNumbers="true"
-            value={code}
-            autoFocus={true}
-            onTextChange={code => this.setState({ code, showError: false })}
-            onFulfill={codeInput => {
-              reconfirmCode
-                ? this.checkCode(codeInput)
-                : this.setState({
-                    initialCode: codeInput,
-                    reconfirmCode: true,
-                    code: ""
-                  });
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Image
+            source={require("../../assets/path-logo.png")}
+            style={{
+              alignSelf: "center",
+              marginTop: 20,
+              color: colors.accent,
+              marginBottom: 20
             }}
           />
-        </View>
-        {showError && (
-          <ErrorMessage errorMessage={errorMessage} marginTop={10} />
-        )}
-        {loading && <ModalLoading text="Please wait" />}
+          <Text style={styles.textStyle}>
+            {reconfirmCode ? text[1] : text[0]}
+          </Text>
+          <View
+            style={{
+              alignContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+              marginTop: 20
+            }}
+          >
+            <SmoothPinCodeInput
+              textStyle={{
+                fontSize: 24,
+                color: "salmon"
+              }}
+              textStyleFocused={{
+                color: "crimson"
+              }}
+              restrictToNumbers="true"
+              value={code}
+              autoFocus={true}
+              onTextChange={code => this.setState({ code, showError: false })}
+              onFulfill={codeInput => {
+                reconfirmCode
+                  ? this.checkCode(codeInput)
+                  : this.setState({
+                      initialCode: codeInput,
+                      reconfirmCode: true,
+                      code: ""
+                    });
+              }}
+            />
+          </View>
+          {showError && (
+            <View style={{ alignSelf: "center" }}>
+              <ErrorMessage errorMessage={errorMessage} marginTop={10} />
+            </View>
+          )}
+          {loading && <ModalLoading text="Please wait" />}
+        </ScrollView>
       </KeyboardAvoidingView>
     );
   }

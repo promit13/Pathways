@@ -54,7 +54,7 @@ export default class ThankYou extends React.Component {
             What happens next?
           </Text>
           <Text style={styles.textStyle}>
-            {`One of our support team will be in contact shortly.\n\nPlease share this information with the victim and let them know they will be receiving a call from an 0800 number.`}
+            {`One of our support team will be in contact shortly.\n\nPlease share this information with the victim and let them know they will be receiving a call from Pathways.`}
           </Text>
           <TouchableOpacity
             onPress={() =>

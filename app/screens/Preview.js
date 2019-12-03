@@ -122,7 +122,7 @@ export default class Profile extends React.Component {
           records.map((record, index) => {
             if (
               record.Triage_Status__c === "Awaiting to be Contacted" ||
-              record.Triage_Status__c === "Contcting"
+              record.Triage_Status__c === "Contacting"
             ) {
               awaitingCasesArray.push(record);
             }

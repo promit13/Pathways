@@ -12,7 +12,8 @@ import {
   Platform,
   Image,
   ScrollView,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  BackHandler
 } from "react-native";
 import { Formik } from "formik";
 import axios from "axios";
@@ -90,10 +91,17 @@ export default class Login extends Component {
     loading: false
   };
 
-  // componentDidMount = async () => {
-  //   const fcmToken = await getFcmToken();
-  //   this.setState({ fcmToken });
-  // };
+  componentDidMount = async () => {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+  };
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+  }
+
+  onBackPress = () => {
+    return true;
+  };
 
   registerUser = values => {
     const { code } = values;
