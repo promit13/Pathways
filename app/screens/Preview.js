@@ -7,12 +7,16 @@ import {
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
-  AsyncStorage
+  Alert
 } from "react-native";
+import { connect } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage";
 import axios from "axios";
 import { Icon } from "react-native-elements";
 import colors from "../style";
 import LoadScreen from "../components/LoadScreen";
+import OfflineNotice from "../components/OfflineNotice";
+import { date } from "yup";
 
 const { width, height } = Dimensions.get("window");
 
@@ -57,30 +61,33 @@ const styles = {
     fontSize: 40,
     color: colors.darkGrey,
     textAlign: "center"
+  },
+  iconStyle: {
+    flex: 1,
+    color: colors.accent,
+    height: 50,
+    width: 50
   }
 };
 
 let awaitingCasesArray = [];
-let contactingCasesArray = [];
 let contactMadeCasesArray = [];
-let liveCasesArray = [];
 let unableToContactCasesArray = [];
 let notReferredCasesArray = [];
-let completedCasesArray = [];
+let totalReferralArray = [];
 
-export default class Profile extends React.Component {
+class Preview extends React.Component {
   static navigationOptions = {
     header: null
   };
 
   state = {
     awaitingCasesArray: [],
-    contactingCasesArray: [],
     contactMadeCasesArray: [],
     liveCasesArray: [],
-    completedCasesArray: [],
     unableToContactCasesArray: [],
     notReferredCasesArray: [],
+    totalReferralArray: [],
     loadScreen: true,
     refresh: true,
     myId: "",
@@ -116,38 +123,55 @@ export default class Profile extends React.Component {
       axios
         .get("http://167.99.90.138:8675/convertedAccounts")
         .then(completedRecords => {
-          console.log(completedRecords.data);
-          console.log(res.data.records);
           const { records } = res.data;
+          const { data } = completedRecords;
+          console.log(data);
+          console.log(records);
+          if (records === undefined) {
+            this.setState({
+              liveCasesArray: data,
+              myId: Id,
+              refresh:
+                this.props.navigation.state.params === undefined
+                  ? this.state.refresh
+                  : !this.state.refresh,
+              organisationId: AccountId,
+              loadScreen: false
+            });
+            return;
+          }
+          totalReferralArray = records.concat(data);
+          console.log(totalReferralArray);
           records.map((record, index) => {
             if (
-              record.Triage_Status__c === "Awaiting to be Contacted" ||
-              record.Triage_Status__c === "Contacting"
+              record.Case_Status__c === "Awaiting to be Contacted" ||
+              record.Case_Status__c === "Contacting"
             ) {
               awaitingCasesArray.push(record);
             }
-            if (record.Triage_Status__c === "Unable to Contact") {
+            if (record.Case_Status__c === "Unable to Contact") {
               unableToContactCasesArray.push(record);
             }
-            if (record.Triage_Status__c === "Contact Made") {
+            if (record.Case_Status__c === "Contact Made") {
               contactMadeCasesArray.push(record);
             }
-            if (record.Triage_Status__c === "Live") {
+            if (record.Case_Status__c === "Live") {
               // liveCasesArray.push(record);
-              completedRecords.data.push(record);
+              data.push(record);
             }
-            if (record.Triage_Status__c === "Not Referred") {
+            if (record.Case_Status__c === "Not Referred") {
               notReferredCasesArray.push(record);
             }
-            // if (record.Triage_Status__c === "Completed") {
+            // if (record.Case_Status__c === "Completed") {
             //   completedCasesArray.push(record);
             // }
             if (index === records.length - 1) {
               this.setState({
+                totalReferralArray,
                 awaitingCasesArray,
                 unableToContactCasesArray,
                 contactMadeCasesArray,
-                liveCasesArray: completedRecords.data,
+                liveCasesArray: data,
                 notReferredCasesArray,
                 myId: Id,
                 refresh:
@@ -160,8 +184,8 @@ export default class Profile extends React.Component {
               awaitingCasesArray = [];
               unableToContactCasesArray = [];
               contactMadeCasesArray = [];
-              liveCasesArray = [];
               notReferredCasesArray = [];
+              totalReferralArray = [];
             }
           });
         });
@@ -173,33 +197,44 @@ export default class Profile extends React.Component {
 
   render() {
     const {
+      totalReferralArray,
       awaitingCasesArray,
       unableToContactCasesArray,
       contactMadeCasesArray,
       liveCasesArray,
       notReferredCasesArray,
       loadScreen,
-      myId,
-      organisationId
+      myId
     } = this.state;
+    console.log(myId);
     if (loadScreen) return <LoadScreen text="Please wait" />;
     return (
       <SafeAreaView
         forceInset={{ bottom: "always", top: "never" }}
-        style={{ flex: 1, marginTop: 80 }}
+        style={{ flex: 1, paddingTop: 40 }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
+          {!this.props.isConnected.isConnected && (
+            <View style={{ marginTop: 40 }}>
+              <OfflineNotice />
+            </View>
+          )}
           <Image
             source={require("../../assets/path-logo.png")}
             style={{
               alignSelf: "center",
-              marginTop: 20,
+              marginTop: 40,
               color: colors.accent,
               marginBottom: 40
             }}
           />
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate("NewCase")}
+            onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
+              this.props.navigation.navigate("NewCase");
+            }}
             style={{
               width: width - 40,
               display: "flex",
@@ -225,21 +260,41 @@ export default class Profile extends React.Component {
             >
               Start a new referral
             </Text>
-            {/* <Image
-              source={require("../../assets/plus.png")}
-              resizeMode="contain"
-              style={{
-                display: "flex",
-                flex: 1,
-                alignSelf: "center",
-                height: 25,
-                width: 25
-              }}
-            /> */}
             <Icon name="plus" type="entypo" color={colors.accent} size={40} />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
+              this.props.navigation.navigate("MyReferrals", {
+                casesArray: totalReferralArray
+              });
+            }}
+            style={styles.listItemContainerStyle}
+          >
+            <Image
+              source={require("../../assets/myreferrals.png")}
+              resizeMode="contain"
+              style={styles.iconStyle}
+            />
+            <Text style={styles.listItemTextStyle}>My Referrals</Text>
+            <Text style={styles.listItemCountStyle}>
+              {
+                totalReferralArray.filter(item => {
+                  return (
+                    item.Referral__r &&
+                    item.Referral__r.Referrer_Contact_Name__c === myId
+                  );
+                }).length
+              }
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: awaitingCasesArray,
                 arrayTitle: "Contacting"
@@ -248,9 +303,9 @@ export default class Profile extends React.Component {
             style={styles.listItemContainerStyle}
           >
             <Image
-              source={require("../../assets/user.png")}
+              source={require("../../assets/contacting.png")}
               resizeMode="contain"
-              style={{ flex: 1, color: colors.accent }}
+              style={styles.iconStyle}
             />
             <Text style={styles.listItemTextStyle}>Contacting</Text>
             <Text style={styles.listItemCountStyle}>
@@ -266,6 +321,9 @@ export default class Profile extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: unableToContactCasesArray,
                 arrayTitle: "Unable to Contact"
@@ -274,9 +332,9 @@ export default class Profile extends React.Component {
             style={styles.listItemContainerStyle}
           >
             <Image
-              source={require("../../assets/tick.png")}
+              source={require("../../assets/unable.png")}
               resizeMode="contain"
-              style={{ flex: 1, color: colors.accent }}
+              style={styles.iconStyle}
             />
             <Text style={styles.listItemTextStyle}>Unable to Contact</Text>
             <Text style={styles.listItemCountStyle}>
@@ -292,6 +350,9 @@ export default class Profile extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: contactMadeCasesArray,
                 arrayTitle: "Processing"
@@ -300,9 +361,9 @@ export default class Profile extends React.Component {
             style={styles.listItemContainerStyle}
           >
             <Image
-              source={require("../../assets/injunction.png")}
+              source={require("../../assets/processing.png")}
               resizeMode="contain"
-              style={{ flex: 1, color: colors.accent }}
+              style={styles.iconStyle}
             />
             <Text style={styles.listItemTextStyle}>Processing</Text>
             <Text style={styles.listItemCountStyle}>
@@ -318,6 +379,9 @@ export default class Profile extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: liveCasesArray,
                 arrayTitle: "Referred to Agency"
@@ -326,9 +390,9 @@ export default class Profile extends React.Component {
             style={styles.listItemContainerStyle}
           >
             <Image
-              source={require("../../assets/logo-circle.png")}
+              source={require("../../assets/referred.png")}
               resizeMode="contain"
-              style={{ flex: 1, color: colors.accent }}
+              style={styles.iconStyle}
             />
             <Text style={styles.listItemTextStyle}>Referred to Agency</Text>
             <Text style={styles.listItemCountStyle}>
@@ -344,6 +408,9 @@ export default class Profile extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.props.navigation.navigate("ActiveCases", {
                 casesArray: notReferredCasesArray,
                 arrayTitle: "Not Referred"
@@ -352,9 +419,9 @@ export default class Profile extends React.Component {
             style={styles.listItemContainerStyle}
           >
             <Image
-              source={require("../../assets/cross.png")}
+              source={require("../../assets/notreferred.png")}
               resizeMode="contain"
-              style={{ flex: 1, color: colors.accent }}
+              style={styles.iconStyle}
             />
             <Text style={styles.listItemTextStyle}>Not Referred</Text>
             <Text style={styles.listItemCountStyle}>
@@ -373,3 +440,13 @@ export default class Profile extends React.Component {
     );
   }
 }
+
+const mapStateToProps = ({ checkNetworkStatus }) => {
+  const { network } = checkNetworkStatus;
+  console.log("NETWORK STATUS", network);
+  return {
+    isConnected: network
+  };
+};
+
+export default connect(mapStateToProps)(Preview);

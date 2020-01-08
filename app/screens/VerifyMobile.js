@@ -1,24 +1,22 @@
 import React, { Component } from "react";
 import {
-  TextInput,
   Text,
   TouchableOpacity,
   StyleSheet,
   BackHandler,
-  Dimensions,
-  AsyncStorage,
   View,
   Image,
   ScrollView,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from "react-native";
+import { connect } from "react-redux";
 import axios from "axios";
+import AsyncStorage from "@react-native-community/async-storage";
 import firebase from "react-native-firebase";
-// import firebase from "../utils/firebase";
 import colors from "../style";
 import { ModalLoading } from "../components/LoadScreen";
-
-var { height, width } = Dimensions.get("window");
+import OfflineNotice from "../components/OfflineNotice";
 
 const getVerificationCodeApi = "http://167.99.90.138:8675/getVerificationCode";
 
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class VerifyMobile extends Component {
+class VerifyMobile extends Component {
   static navigationOptions = {
     header: null
   };
@@ -142,7 +140,7 @@ export default class VerifyMobile extends Component {
   };
 
   logout = async () => {
-    const { user, currentUser } = this.props.navigation.state.params;
+    // const { user, currentUser } = this.props.navigation.state.params;
     await AsyncStorage.getAllKeys((err, keys) => {
       AsyncStorage.multiRemove(keys);
     });
@@ -197,15 +195,20 @@ export default class VerifyMobile extends Component {
       <KeyboardAvoidingView
         behavior="padding"
         enabled
-        style={{ flex: 1, padding: 40, marginTop: 40 }}
+        style={{ flex: 1, paddingVertical: 40 }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ felx: 1 }}>
+          {!this.props.isConnected.isConnected && (
+            <View style={{ marginTop: 40 }}>
+              <OfflineNotice />
+            </View>
+          )}
+          <View style={{ felx: 1, paddingHorizontal: 40 }}>
             <Image
               source={require("../../assets/path-logo.png")}
               style={{
                 alignSelf: "center",
-                marginTop: 20,
+                marginTop: 40,
                 color: colors.accent,
                 marginBottom: 20
               }}
@@ -224,7 +227,12 @@ export default class VerifyMobile extends Component {
             {loading && <ModalLoading text="Please wait..." />}
             <TouchableOpacity
               style={{ marginTop: 20 }}
-              onPress={() => this.registerMobile(phone)}
+              onPress={() => {
+                if (!this.props.isConnected.isConnected) {
+                  return Alert.alert("No Internet Connection");
+                }
+                this.registerMobile(phone);
+              }}
               underlayColor="#fff"
             >
               <Text
@@ -250,7 +258,14 @@ export default class VerifyMobile extends Component {
               >
                 If you have not received a code please click button below.
               </Text>
-              <TouchableOpacity onPress={() => this.registerMobile(phone)}>
+              <TouchableOpacity
+                onPress={() => {
+                  if (!this.props.isConnected.isConnected) {
+                    return Alert.alert("No Internet Connection");
+                  }
+                  this.registerMobile(phone);
+                }}
+              >
                 <Text
                   style={{
                     color: "blue",
@@ -290,6 +305,9 @@ export default class VerifyMobile extends Component {
             <TouchableOpacity
               style={styles.touchableStyle}
               onPress={() => {
+                if (!this.props.isConnected.isConnected) {
+                  return Alert.alert("No Internet Connection");
+                }
                 this.setState({ loading: true });
                 this.logout();
               }}
@@ -302,3 +320,12 @@ export default class VerifyMobile extends Component {
     );
   }
 }
+const mapStateToProps = ({ checkNetworkStatus }) => {
+  const { network } = checkNetworkStatus;
+  console.log("NETWORK STATUS", network);
+  return {
+    isConnected: network
+  };
+};
+
+export default connect(mapStateToProps)(VerifyMobile);

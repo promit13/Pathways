@@ -4,7 +4,6 @@ import {
   Text,
   AppState,
   TouchableOpacity,
-  AsyncStorage,
   KeyboardAvoidingView,
   ScrollView,
   Platform,
@@ -15,6 +14,7 @@ import axios from "axios";
 import { moderateScale } from "react-native-size-matters";
 import firebase from "react-native-firebase";
 import SmoothPinCodeInput from "react-native-smooth-pincode-input";
+import AsyncStorage from "@react-native-community/async-storage";
 import AppNavigator from "./app/router";
 import store from "./app/store";
 import ErrorMessage from "./app/components/Error";
@@ -53,6 +53,7 @@ export default class App extends React.Component {
   };
 
   componentDidMount = async () => {
+    //  NetInfo.addEventListener("connectionChange", this.handleConnectivityChange);
     AppState.addEventListener("change", this._handleAppStateChange);
     const pin = await AsyncStorage.getItem("pin");
     if (pin === null) {
@@ -65,20 +66,13 @@ export default class App extends React.Component {
   };
 
   componentWillUnmount() {
+    // NetInfo.addEventListener("connectionChange", this.handleConnectivityChange);
     AppState.removeEventListener("change", this._handleAppStateChange);
   }
 
   _handleAppStateChange = nextAppState => {
     console.log(nextAppState);
     this.setState({ appState: nextAppState, code: "" });
-
-    // if (
-    //   this.state.appState.match(/inactive|background/) &&
-    //   nextAppState === "active"
-    // ) {
-    //   console.log("App has come to the foreground!");
-    // }
-    // this.setState({ appState: nextAppState });
   };
 
   checkCode = code => {
@@ -116,7 +110,8 @@ export default class App extends React.Component {
         this.setState({
           loading: false,
           showError: true,
-          errorMessage: "Something went wrong. Please try again."
+          errorMessage:
+            "Something went wrong. Please try again. Or please check your internet connection"
         });
       });
   };
@@ -182,7 +177,7 @@ export default class App extends React.Component {
         style={{
           flex: 1,
           padding: moderateScale(40),
-          marginTop: moderateScale(40)
+          backgroundColor: "white"
         }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -191,7 +186,8 @@ export default class App extends React.Component {
             style={{
               alignSelf: "center",
               color: colors.accent,
-              marginBottom: moderateScale(20)
+              marginBottom: moderateScale(20),
+              marginTop: moderateScale(40)
             }}
           />
           <Text style={[styles.textStyle, { marginBottom: 40 }]}>

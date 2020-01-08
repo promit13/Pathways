@@ -166,9 +166,10 @@ android {
 }
 
 dependencies {
+    implementation project(':rn-fetch-blob')
+    implementation project(':@react-native-community_netinfo')
     implementation project(':react-native-firebase')
     implementation project(':react-native-pdf')
-    implementation project(':rn-fetch-blob')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-gesture-handler')

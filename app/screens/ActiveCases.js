@@ -5,26 +5,20 @@ import {
   ScrollView,
   SafeAreaView,
   Platform,
+  Alert,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  AsyncStorage
+  KeyboardAvoidingView
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import _ from "lodash";
 import moment from "moment";
-import { withNavigation } from "react-navigation";
+import { connect } from "react-redux";
 import colors from "../style";
-import axios from "axios";
-import BookingDetails from "../components/BookingDetails";
+import CaseDetails from "../components/CaseDetails";
 import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
+import OfflineNotice from "../components/OfflineNotice";
 
-const allTitles = [
-  "Awaiting to be Contacted",
-  "Contacting",
-  "Contact Made",
-  "Live",
-  "Completed"
-];
 class ActiveCases extends React.Component {
   static navigationOptions = {
     headerStyle: {
@@ -151,13 +145,16 @@ class ActiveCases extends React.Component {
   renderContent = status => {
     const casesList = Object.values(status)[0].map(caseDetails => {
       return (
-        <BookingDetails
+        <CaseDetails
           caseDetails={caseDetails}
-          onPress={() =>
+          onPress={() => {
+            if (!this.props.isConnected.isConnected) {
+              return Alert.alert("No internet connection");
+            }
             this.props.navigation.navigate("Case", {
               caseDetails
-            })
-          }
+            });
+          }}
         />
       );
     });
@@ -221,96 +218,106 @@ class ActiveCases extends React.Component {
         enabled
         behavior={Platform.OS === "android" ? "" : "padding"}
         style={{
-          borderBottomWidth: 2,
-          borderBottomColor: "#F1F3F2",
-          borderTopWidth: 2,
-          borderTopColor: "#F1F3F2"
+          flex: 1
         }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
-          <SearchBarWrapper
-            onSearchChange={searchKey => {
-              this.setState({ searchKey });
-              console.log(searchKey);
-            }}
-            sevenDaysPress={() => {
-              this.buttonPress(0);
-            }}
-            thirtyDaysPress={() => {
-              this.buttonPress(1);
-            }}
-            sixtyDaysPress={() => {
-              this.buttonPress(2);
-            }}
-            ninetyDaysPress={() => {
-              this.buttonPress(3);
-            }}
-            allDaysPress={() => {
-              this.buttonPress(4);
-            }}
-            myReferralsPress={() => {
-              this.buttonPress(5);
-            }}
-            myConstabularyPress={() => {
-              this.buttonPress(6);
-            }}
-            nationalReferralsPress={() => {
-              this.buttonPress(7);
-            }}
-            sevenDays={sevenDays}
-            thirtyDays={thirtyDays}
-            sixtyDays={sixtyDays}
-            ninetyDays={ninetyDays}
-            allDays={allDays}
-            myReferrals={myReferrals}
-            myConstabulary={myConstabulary}
-            nationalReferrals={nationalReferrals}
-          />
-          <View
-            style={{
-              height: 20
-            }}
-          />
-          {filteredArray.map(status => {
-            const titleArray = Object.keys(status);
-            console.log(titleArray);
-            return (
-              <View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    height: 35,
-                    borderTopWidth: 2,
-                    borderTopColor: colors.lightGrey
-                  }}
-                >
+          {!this.props.isConnected.isConnected && <OfflineNotice />}
+          <View style={{ flex: 1, paddingTop: 20 }}>
+            <SearchBarWrapper
+              showDownBar={true}
+              onSearchChange={searchKey => {
+                this.setState({ searchKey });
+                console.log(searchKey);
+              }}
+              sevenDaysPress={() => {
+                this.buttonPress(0);
+              }}
+              thirtyDaysPress={() => {
+                this.buttonPress(1);
+              }}
+              sixtyDaysPress={() => {
+                this.buttonPress(2);
+              }}
+              ninetyDaysPress={() => {
+                this.buttonPress(3);
+              }}
+              allDaysPress={() => {
+                this.buttonPress(4);
+              }}
+              myReferralsPress={() => {
+                this.buttonPress(5);
+              }}
+              myConstabularyPress={() => {
+                this.buttonPress(6);
+              }}
+              nationalReferralsPress={() => {
+                this.buttonPress(7);
+              }}
+              sevenDays={sevenDays}
+              thirtyDays={thirtyDays}
+              sixtyDays={sixtyDays}
+              ninetyDays={ninetyDays}
+              allDays={allDays}
+              myReferrals={myReferrals}
+              myConstabulary={myConstabulary}
+              nationalReferrals={nationalReferrals}
+            />
+            <View
+              style={{
+                height: 20
+              }}
+            />
+            {filteredArray.map(status => {
+              const titleArray = Object.keys(status);
+              console.log(titleArray);
+              return (
+                <View>
                   <View
                     style={{
-                      backgroundColor: colors.grey,
-                      width: "100%"
+                      flexDirection: "row",
+                      height: 35,
+                      borderTopWidth: 2,
+                      borderTopColor: colors.lightGrey
                     }}
                   >
-                    <Text
+                    <View
                       style={{
-                        fontSize: 20,
-                        color: colors.darkGrey,
-                        marginTop: 5,
-                        color: "white",
-                        marginLeft: 25,
-                        textTransform: "uppercase"
+                        backgroundColor: colors.grey,
+                        width: "100%"
                       }}
                     >
-                      {titleArray}
-                    </Text>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          color: colors.darkGrey,
+                          marginTop: 5,
+                          color: "white",
+                          marginLeft: 25,
+                          textTransform: "uppercase"
+                        }}
+                      >
+                        {titleArray}
+                      </Text>
+                    </View>
                   </View>
+                  {this.renderContent(status)}
                 </View>
-                {this.renderContent(status)}
-              </View>
-            );
-          })}
+              );
+            })}
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     );
   }
 }
-export default withNavigation(ActiveCases);
+// export default withNavigation(ActiveCases);
+const mapStateToProps = ({ checkNetworkStatus }) => {
+  const { network } = checkNetworkStatus;
+  console.log("NETWORK STATUS", network);
+  return {
+    isConnected: network
+  };
+};
+
+export default connect(mapStateToProps)(ActiveCases);

@@ -27,7 +27,7 @@ export default class ThankYou extends React.Component {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={{ marginBottom: 30 }}>
         <Image
           source={require("../../assets/path-logo.png")}
           style={{

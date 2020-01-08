@@ -6,11 +6,14 @@ import {
   Image,
   ScrollView,
   Linking,
+  Alert,
   Platform
 } from "react-native";
 import { Icon } from "react-native-elements";
+import { connect } from "react-redux";
 import moment from "moment";
 import colors from "../style";
+import OfflineNotice from "../components/OfflineNotice";
 
 const styles = {
   viewBoxStyle: {
@@ -40,7 +43,7 @@ const styles = {
     textTransform: "uppercase"
   }
 };
-export default class Case extends React.Component {
+class Case extends React.Component {
   static navigationOptions = {
     headerStyle: {
       backgroundColor: colors.accent
@@ -52,149 +55,56 @@ export default class Case extends React.Component {
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 20 }}
+        contentContainerStyle={{ paddingVertical: 20 }}
       >
-        <Image
-          source={require("../../assets/path-logo.png")}
-          style={{
-            alignSelf: "center",
-            marginTop: 20,
-            color: colors.accent,
-            marginBottom: 20
-          }}
-        />
-        <View>
-          <View
-            style={[
-              styles.viewBoxStyle,
-              {
-                backgroundColor: colors.grey,
-                justifyContent: "space-between",
-                flexDirection: "row",
-                alignItems: "center",
-                borderWidth: 0
-              }
-            ]}
-          >
-            <Text
-              style={{
-                fontWeight: "600",
-                fontSize: 20,
-                color: "white"
-              }}
-            >
-              CASE
-            </Text>
-            <Text
-              style={{
-                fontSize: 14,
-                color: "white"
-              }}
-            >
-              Started {moment(caseDetails.CreatedDate).format("DD MMM YYYY")}
-            </Text>
-          </View>
-          <View style={styles.viewBoxStyle}>
-            <Text style={styles.textBoxStyle}>
-              {caseDetails.Referral__r.Name}
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.viewBoxStyle,
-              {
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "flex-start"
-              }
-            ]}
-          >
-            <Text style={[styles.textBoxStyle, { flex: 4 }]}>
-              {caseDetails.Referral__r.Phone}
-            </Text>
-            <Icon
-              name="phone"
-              type="font-awesome"
-              size={30}
-              onPress={() => {
-                if (Platform.OS === "android") {
-                  phoneNumber = `tel:${caseDetails.Referral__r.Phone}`;
-                } else {
-                  phoneNumber = `telprompt:${caseDetails.Referral__r.Phone}`;
-                }
-
-                Linking.openURL(phoneNumber);
-              }}
-              color={colors.darkGrey}
-              iconStyle={{
-                flex: 1,
-                alignSelf: "flex-end",
-                justifySelf: "center",
-                justifySelf: "flex-end",
-                color: colors.darkGrey
-              }}
-            />
-          </View>
-          <Text style={styles.textHeaderStyle}>STATUS</Text>
-        </View>
-        <View
-          style={[
-            styles.viewBoxStyle,
-            {
-              backgroundColor: colors.accent,
-              justifyContent: "center",
-              borderWidth: 0
-            }
-          ]}
-        >
-          <Text style={styles.statusText}>
-            {/* {caseDetails.Triage_Status__c} */}
-            {caseDetails.Triage_Status__c === "Unable to Contact"
-              ? "Unable to Contact"
-              : caseDetails.Triage_Status__c === "Contact Made"
-              ? "Processing"
-              : caseDetails.Triage_Status__c === "Live" ||
-                caseDetails.Triage_Status__c === "Completed"
-              ? "Referred to Agency"
-              : caseDetails.Triage_Status__c === "Awaiting to be Contacted" ||
-                caseDetails.Triage_Status__c === "Contacting"
-              ? "Contacting"
-              : caseDetails.Triage_Status__c}
-          </Text>
-        </View>
-        {caseDetails.Recovery_Pathway__r && (
-          <View
+        {!this.props.isConnected.isConnected && <OfflineNotice />}
+        <View style={{ flex: 1, padding: 20 }}>
+          <Image
+            source={require("../../assets/path-logo.png")}
             style={{
-              marginTop: 20
+              alignSelf: "center",
+              marginTop: 20,
+              color: colors.accent,
+              marginBottom: 20
             }}
-          >
-            <Text style={styles.textHeaderStyle}>RECOVERY PATHWAY</Text>
-            <TouchableOpacity
+          />
+          <View>
+            <View
               style={[
                 styles.viewBoxStyle,
                 {
-                  backgroundColor: colors.accent,
-                  justifyContent: "center",
+                  backgroundColor: colors.grey,
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  alignItems: "center",
                   borderWidth: 0
                 }
               ]}
             >
-              <Text style={styles.statusText}>
-                {caseDetails.Recovery_Pathway__r.StageName}
+              <Text
+                style={{
+                  fontWeight: "600",
+                  fontSize: 20,
+                  color: "white"
+                }}
+              >
+                CASE
               </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        {caseDetails.Court_Injunction_url ? (
-          <React.Fragment>
-            {/* <Text style={styles.textHeaderStyle}>DOCUMENTS</Text> */}
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate("PdfViewer", {
-                  documentUrl: caseDetails.Court_Injunction_url
-                })
-              }
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: "white"
+                }}
+              >
+                Started {moment(caseDetails.CreatedDate).format("DD MMM YYYY")}
+              </Text>
+            </View>
+            <View style={styles.viewBoxStyle}>
+              <Text style={styles.textBoxStyle}>
+                {caseDetails.Referral__r.Name}
+              </Text>
+            </View>
+            <View
               style={[
                 styles.viewBoxStyle,
                 {
@@ -206,41 +116,149 @@ export default class Case extends React.Component {
               ]}
             >
               <Text style={[styles.textBoxStyle, { flex: 4 }]}>
-                DOCUMENTS
-                {/* {status} */}
+                {caseDetails.Referral__r.Phone}
               </Text>
               <Icon
-                name="angle-right"
+                name="phone"
                 type="font-awesome"
-                size={40}
+                size={30}
+                onPress={() => {
+                  if (Platform.OS === "android") {
+                    phoneNumber = `tel:${caseDetails.Referral__r.Phone}`;
+                  } else {
+                    phoneNumber = `telprompt:${caseDetails.Referral__r.Phone}`;
+                  }
+
+                  Linking.openURL(phoneNumber);
+                }}
+                color={colors.darkGrey}
                 iconStyle={{
                   flex: 1,
                   alignSelf: "flex-end",
                   justifySelf: "center",
+                  justifySelf: "flex-end",
                   color: colors.darkGrey
                 }}
               />
-            </TouchableOpacity>
-          </React.Fragment>
-        ) : (
+            </View>
+            <Text style={styles.textHeaderStyle}>STATUS</Text>
+          </View>
           <View
             style={[
               styles.viewBoxStyle,
               {
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center"
+                backgroundColor: colors.accent,
+                justifyContent: "center",
+                borderWidth: 0
               }
             ]}
           >
-            <Text style={styles.textBoxStyle}>
-              No Injunction Served
-              {/* {status} */}
+            <Text style={styles.statusText}>
+              {/* {caseDetails.Case_Status__c} */}
+              {caseDetails.Case_Status__c === "Unable to Contact"
+                ? "Unable to Contact"
+                : caseDetails.Case_Status__c === "Contact Made"
+                ? "Processing"
+                : caseDetails.Case_Status__c === "Live" ||
+                  caseDetails.Case_Status__c === "Completed"
+                ? "Referred to Agency"
+                : caseDetails.Case_Status__c === "Awaiting to be Contacted" ||
+                  caseDetails.Case_Status__c === "Contacting"
+                ? "Contacting"
+                : caseDetails.Case_Status__c}
             </Text>
           </View>
-        )}
+          {caseDetails.Recovery_Pathway__r && (
+            <View
+              style={{
+                marginTop: 20
+              }}
+            >
+              <Text style={styles.textHeaderStyle}>RECOVERY PATHWAY</Text>
+              <TouchableOpacity
+                style={[
+                  styles.viewBoxStyle,
+                  {
+                    backgroundColor: colors.accent,
+                    justifyContent: "center",
+                    borderWidth: 0
+                  }
+                ]}
+              >
+                <Text style={styles.statusText}>
+                  {caseDetails.Recovery_Pathway__r.StageName}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {caseDetails.Court_Injunction_url ? (
+            <React.Fragment>
+              {/* <Text style={styles.textHeaderStyle}>DOCUMENTS</Text> */}
+              <TouchableOpacity
+                onPress={() => {
+                  if (!this.props.isConnected.isConnected) {
+                    return Alert.alert("No internet connection");
+                  }
+                  this.props.navigation.navigate("PdfViewer", {
+                    documentUrl: caseDetails.Court_Injunction_url
+                  });
+                }}
+                style={[
+                  styles.viewBoxStyle,
+                  {
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-start"
+                  }
+                ]}
+              >
+                <Text style={[styles.textBoxStyle, { flex: 4 }]}>
+                  DOCUMENTS
+                  {/* {status} */}
+                </Text>
+                <Icon
+                  name="angle-right"
+                  type="font-awesome"
+                  size={40}
+                  iconStyle={{
+                    flex: 1,
+                    alignSelf: "flex-end",
+                    justifySelf: "center",
+                    color: colors.darkGrey
+                  }}
+                />
+              </TouchableOpacity>
+            </React.Fragment>
+          ) : (
+            <View
+              style={[
+                styles.viewBoxStyle,
+                {
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }
+              ]}
+            >
+              <Text style={styles.textBoxStyle}>
+                No Injunction Served
+                {/* {status} */}
+              </Text>
+            </View>
+          )}
+        </View>
       </ScrollView>
     );
   }
 }
+const mapStateToProps = ({ checkNetworkStatus }) => {
+  const { network } = checkNetworkStatus;
+  console.log("NETWORK STATUS", network);
+  return {
+    isConnected: network
+  };
+};
+
+export default connect(mapStateToProps)(Case);

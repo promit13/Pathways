@@ -162,74 +162,78 @@ export default class SearchBarWrapper extends Component {
           padding={10}
           returnKeyType={"search"}
         />
-        <View style={styles.viewItemContainerStyle}>
-          <TouchableOpacity
-            style={[
-              styles.touchableStyle,
-              {
-                backgroundColor: this.props.myReferrals
-                  ? colors.accent
-                  : "transparent"
-              }
-            ]}
-            onPress={this.props.myReferralsPress}
-          >
-            <Text
+        {this.props.showDownBar && (
+          <View style={styles.viewItemContainerStyle}>
+            <TouchableOpacity
               style={[
-                styles.textStyle,
+                styles.touchableStyle,
                 {
-                  color: this.props.myReferrals ? "white" : colors.accent
+                  backgroundColor: this.props.myReferrals
+                    ? colors.accent
+                    : "transparent"
                 }
               ]}
+              onPress={this.props.myReferralsPress}
             >
-              My Referrals
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.touchableStyle,
-              {
-                backgroundColor: this.props.myConstabulary
-                  ? colors.accent
-                  : "transparent"
-              }
-            ]}
-            onPress={this.props.myConstabularyPress}
-          >
-            <Text
+              <Text
+                style={[
+                  styles.textStyle,
+                  {
+                    color: this.props.myReferrals ? "white" : colors.accent
+                  }
+                ]}
+              >
+                My Referrals
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[
-                styles.textStyle,
+                styles.touchableStyle,
                 {
-                  color: this.props.myConstabulary ? "white" : colors.accent
+                  backgroundColor: this.props.myConstabulary
+                    ? colors.accent
+                    : "transparent"
                 }
               ]}
+              onPress={this.props.myConstabularyPress}
             >
-              My Organisations
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.touchableStyle,
-              {
-                backgroundColor: this.props.nationalReferrals
-                  ? colors.accent
-                  : "transparent"
-              }
-            ]}
-            onPress={this.props.nationalReferralsPress}
-          >
-            <Text
+              <Text
+                style={[
+                  styles.textStyle,
+                  {
+                    color: this.props.myConstabulary ? "white" : colors.accent
+                  }
+                ]}
+              >
+                My Organisations
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={[
-                styles.textStyle,
+                styles.touchableStyle,
                 {
-                  color: this.props.nationalReferrals ? "white" : colors.accent
+                  backgroundColor: this.props.nationalReferrals
+                    ? colors.accent
+                    : "transparent"
                 }
               ]}
+              onPress={this.props.nationalReferralsPress}
             >
-              National Referrals
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <Text
+                style={[
+                  styles.textStyle,
+                  {
+                    color: this.props.nationalReferrals
+                      ? "white"
+                      : colors.accent
+                  }
+                ]}
+              >
+                National Referrals
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     );
   }

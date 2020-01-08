@@ -2,17 +2,19 @@ import React, { Component } from "react";
 import {
   View,
   Text,
-  AsyncStorage,
   TouchableOpacity,
-  Platform,
   Image,
   Linking,
   BackHandler,
-  KeyboardAvoidingView
+  Alert
 } from "react-native";
+import { Icon } from "react-native-elements";
+import { connect } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage";
 import firebase from "react-native-firebase";
 import colors from "../style";
 import LoadScreen, { ModalLoading } from "../components/LoadScreen";
+import OfflineNotice from "../components/OfflineNotice";
 
 const styles = {
   textStyle: {
@@ -29,19 +31,18 @@ const styles = {
   }
 };
 
-export default class Pathways extends Component {
+class Pathways extends Component {
+  static navigationOptions = {
+    header: null
+  };
   state = {
-    myId: "",
     loading: false,
     loadScreen: true,
     hardWareBackButton: true
   };
   componentDidMount = async () => {
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
-    const contactData = await AsyncStorage.getItem("userDetails");
-    const jsonObjectData = JSON.parse(contactData);
     this.setState({
-      myId: jsonObjectData.Id,
       loadScreen: false,
       hardWareBackButton: true
     });
@@ -57,6 +58,7 @@ export default class Pathways extends Component {
 
   logout = async () => {
     await AsyncStorage.getAllKeys((err, keys) => {
+      console.log(keys);
       AsyncStorage.multiRemove(keys);
     });
     this.setState({
@@ -97,22 +99,22 @@ export default class Pathways extends Component {
   };
 
   render() {
-    const { myId, loadScreen } = this.state;
-    console.log(myId);
+    const { loadScreen } = this.state;
     if (loadScreen) return <LoadScreen text="Please wait" />;
     return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "android" ? "" : "padding"}
-        enabled
-        style={{ flex: 1 }}
-      >
+      <View style={{ flex: 1, paddingTop: 40 }}>
+        {!this.props.isConnected.isConnected && (
+          <View style={{ marginTop: 40 }}>
+            <OfflineNotice />
+          </View>
+        )}
         <Image
           source={require("../../assets/path-logo.png")}
           style={{
             alignSelf: "center",
-            marginTop: 20,
+            marginTop: 40,
             color: colors.accent,
-            marginBottom: 40
+            marginBottom: 20
           }}
         />
         <View style={{ flex: 1 }}>
@@ -130,46 +132,46 @@ export default class Pathways extends Component {
           </Text>
           <TouchableOpacity
             onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.setState({ hardWareBackButton: false });
               this.props.navigation.navigate("Preview");
             }}
             style={{
               paddingVertical: 20,
               justifyContent: "space-between",
-              display: "flex",
+              alignItems: "center",
               flexDirection: "row",
               borderWidth: 2,
               borderColor: colors.grey,
-              borderBottomWidth: 2,
               borderLeftWidth: 0,
               borderRightWidth: 0,
-              paddingHorizontal: 30,
-              marginBottom: 20
+              paddingHorizontal: 30
             }}
           >
             <Text
               style={{
                 fontSize: 20,
-                color: colors.darkGrey,
-                display: "flex",
-                justifyContent: "center"
+                color: colors.darkGrey
               }}
             >
               Domestic Abuse Pathway
             </Text>
-            <Image
-              source={require("../../assets/arrow-right.png")}
-              resizeMode="contain"
-              style={{
-                display: "flex",
-                alignSelf: "center",
-                height: 25
-              }}
+            <Icon
+              name="chevron-small-right"
+              type="entypo"
+              color={colors.accent}
+              size={40}
+              iconStyle={{ marginTop: 10 }}
             />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.touchableStyle}
             onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.logout();
             }}
           >
@@ -183,6 +185,9 @@ export default class Pathways extends Component {
               }
             ]}
             onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.sendEmail();
             }}
           >
@@ -191,7 +196,17 @@ export default class Pathways extends Component {
             </Text>
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+      </View>
     );
   }
 }
+
+const mapStateToProps = ({ checkNetworkStatus }) => {
+  const { network } = checkNetworkStatus;
+  console.log("NETWORK STATUS", network);
+  return {
+    isConnected: network
+  };
+};
+
+export default connect(mapStateToProps)(Pathways);

@@ -1,6 +1,8 @@
-import { combineReducers } from 'redux';
-import { checkUser } from './authReducer';
+import { combineReducers } from "redux";
+import { checkUser } from "./authReducer";
+import { checkNetworkStatus } from "./networkReducer";
 
 export default combineReducers({
-    checkUser,
+  checkUser,
+  checkNetworkStatus
 });

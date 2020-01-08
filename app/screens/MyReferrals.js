@@ -11,13 +11,12 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import _ from "lodash";
 import moment from "moment";
-import colors from "../style";
-import axios from "axios";
 import { connect } from "react-redux";
 import CaseDetails from "../components/CaseDetails";
 import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
 import OfflineNotice from "../components/OfflineNotice";
+import colors from "../style";
 
 const allTitles = [
   "Awaiting to be Contacted",
@@ -42,7 +41,7 @@ let contactMadeCasesArray = [];
 let liveCasesArray = [];
 let unableToContactCasesArray = [];
 let notReferredCasesArray = [];
-class Search extends React.Component {
+class MyReferrals extends React.Component {
   static navigationOptions = {
     headerStyle: {
       backgroundColor: colors.accent
@@ -64,60 +63,25 @@ class Search extends React.Component {
     checkDays: null,
     loadScreen: true,
     accountId: "",
-    myId: "",
-    completedRecords: []
+    myId: ""
   };
 
   componentDidMount = async () => {
     const contactData = await AsyncStorage.getItem("userDetails");
     const jsonObjectData = JSON.parse(contactData);
     const { AccountId, Id } = jsonObjectData;
-    if (!this.props.isConnected.isConnected) {
-      this.setState({ loadScreen: false });
-      return;
-    }
-    axios.get("http://167.99.90.138:8675/referrals").then(res => {
-      axios
-        .get("http://167.99.90.138:8675/convertedAccounts")
-        .then(completedRecords => {
-          const mergedArray = res.data.records.concat(completedRecords.data);
-          const sortedCasesArray = _.reverse(
-            _.sortBy(mergedArray, o => o.CreatedDate)
-          );
-          this.setState({
-            activeCases: sortedCasesArray,
-            loadScreen: false,
-            accountId: AccountId,
-            myId: Id
-          });
-        });
+    const { casesArray } = this.props.navigation.state.params;
+    console.log(casesArray);
+    const sortedCasesArray = _.reverse(
+      _.sortBy(casesArray, o => o.CreatedDate)
+    );
+    this.setState({
+      activeCases: sortedCasesArray,
+      loadScreen: false,
+      accountId: AccountId,
+      myId: Id
     });
   };
-
-  // buttonPress = i => {
-  //   const {
-  //     sevenDays,
-  //     thirtyDays,
-  //     sixtyDays,
-  //     ninetyDays,
-  //     allDays,
-  //     myReferrals,
-  //     myConstabulary,
-  //     nationalReferrals
-  //   } = this.state;
-  //   this.setState({
-  //     sevenDays: sevenDays || i === 0 ? !this.state.sevenDays : false,
-  //     thirtyDays: thirtyDays || i === 1 ? !this.state.thirtyDays : false,
-  //     sixtyDays: sixtyDays || i === 2 ? !this.state.sixtyDays : false,
-  //     ninetyDays: ninetyDays || i === 3 ? !this.state.ninetyDays : false,
-  //     allDays: allDays || i === 4 ? !this.state.allDays : false,
-  //     myReferrals: myReferrals || i === 5 ? !this.state.myReferrals : false,
-  //     myConstabulary:
-  //       myConstabulary || i === 6 ? !this.state.myConstabulary : false,
-  //     nationalReferrals:
-  //       nationalReferrals || i === 7 ? !this.state.nationalReferrals : false
-  //   });
-  // };
 
   buttonPress = i => {
     const {
@@ -318,7 +282,6 @@ class Search extends React.Component {
           {!this.props.isConnected.isConnected && <OfflineNotice />}
           <View style={{ flex: 1, paddingTop: 20 }}>
             <SearchBarWrapper
-              showDownBar={true}
               onSearchChange={searchKey => {
                 this.setState({ searchKey });
               }}
@@ -414,4 +377,4 @@ const mapStateToProps = ({ checkNetworkStatus }) => {
   };
 };
 
-export default connect(mapStateToProps)(Search);
+export default connect(mapStateToProps)(MyReferrals);

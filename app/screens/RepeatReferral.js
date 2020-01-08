@@ -1,8 +1,17 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  Alert
+} from "react-native";
 import axios from "axios";
+import { connect } from "react-redux";
 import colors from "../style";
 import { ModalLoading } from "../components/LoadScreen";
+import OfflineNotice from "../components/OfflineNotice";
 
 const createReferralApi = "http://167.99.90.138:8675/createReferral";
 const createTriageApi = "http://167.99.90.138:8675/createTriage";
@@ -21,7 +30,7 @@ const styles = {
     color: "white"
   }
 };
-export default class RepeatReferrals extends React.Component {
+class RepeatReferrals extends React.Component {
   static navigationOptions = {
     headerStyle: {
       backgroundColor: colors.accent
@@ -34,6 +43,9 @@ export default class RepeatReferrals extends React.Component {
   };
 
   createTriageAndReferral = check => {
+    if (!this.props.isConnected.isConnected) {
+      return Alert.alert("No internet connection");
+    }
     this.setState({ loadscreen: true });
     const { userDetails } = this.props.navigation.state.params;
     console.log(userDetails);
@@ -59,33 +71,52 @@ export default class RepeatReferrals extends React.Component {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 15 }}
       >
-        <Image
-          source={require("../../assets/path-logo.png")}
-          style={{
-            alignSelf: "center",
-            marginTop: 20,
-            color: colors.accent,
-            marginBottom: 20
-          }}
-        />
+        {!this.props.isConnected.isConnected && <OfflineNotice />}
+        <View style={{ flex: 1, paddingTop: 20 }}>
+          <Image
+            source={require("../../assets/path-logo.png")}
+            style={{
+              alignSelf: "center",
+              marginVertical: 20,
+              color: colors.accent
+            }}
+          />
 
-        <Text style={{ fontSize: 20, color: colors.darkGrey, margin: 40 }}>
-          {`The victim is already in the system with a matching name and date of birth.\n\nPlease ask the victim if they have been referred before to their knowledge.\n\nIf the victim is not sure please click NO.`}
-        </Text>
-        <TouchableOpacity
-          onPress={() => this.createTriageAndReferral(true)}
-          style={styles.touchableStyle}
-        >
-          <Text style={styles.textStyle}>YES - THIS IS THE SAME VICTIM</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.createTriageAndReferral(false)}
-          style={styles.touchableStyle}
-        >
-          <Text style={styles.textStyle}>NO - THIS IS NOT THE SAME VICTIM</Text>
-        </TouchableOpacity>
-        {this.state.loadscreen && <ModalLoading text="Please wait" />}
+          <Text
+            style={{
+              fontSize: 20,
+              color: colors.darkGrey,
+              marginHorizontal: 40
+            }}
+          >
+            {`The victim is already in the system with a matching name and date of birth.\n\nPlease ask the victim if they have been referred before to their knowledge.\n\nIf the victim is not sure please click NO.`}
+          </Text>
+          <TouchableOpacity
+            onPress={() => this.createTriageAndReferral(true)}
+            style={styles.touchableStyle}
+          >
+            <Text style={styles.textStyle}>YES - THIS IS THE SAME VICTIM</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.createTriageAndReferral(false)}
+            style={styles.touchableStyle}
+          >
+            <Text style={styles.textStyle}>
+              NO - THIS IS NOT THE SAME VICTIM
+            </Text>
+          </TouchableOpacity>
+          {this.state.loadscreen && <ModalLoading text="Please wait" />}
+        </View>
       </ScrollView>
     );
   }
 }
+const mapStateToProps = ({ checkNetworkStatus }) => {
+  const { network } = checkNetworkStatus;
+  console.log("NETWORK STATUS", network);
+  return {
+    isConnected: network
+  };
+};
+
+export default connect(mapStateToProps)(RepeatReferrals);

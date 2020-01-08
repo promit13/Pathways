@@ -1,8 +1,11 @@
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
 import firebase from "react-native-firebase";
+import { connect } from "react-redux";
+import NetInfo from "@react-native-community/netinfo";
+import { networkStatus } from "../actions";
 
-export default class AuthLoadingScreen extends React.Component {
+class AuthLoadingScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
@@ -14,14 +17,20 @@ export default class AuthLoadingScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.handleConnectivityChange();
+    NetInfo.addEventListener("connectionChange", this.handleConnectivityChange);
+    this.handleUserStatusChange();
   }
 
   componentWillUnmount() {
+    NetInfo.addEventListener("connectionChange", this.handleConnectivityChange);
     this.authSubscription();
   }
 
   handleConnectivityChange = () => {
+    this.props.networkStatus();
+  };
+
+  handleUserStatusChange = () => {
     this.authSubscription = firebase.auth().onAuthStateChanged(currentUser => {
       console.log(currentUser);
       if (currentUser === null) {
@@ -73,3 +82,17 @@ export default class AuthLoadingScreen extends React.Component {
     return <View>{this.renderComponent()}</View>;
   }
 }
+
+const mapStateToProps = ({ checkNetworkStatus }) => {
+  const { network } = checkNetworkStatus;
+  console.log("NETWORK STATUS", network);
+  return {
+    isConnected: network
+  };
+};
+
+const mapDispatchToProps = {
+  networkStatus
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthLoadingScreen);

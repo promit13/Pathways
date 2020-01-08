@@ -2,7 +2,6 @@ import React from "react";
 import { View, ActivityIndicator, Text } from "react-native";
 import { moderateScale } from "react-native-size-matters";
 import Modal from "react-native-modal";
-import colors from "../style";
 
 const styles = {
   container: {

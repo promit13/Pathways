@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from "react-native";
 import { Icon } from "react-native-elements";
 import colors from "../style";
 
-const BookingDetails = ({ onPress, caseDetails }) => (
+const CaseDetails = ({ onPress, caseDetails }) => (
   <View>
     <TouchableOpacity
       onPress={onPress}
@@ -51,4 +51,4 @@ const BookingDetails = ({ onPress, caseDetails }) => (
   </View>
 );
 
-export default BookingDetails;
+export default CaseDetails;

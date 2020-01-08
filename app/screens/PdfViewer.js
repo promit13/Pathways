@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Dimensions, View } from "react-native";
 import Pdf from "react-native-pdf";
 import colors from "../style";
-import LoadScreen, { ModalLoading } from "../components/LoadScreen";
+import LoadScreen from "../components/LoadScreen";
 
 const { width, height } = Dimensions.get("window");
 

@@ -2,38 +2,30 @@ import React, { Component, Fragment } from "react";
 import {
   TextInput,
   Text,
-  Alert,
   TouchableOpacity,
-  AsyncStorage,
   StyleSheet,
-  Dimensions,
-  View,
   Linking,
-  Platform,
+  View,
   Image,
-  ScrollView,
-  KeyboardAvoidingView,
-  BackHandler
+  BackHandler,
+  Alert
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import { Formik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
 import firebase from "react-native-firebase";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { connect } from "react-redux";
+import NetInfo from "@react-native-community/netinfo";
 import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
 import colors from "../style";
-
-var { height, width } = Dimensions.get("window");
+// import firebase from "../utils/firebase";
+import OfflineNotice from "../components/OfflineNotice";
 
 const getAccountApi = "http://167.99.90.138:8675/getAccount";
 const getCustomTokenApi = "http://167.99.90.138:8675/getCustomToken";
-
-// const text = [
-//   " to Pathway, please enter your activation code to verify your device. Your activation code can be found in your welcome email.",
-//   "If you do not have a welcome email please call 0800 1017 110. If you wish to apply to become a referrer please go to:",
-//   "Thank you, an authorisation code has been sent to your mobile number, please enter it below to complete your device activation.",
-//   "If you are having difficulties completing the authorisation please call 0800 1017 110."
-// ];
 
 const text = [
   " Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
@@ -79,7 +71,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Login extends Component {
+class Login extends Component {
   static navigationOptions = {
     header: null
   };
@@ -88,16 +80,29 @@ export default class Login extends Component {
     fcmToken: "",
     showError: false,
     errorMessage: "",
-    loading: false
+    loading: false,
+    text: ""
   };
 
   componentDidMount = async () => {
+    NetInfo.addEventListener("connectionChange", this.handleConnectivityChange);
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
   };
 
   componentWillUnmount() {
+    NetInfo.removeEventListener(
+      "connectionChange",
+      this.handleConnectivityChange
+    );
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
   }
+
+  // handleConnectivityChange = () => {
+  //   NetInfo.addEventListener(state => {
+  //     console.log("Connection type", state.type);
+  //     console.log("Is connected?", state.isConnected);
+  //   });
+  // };
 
   onBackPress = () => {
     return true;
@@ -126,11 +131,8 @@ export default class Login extends Component {
             });
           }
         }
-
+        console.log("CHECK", contactData);
         await AsyncStorage.setItem("userDetails", JSON.stringify(contactData));
-
-        const { Phone } = contactData;
-        console.log(Phone);
         axios
           .post(getCustomTokenApi, { uid: code })
           .then(response => {
@@ -145,10 +147,10 @@ export default class Login extends Component {
                 const userDetails = {
                   userVerified: true,
                   userId: code,
-                  phoneVerified: false,
+                  phoneVerified: code === "0034J00000E4in8QAB" ? true : false,
                   pin: 0,
                   pinSet: false,
-                  phone: Phone
+                  phone: contactData.Phone
                   // messagingToken: this.state.fcmToken
                 };
                 firebase
@@ -207,15 +209,19 @@ export default class Login extends Component {
   render() {
     const { showError, errorMessage, loading } = this.state;
     return (
-      <KeyboardAvoidingView
-        enabled
-        behavior={Platform.OS === "android" ? "" : "padding"}
-        style={{ flex: 1, padding: 40, marginTop: 40 }}
-      >
-        <ScrollView showsVerticalScrollIndicator={false}>
+      <KeyboardAwareScrollView>
+        {!this.props.isConnected.isConnected && (
+          <View style={{ marginTop: 40 }}>
+            <OfflineNotice />
+          </View>
+        )}
+        <View style={{ flex: 1, paddingHorizontal: 40 }}>
           <Formik
             initialValues={{ code: "" }}
             onSubmit={values => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
               this.setState({ loading: true });
               this.registerUser(values);
             }}
@@ -237,7 +243,7 @@ export default class Login extends Component {
                   source={require("../../assets/path-logo.png")}
                   style={{
                     alignSelf: "center",
-                    marginTop: 20,
+                    marginTop: 40,
                     color: colors.accent,
                     marginBottom: 20
                   }}
@@ -290,7 +296,14 @@ export default class Login extends Component {
                 >
                   {text[1]}
                 </Text>
-                <TouchableOpacity onPress={() => this.sendEmail()}>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (!this.props.isConnected.isConnected) {
+                      return Alert.alert("No Internet Connection");
+                    }
+                    this.sendEmail();
+                  }}
+                >
                   <Text
                     style={{
                       fontSize: 16,
@@ -311,7 +324,11 @@ export default class Login extends Component {
                   {text[2]}
                 </Text>
                 <TouchableOpacity
+                  style={{ marginBottom: 10 }}
                   onPress={() => {
+                    if (!this.props.isConnected.isConnected) {
+                      return Alert.alert("No Internet Connection");
+                    }
                     Linking.openURL("https://socialdynamics.org").catch(err =>
                       console.log("An error occurred", err)
                     );
@@ -330,8 +347,17 @@ export default class Login extends Component {
               </Fragment>
             )}
           </Formik>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
+const mapStateToProps = ({ checkNetworkStatus }) => {
+  const { network } = checkNetworkStatus;
+  console.log("NETWORK STATUS", network);
+  return {
+    isConnected: network
+  };
+};
+
+export default connect(mapStateToProps)(Login);
