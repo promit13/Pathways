@@ -55,7 +55,7 @@ export default class SearchBarWrapper extends Component {
               style={[
                 styles.textStyle,
                 {
-                  color: this.props.sevenDays ? "white" : colors.accent
+                  color: this.props.sevenDays ? "white" : colors.black
                 }
               ]}
             >
@@ -77,7 +77,7 @@ export default class SearchBarWrapper extends Component {
               style={[
                 styles.textStyle,
                 {
-                  color: this.props.thirtyDays ? "white" : colors.accent
+                  color: this.props.thirtyDays ? "white" : colors.black
                 }
               ]}
             >
@@ -99,7 +99,7 @@ export default class SearchBarWrapper extends Component {
               style={[
                 styles.textStyle,
                 {
-                  color: this.props.sixtyDays ? "white" : colors.accent
+                  color: this.props.sixtyDays ? "white" : colors.black
                 }
               ]}
             >
@@ -121,7 +121,7 @@ export default class SearchBarWrapper extends Component {
               style={[
                 styles.textStyle,
                 {
-                  color: this.props.ninetyDays ? "white" : colors.accent
+                  color: this.props.ninetyDays ? "white" : colors.black
                 }
               ]}
             >
@@ -143,7 +143,7 @@ export default class SearchBarWrapper extends Component {
               style={[
                 styles.textStyle,
                 {
-                  color: this.props.allDays ? "white" : colors.accent
+                  color: this.props.allDays ? "white" : colors.black
                 }
               ]}
             >
@@ -179,7 +179,7 @@ export default class SearchBarWrapper extends Component {
                 style={[
                   styles.textStyle,
                   {
-                    color: this.props.myReferrals ? "white" : colors.accent
+                    color: this.props.myReferrals ? "white" : colors.black
                   }
                 ]}
               >
@@ -201,7 +201,7 @@ export default class SearchBarWrapper extends Component {
                 style={[
                   styles.textStyle,
                   {
-                    color: this.props.myConstabulary ? "white" : colors.accent
+                    color: this.props.myConstabulary ? "white" : colors.black
                   }
                 ]}
               >
@@ -223,9 +223,7 @@ export default class SearchBarWrapper extends Component {
                 style={[
                   styles.textStyle,
                   {
-                    color: this.props.nationalReferrals
-                      ? "white"
-                      : colors.accent
+                    color: this.props.nationalReferrals ? "white" : colors.black
                   }
                 ]}
               >

@@ -115,7 +115,7 @@ class ActivateDevice extends Component {
           />
           <Text
             style={{
-              color: colors.darkGrey,
+              color: colors.black,
               fontSize: 20,
               marginHorizontal: 40,
               marginBottom: 20

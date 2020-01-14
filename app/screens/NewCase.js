@@ -50,13 +50,12 @@ class NewCase extends React.Component {
             style={{
               alignSelf: "center",
               marginTop: 20,
-              color: colors.accent,
               marginBottom: 20
             }}
           />
           <Text
             style={{
-              color: colors.accent,
+              color: colors.black,
               fontSize: 20,
               fontWeight: "300",
               marginHorizontal: 40,

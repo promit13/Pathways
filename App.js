@@ -27,11 +27,12 @@ const resetPinMessage =
 const resetPinApi = "http://167.99.90.138:8675/pinReset";
 const styles = {
   textStyle: {
-    color: colors.darkGrey,
+    color: colors.black,
     fontSize: 20
   },
   resetText: {
-    color: "blue",
+    color: colors.black,
+    fontSize: 20,
     textAlign: "center"
   },
   touchableStyle: {

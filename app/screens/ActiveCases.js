@@ -275,31 +275,25 @@ class ActiveCases extends React.Component {
                 <View>
                   <View
                     style={{
-                      flexDirection: "row",
-                      height: 35,
+                      backgroundColor: colors.darkGrey,
+                      width: "100%",
                       borderTopWidth: 2,
-                      borderTopColor: colors.lightGrey
+                      borderTopColor: colors.grey,
+                      paddingVertical: 10
                     }}
                   >
-                    <View
+                    <Text
                       style={{
-                        backgroundColor: colors.grey,
-                        width: "100%"
+                        fontSize: 20,
+                        color: colors.darkGrey,
+                        marginTop: 5,
+                        color: "white",
+                        marginLeft: 25,
+                        textTransform: "uppercase"
                       }}
                     >
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          color: colors.darkGrey,
-                          marginTop: 5,
-                          color: "white",
-                          marginLeft: 25,
-                          textTransform: "uppercase"
-                        }}
-                      >
-                        {titleArray}
-                      </Text>
-                    </View>
+                      {titleArray}
+                    </Text>
                   </View>
                   {this.renderContent(status)}
                 </View>

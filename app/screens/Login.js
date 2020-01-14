@@ -21,14 +21,14 @@ import NetInfo from "@react-native-community/netinfo";
 import ErrorMessage from "../components/Error";
 import { ModalLoading } from "../components/LoadScreen";
 import colors from "../style";
-// import firebase from "../utils/firebase";
+// import firebase, { auth, db } from "../utils/firebase";
 import OfflineNotice from "../components/OfflineNotice";
 
 const getAccountApi = "http://167.99.90.138:8675/getAccount";
 const getCustomTokenApi = "http://167.99.90.138:8675/getCustomToken";
 
 const text = [
-  " Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
+  "Welcome to Pathways, please enter your activation code from your welcome email.",
   "If you do not have a welcome email or have any issues, please email us at:",
   "If you wish to apply to become a referrer please go to:"
 ];
@@ -127,7 +127,7 @@ class Login extends Component {
             return this.setState({
               loading: false,
               showError: true,
-              errorMessage: `Error: ${contactData.errorCode} `
+              errorMessage: `Error: ${contactData.errorCode}`
             });
           }
         }
@@ -143,7 +143,7 @@ class Login extends Component {
               .signInWithCustomToken(response.data)
               .then(res => {
                 console.log(res);
-                console.log(res.user._user.uid);
+                console.log(res.user.uid);
                 const userDetails = {
                   userVerified: true,
                   userId: code,
@@ -156,7 +156,7 @@ class Login extends Component {
                 firebase
                   .firestore()
                   .collection("users")
-                  .doc(res.user._user.uid)
+                  .doc(res.user.uid)
                   .set(userDetails);
               })
               .then(r => {
@@ -215,7 +215,7 @@ class Login extends Component {
             <OfflineNotice />
           </View>
         )}
-        <View style={{ flex: 1, paddingHorizontal: 40 }}>
+        <View style={{ flex: 1, padding: 40 }}>
           <Formik
             initialValues={{ code: "" }}
             onSubmit={values => {
@@ -250,7 +250,7 @@ class Login extends Component {
                 />
                 <Text
                   style={{
-                    color: colors.darkGrey,
+                    color: colors.black,
                     fontSize: 20,
                     marginBottom: 20
                   }}
@@ -289,7 +289,7 @@ class Login extends Component {
                 </TouchableOpacity>
                 <Text
                   style={{
-                    color: colors.darkGrey,
+                    color: colors.black,
                     fontSize: 20,
                     marginTop: 20
                   }}
@@ -316,9 +316,9 @@ class Login extends Component {
                 </TouchableOpacity>
                 <Text
                   style={{
-                    color: colors.darkGrey,
+                    color: colors.black,
                     fontSize: 20,
-                    marginTop: 20
+                    marginTop: 50
                   }}
                 >
                   {text[2]}

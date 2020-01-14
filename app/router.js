@@ -150,14 +150,14 @@ const SignedIn = createBottomTabNavigator(
             <View
               style={[
                 styles.circle,
-                { borderColor: focused ? colors.accent : colors.grey }
+                { borderColor: focused ? colors.accent : colors.darkGrey }
               ]}
             >
               <Icon
                 name="home"
                 size={20}
                 type="entypo"
-                color={focused ? colors.accent : colors.grey}
+                color={focused ? colors.accent : colors.darkGrey}
               />
             </View>
           );
@@ -167,14 +167,14 @@ const SignedIn = createBottomTabNavigator(
             <View
               style={[
                 styles.circle,
-                { borderColor: focused ? colors.accent : colors.grey }
+                { borderColor: focused ? colors.accent : colors.darkGrey }
               ]}
             >
               <Icon
                 name="plus"
                 size={20}
                 type="entypo"
-                color={focused ? colors.accent : colors.grey}
+                color={focused ? colors.accent : colors.darkGrey}
               />
             </View>
           );
@@ -184,14 +184,14 @@ const SignedIn = createBottomTabNavigator(
             <View
               style={[
                 styles.circle,
-                { borderColor: focused ? colors.accent : colors.grey }
+                { borderColor: focused ? colors.accent : colors.darkGrey }
               ]}
             >
               <Icon
                 name="search"
                 size={20}
                 type="evilicon"
-                color={focused ? colors.accent : colors.grey}
+                color={focused ? colors.accent : colors.darkGrey}
               />
             </View>
           );

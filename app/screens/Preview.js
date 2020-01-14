@@ -20,22 +20,6 @@ import { date } from "yup";
 
 const { width, height } = Dimensions.get("window");
 
-const itemListName = [
-  "Active Cases",
-  "Contact Made",
-  "Live",
-  "Completed",
-  "Closed"
-];
-
-const imageList = [
-  "../../assets/user.png",
-  "../../assets/tick.png",
-  "../../assets/injunction.png",
-  "../../assets/logo-circle.png",
-  "../../assets/cross.png"
-];
-
 const styles = {
   listItemContainerStyle: {
     display: "flex",
@@ -74,6 +58,7 @@ let awaitingCasesArray = [];
 let contactMadeCasesArray = [];
 let unableToContactCasesArray = [];
 let notReferredCasesArray = [];
+let liveCasesArray = [];
 let totalReferralArray = [];
 
 class Preview extends React.Component {
@@ -117,19 +102,15 @@ class Preview extends React.Component {
     const contactData = await AsyncStorage.getItem("userDetails");
     const jsonObjectData = JSON.parse(contactData);
     const { AccountId, Id } = jsonObjectData;
-    console.log(jsonObjectData);
-    console.log(AccountId, Id);
     axios.get("http://167.99.90.138:8675/referrals").then(res => {
       axios
         .get("http://167.99.90.138:8675/convertedAccounts")
         .then(completedRecords => {
           const { records } = res.data;
-          const { data } = completedRecords;
-          console.log(data);
-          console.log(records);
+          // liveCasesArray = completedRecords.data;
           if (records === undefined) {
             this.setState({
-              liveCasesArray: data,
+              liveCasesArray,
               myId: Id,
               refresh:
                 this.props.navigation.state.params === undefined
@@ -140,9 +121,8 @@ class Preview extends React.Component {
             });
             return;
           }
-          totalReferralArray = records.concat(data);
-          console.log(totalReferralArray);
-          records.map((record, index) => {
+          totalReferralArray = records.concat(completedRecords.data);
+          totalReferralArray.map((record, index) => {
             if (
               record.Case_Status__c === "Awaiting to be Contacted" ||
               record.Case_Status__c === "Contacting"
@@ -155,23 +135,22 @@ class Preview extends React.Component {
             if (record.Case_Status__c === "Contact Made") {
               contactMadeCasesArray.push(record);
             }
-            if (record.Case_Status__c === "Live") {
-              // liveCasesArray.push(record);
-              data.push(record);
+            if (
+              record.Case_Status__c === "Live" ||
+              record.Case_Status__c === "Completed"
+            ) {
+              liveCasesArray.push(record);
             }
             if (record.Case_Status__c === "Not Referred") {
               notReferredCasesArray.push(record);
             }
-            // if (record.Case_Status__c === "Completed") {
-            //   completedCasesArray.push(record);
-            // }
             if (index === records.length - 1) {
               this.setState({
                 totalReferralArray,
                 awaitingCasesArray,
                 unableToContactCasesArray,
                 contactMadeCasesArray,
-                liveCasesArray: data,
+                liveCasesArray,
                 notReferredCasesArray,
                 myId: Id,
                 refresh:
@@ -181,11 +160,13 @@ class Preview extends React.Component {
                 organisationId: AccountId,
                 loadScreen: false
               });
+              console.log(liveCasesArray);
               awaitingCasesArray = [];
               unableToContactCasesArray = [];
               contactMadeCasesArray = [];
               notReferredCasesArray = [];
               totalReferralArray = [];
+              liveCasesArray = [];
             }
           });
         });

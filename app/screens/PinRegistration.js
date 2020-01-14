@@ -20,14 +20,14 @@ import OfflineNotice from "../components/OfflineNotice";
 
 const styles = {
   textStyle: {
-    color: colors.darkGrey,
+    color: colors.black,
     fontSize: 20
   }
 };
 
 const text = [
-  "In order to secure the data in the app, we need you to create a PIN. You will need to enter every time you access the app.",
-  "Please re-enter your PIN to confirm you have entered it correctly."
+  "Please create a PIN. You will need to enter your PIN every time you access the app.",
+  "Please re-enter your PIN."
 ];
 class PinRegistration extends Component {
   static navigationOptions = {
@@ -148,7 +148,7 @@ class PinRegistration extends Component {
                 alignContent: "center",
                 alignItems: "center",
                 alignSelf: "center",
-                marginTop: 20
+                marginTop: 50
               }}
             >
               <SmoothPinCodeInput

@@ -31,7 +31,7 @@ const text = [
   "Welcome to Pathway, please enter your activation code to activate your account. Your activation code can be found in your welcome email.",
   "If you wish to apply to become a referrer please go to:",
   "Thank you! Please verify your mobile number.",
-  "If you are having difficulties completing the authorisation please email support@socialdynamics.org."
+  "If you are having difficulties completing the authorisation please email support@socialdynamics.org"
 ];
 
 const styles = StyleSheet.create({
@@ -70,11 +70,13 @@ const styles = StyleSheet.create({
     marginLeft: 40
   },
   touchableStyle: {
+    backgroundColor: colors.accent,
     marginVertical: 20,
+    paddingVertical: 18,
     alignItems: "center"
   },
   resetText: {
-    color: "blue",
+    color: "white",
     textAlign: "center"
   }
 });
@@ -215,7 +217,7 @@ class VerifyMobile extends Component {
             />
             <Text
               style={{
-                color: colors.darkGrey,
+                color: colors.black,
                 fontSize: 20,
                 marginBottom: 20
               }}
@@ -251,7 +253,7 @@ class VerifyMobile extends Component {
             <View>
               <Text
                 style={{
-                  color: colors.darkGrey,
+                  color: colors.black,
                   fontSize: 20,
                   marginTop: 20
                 }}
@@ -270,7 +272,7 @@ class VerifyMobile extends Component {
                   style={{
                     color: "blue",
                     fontSize: 16,
-                    marginTop: 10
+                    marginTop: 20
                   }}
                 >
                   Resend code
@@ -286,21 +288,12 @@ class VerifyMobile extends Component {
             </View>
             <Text
               style={{
-                color: colors.darkGrey,
+                color: colors.black,
                 fontSize: 20,
-                marginTop: 20
+                marginTop: 60
               }}
             >
               {text[3]}
-            </Text>
-            <Text
-              style={{
-                color: colors.darkGrey,
-                fontSize: 20,
-                marginBottom: 20
-              }}
-            >
-              https://socialdynamics.org/apply
             </Text>
             <TouchableOpacity
               style={styles.touchableStyle}

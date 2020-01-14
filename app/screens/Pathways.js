@@ -18,15 +18,18 @@ import OfflineNotice from "../components/OfflineNotice";
 
 const styles = {
   textStyle: {
-    color: colors.darkGrey,
+    color: colors.black,
     fontSize: 20
   },
   resetText: {
-    color: "blue",
+    color: "white",
     textAlign: "center"
   },
   touchableStyle: {
-    marginVertical: 30,
+    marginLeft: 20,
+    marginRight: 20,
+    backgroundColor: colors.accent,
+    paddingVertical: 20,
     alignItems: "center"
   }
 };
@@ -120,16 +123,17 @@ class Pathways extends Component {
         <View style={{ flex: 1 }}>
           <Text
             style={{
-              color: colors.darkGrey,
+              color: colors.black,
               fontSize: 20,
               marginBottom: 30,
               paddingHorizontal: 20,
               marginLeft: 10
             }}
           >
-            Welcome to Pathway, please select the recovery pathway you wish to
+            Welcome to Pathways, please select the recovery pathway you wish to
             use.
           </Text>
+          <View></View>
           <TouchableOpacity
             onPress={() => {
               if (!this.props.isConnected.isConnected) {
@@ -153,7 +157,7 @@ class Pathways extends Component {
             <Text
               style={{
                 fontSize: 20,
-                color: colors.darkGrey
+                color: colors.black
               }}
             >
               Domestic Abuse Pathway
@@ -166,35 +170,39 @@ class Pathways extends Component {
               iconStyle={{ marginTop: 10 }}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.touchableStyle}
-            onPress={() => {
-              if (!this.props.isConnected.isConnected) {
-                return Alert.alert("No internet connection");
-              }
-              this.logout();
-            }}
-          >
-            <Text style={styles.resetText}>Not you? Log out</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.touchableStyle,
-              {
-                marginTop: 20
-              }
-            ]}
-            onPress={() => {
-              if (!this.props.isConnected.isConnected) {
-                return Alert.alert("No internet connection");
-              }
-              this.sendEmail();
-            }}
-          >
-            <Text style={[styles.resetText, { color: "blue" }]}>
-              Report Issues
-            </Text>
-          </TouchableOpacity>
+          <View style={{ width: "100%", position: "absolute", bottom: 0 }}>
+            <TouchableOpacity
+              style={styles.touchableStyle}
+              onPress={() => {
+                if (!this.props.isConnected.isConnected) {
+                  return Alert.alert("No internet connection");
+                }
+                this.logout();
+              }}
+            >
+              <Text style={styles.resetText}>Not you? Log out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.touchableStyle,
+                {
+                  marginTop: 10,
+                  marginBottom: 35,
+                  backgroundColor: colors.grey
+                }
+              ]}
+              onPress={() => {
+                if (!this.props.isConnected.isConnected) {
+                  return Alert.alert("No internet connection");
+                }
+                this.sendEmail();
+              }}
+            >
+              <Text style={[styles.resetText, { color: colors.darkGrey }]}>
+                Report Issues
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );

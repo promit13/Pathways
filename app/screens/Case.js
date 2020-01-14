@@ -52,6 +52,7 @@ class Case extends React.Component {
   };
   render() {
     const { caseDetails } = this.props.navigation.state.params;
+    console.log(caseDetails);
     return (
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -73,7 +74,7 @@ class Case extends React.Component {
               style={[
                 styles.viewBoxStyle,
                 {
-                  backgroundColor: colors.grey,
+                  backgroundColor: colors.darkGrey,
                   justifyContent: "space-between",
                   flexDirection: "row",
                   alignItems: "center",
@@ -116,7 +117,9 @@ class Case extends React.Component {
               ]}
             >
               <Text style={[styles.textBoxStyle, { flex: 4 }]}>
-                {caseDetails.Referral__r.Phone}
+                {caseDetails.Referral__r.Phone ||
+                  caseDetails.Referral__r.Mobile ||
+                  caseDetails.Referral__r.MobilePhone}
               </Text>
               <Icon
                 name="phone"
@@ -124,9 +127,11 @@ class Case extends React.Component {
                 size={30}
                 onPress={() => {
                   if (Platform.OS === "android") {
-                    phoneNumber = `tel:${caseDetails.Referral__r.Phone}`;
+                    phoneNumber = `tel:${caseDetails.Referral__r.Phone ||
+                      caseDetails.Referral__r.MobilePhone}`;
                   } else {
-                    phoneNumber = `telprompt:${caseDetails.Referral__r.Phone}`;
+                    phoneNumber = `telprompt:${caseDetails.Referral__r.Phone ||
+                      caseDetails.Referral__r.MobilePhone}`;
                   }
 
                   Linking.openURL(phoneNumber);
@@ -192,44 +197,41 @@ class Case extends React.Component {
             </View>
           )}
           {caseDetails.Court_Injunction_url ? (
-            <React.Fragment>
-              {/* <Text style={styles.textHeaderStyle}>DOCUMENTS</Text> */}
-              <TouchableOpacity
-                onPress={() => {
-                  if (!this.props.isConnected.isConnected) {
-                    return Alert.alert("No internet connection");
-                  }
-                  this.props.navigation.navigate("PdfViewer", {
-                    documentUrl: caseDetails.Court_Injunction_url
-                  });
+            <TouchableOpacity
+              onPress={() => {
+                if (!this.props.isConnected.isConnected) {
+                  return Alert.alert("No internet connection");
+                }
+                this.props.navigation.navigate("PdfViewer", {
+                  documentUrl: caseDetails.Court_Injunction_url
+                });
+              }}
+              style={[
+                styles.viewBoxStyle,
+                {
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "flex-start"
+                }
+              ]}
+            >
+              <Text style={[styles.textBoxStyle, { flex: 4 }]}>
+                DOCUMENTS
+                {/* {status} */}
+              </Text>
+              <Icon
+                name="angle-right"
+                type="font-awesome"
+                size={40}
+                iconStyle={{
+                  flex: 1,
+                  alignSelf: "flex-end",
+                  justifySelf: "center",
+                  color: colors.darkGrey
                 }}
-                style={[
-                  styles.viewBoxStyle,
-                  {
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "flex-start"
-                  }
-                ]}
-              >
-                <Text style={[styles.textBoxStyle, { flex: 4 }]}>
-                  DOCUMENTS
-                  {/* {status} */}
-                </Text>
-                <Icon
-                  name="angle-right"
-                  type="font-awesome"
-                  size={40}
-                  iconStyle={{
-                    flex: 1,
-                    alignSelf: "flex-end",
-                    justifySelf: "center",
-                    color: colors.darkGrey
-                  }}
-                />
-              </TouchableOpacity>
-            </React.Fragment>
+              />
+            </TouchableOpacity>
           ) : (
             <View
               style={[
@@ -242,10 +244,7 @@ class Case extends React.Component {
                 }
               ]}
             >
-              <Text style={styles.textBoxStyle}>
-                No Injunction Served
-                {/* {status} */}
-              </Text>
+              <Text style={styles.textBoxStyle}>No Injunction Served</Text>
             </View>
           )}
         </View>

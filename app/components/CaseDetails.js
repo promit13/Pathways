@@ -13,15 +13,15 @@ const CaseDetails = ({ onPress, caseDetails }) => (
         flexDirection: "row",
         width: "100%",
         borderColor: colors.lightGrey,
-        height: 50,
         borderWidth: 2,
-        paddingHorizontal: 15,
+        paddingHorizontal: 5,
         justifyContent: "center"
       }}
     >
       <View
         style={{
           display: "flex",
+          paddingVertical: 10,
           flexDirection: "column",
           flex: 8,
           justifyContent: "center"

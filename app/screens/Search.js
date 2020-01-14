@@ -1,10 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   View,
   Text,
   ScrollView,
   Platform,
-  TouchableOpacity,
   Alert,
   KeyboardAvoidingView
 } from "react-native";
@@ -84,6 +83,9 @@ class Search extends React.Component {
           const sortedCasesArray = _.reverse(
             _.sortBy(mergedArray, o => o.CreatedDate)
           );
+          console.log("completed array", completedRecords.data);
+          console.log("completed array", res.data.records);
+          console.log(sortedCasesArray, "sortedCasesSearch");
           this.setState({
             activeCases: sortedCasesArray,
             loadScreen: false,
@@ -193,7 +195,10 @@ class Search extends React.Component {
   };
 
   renderContent = status => {
-    const casesList = status[0].map(caseDetails => {
+    console.log(status.length, status[1]);
+    const mergedArray =
+      status[1] !== undefined ? status[0].concat(status[1]) : status[0];
+    const casesList = mergedArray.map(caseDetails => {
       return (
         <CaseDetails
           caseDetails={caseDetails}
@@ -306,6 +311,7 @@ class Search extends React.Component {
     });
 
     if (loadScreen) return <LoadScreen text="Please wait" />;
+    console.log(filteredArray);
     return (
       <KeyboardAvoidingView
         behavior="padding"
@@ -363,35 +369,29 @@ class Search extends React.Component {
             {filteredArray.map(status => {
               const headerTitle = Object.keys(status)[0];
               const arrayList = Object.values(status)[0];
+              console.log(arrayList, arrayList.length);
               return (
                 <View>
                   <View
                     style={{
-                      flexDirection: "row",
-                      height: 35,
+                      backgroundColor: colors.darkGrey,
+                      width: "100%",
                       borderTopWidth: 2,
-                      borderTopColor: colors.lightGrey
+                      borderTopColor: colors.grey,
+                      paddingVertical: 10
                     }}
                   >
-                    <View
+                    <Text
                       style={{
-                        backgroundColor: colors.grey,
-                        width: "100%"
+                        fontSize: 20,
+                        color: colors.darkGrey,
+                        color: "white",
+                        marginLeft: 25,
+                        textTransform: "uppercase"
                       }}
                     >
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          color: colors.darkGrey,
-                          marginTop: 5,
-                          color: "white",
-                          marginLeft: 25,
-                          textTransform: "uppercase"
-                        }}
-                      >
-                        {headerTitle}
-                      </Text>
-                    </View>
+                      {headerTitle}
+                    </Text>
                   </View>
                   {arrayList.length === 0
                     ? null

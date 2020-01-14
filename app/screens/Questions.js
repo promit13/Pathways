@@ -19,40 +19,11 @@ import OfflineNotice from "../components/OfflineNotice";
 
 const styles = StyleSheet.create({
   dayTextStyle: {
-    fontSize: 18,
-    color: "grey",
-    marginTop: 15
+    fontSize: 20,
+    color: colors.darkGrey,
+    marginTop: 12
   }
 });
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    marginTop: 10,
-    paddingLeft: 20,
-    paddingVertical: 12,
-    borderWidth: 1,
-    borderColor: colors.accent,
-    borderRadius: 4,
-    borderWidth: 2,
-    color: "black",
-    paddingRight: 30 // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 0.5,
-    borderColor: "purple",
-    borderRadius: 8,
-    color: "black",
-    paddingRight: 30 // to ensure the text is never behind the icon
-  }
-});
-const pickerItems = [
-  { label: "Yes", value: "Yes" },
-  { label: "No", value: "No" }
-];
 
 const createReferralApi = "http://167.99.90.138:8675/createReferral";
 const getAccountApi = "http://167.99.90.138:8675/searchAccount";
@@ -211,8 +182,11 @@ class Questions extends React.Component {
       <View style={{ flexDirection: "row" }}>
         <CheckBox
           checkedColor={colors.accent}
+          size={34}
           title="Yes"
+          textStyle={{ fontSize: 18, color: colors.darkGrey }}
           containerStyle={{ backgroundColor: "white", borderColor: "white" }}
+          uncheckedColor={colors.darkGrey}
           checked={checkBoxYesState}
           onIconPress={() => {
             this.setState({
@@ -224,8 +198,14 @@ class Questions extends React.Component {
         />
         <CheckBox
           checkedColor={colors.accent}
-          containerStyle={{ backgroundColor: "white", borderColor: "white" }}
+          size={34}
+          containerStyle={{
+            backgroundColor: "white",
+            borderColor: "white"
+          }}
+          uncheckedColor={colors.darkGrey}
           title="No"
+          textStyle={{ fontSize: 18, color: colors.darkGrey }}
           checked={checkBoxNoState}
           onIconPress={() => {
             this.setState({
@@ -333,12 +313,11 @@ class Questions extends React.Component {
             style={{
               fontSize: 20,
               fontWeight: "300",
-              color: colors.accent,
+              color: colors.black,
               marginBottom: 20
             }}
           >
-            We now need to learn more about the case. Please select an answer
-            for each question to continue.
+            Please select an answer for each question to continue.
           </Text>
           {this.renderQuestions()}
           {errorMessageVisible && (
