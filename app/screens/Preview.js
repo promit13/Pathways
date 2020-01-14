@@ -103,77 +103,76 @@ class Preview extends React.Component {
     const jsonObjectData = JSON.parse(contactData);
     const { AccountId, Id } = jsonObjectData;
     axios.get("http://167.99.90.138:8675/referrals").then(res => {
-      axios
-        .get("http://167.99.90.138:8675/convertedAccounts")
-        .then(completedRecords => {
-          const { records } = res.data;
-          // liveCasesArray = completedRecords.data;
-          if (records === undefined) {
-            this.setState({
-              liveCasesArray,
-              myId: Id,
-              refresh:
-                this.props.navigation.state.params === undefined
-                  ? this.state.refresh
-                  : !this.state.refresh,
-              organisationId: AccountId,
-              loadScreen: false
-            });
-            return;
-          }
-          totalReferralArray = records.concat(completedRecords.data);
-          totalReferralArray.map((record, index) => {
-            if (
-              record.Case_Status__c === "Awaiting to be Contacted" ||
-              record.Case_Status__c === "Contacting"
-            ) {
-              awaitingCasesArray.push(record);
-            }
-            if (record.Case_Status__c === "Unable to Contact") {
-              unableToContactCasesArray.push(record);
-            }
-            if (record.Case_Status__c === "Contact Made") {
-              contactMadeCasesArray.push(record);
-            }
-            if (
-              record.Case_Status__c === "Live" ||
-              record.Case_Status__c === "Completed"
-            ) {
-              liveCasesArray.push(record);
-            }
-            if (record.Case_Status__c === "Not Referred") {
-              notReferredCasesArray.push(record);
-            }
-            if (index === records.length - 1) {
-              this.setState({
-                totalReferralArray,
-                awaitingCasesArray,
-                unableToContactCasesArray,
-                contactMadeCasesArray,
-                liveCasesArray,
-                notReferredCasesArray,
-                myId: Id,
-                refresh:
-                  this.props.navigation.state.params === undefined
-                    ? this.state.refresh
-                    : !this.state.refresh,
-                organisationId: AccountId,
-                loadScreen: false
-              });
-              console.log(liveCasesArray);
-              awaitingCasesArray = [];
-              unableToContactCasesArray = [];
-              contactMadeCasesArray = [];
-              notReferredCasesArray = [];
-              totalReferralArray = [];
-              liveCasesArray = [];
-            }
-          });
+      //   axios
+      //     .get("http://167.99.90.138:8675/convertedAccounts")
+      //     .then(completedRecords => {
+      const { records } = res.data;
+      // liveCasesArray = completedRecords.data;
+      if (records === undefined) {
+        this.setState({
+          myId: Id,
+          refresh:
+            this.props.navigation.state.params === undefined
+              ? this.state.refresh
+              : !this.state.refresh,
+          organisationId: AccountId,
+          loadScreen: false
         });
-      // this.setState({
-      //   activeCases: res.data.records
-      // });
+        return;
+      }
+      // totalReferralArray = records.concat(completedRecords.data);
+      records.map((record, index) => {
+        if (
+          record.Case_Status__c === "Awaiting to be Contacted" ||
+          record.Case_Status__c === "Contacting"
+        ) {
+          awaitingCasesArray.push(record);
+        }
+        if (record.Case_Status__c === "Unable to Contact") {
+          unableToContactCasesArray.push(record);
+        }
+        if (record.Case_Status__c === "Contact Made") {
+          contactMadeCasesArray.push(record);
+        }
+        if (
+          record.Case_Status__c === "Live" ||
+          record.Case_Status__c === "Completed"
+        ) {
+          liveCasesArray.push(record);
+        }
+        if (record.Case_Status__c === "Not Referred") {
+          notReferredCasesArray.push(record);
+        }
+        if (index === records.length - 1) {
+          this.setState({
+            totalReferralArray: records,
+            awaitingCasesArray,
+            unableToContactCasesArray,
+            contactMadeCasesArray,
+            liveCasesArray,
+            notReferredCasesArray,
+            myId: Id,
+            refresh:
+              this.props.navigation.state.params === undefined
+                ? this.state.refresh
+                : !this.state.refresh,
+            organisationId: AccountId,
+            loadScreen: false
+          });
+          console.log(liveCasesArray);
+          awaitingCasesArray = [];
+          unableToContactCasesArray = [];
+          contactMadeCasesArray = [];
+          notReferredCasesArray = [];
+          totalReferralArray = [];
+          liveCasesArray = [];
+        }
+      });
     });
+    // this.setState({
+    //   activeCases: res.data.records
+    // });
+    //  });
   };
 
   render() {

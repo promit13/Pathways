@@ -76,24 +76,28 @@ class Search extends React.Component {
       return;
     }
     axios.get("http://167.99.90.138:8675/referrals").then(res => {
-      axios
-        .get("http://167.99.90.138:8675/convertedAccounts")
-        .then(completedRecords => {
-          const mergedArray = res.data.records.concat(completedRecords.data);
-          const sortedCasesArray = _.reverse(
-            _.sortBy(mergedArray, o => o.CreatedDate)
-          );
-          console.log("completed array", completedRecords.data);
-          console.log("completed array", res.data.records);
-          console.log(sortedCasesArray, "sortedCasesSearch");
-          this.setState({
-            activeCases: sortedCasesArray,
-            loadScreen: false,
-            accountId: AccountId,
-            myId: Id
-          });
+      const { records } = res.data;
+      if (records === undefined) {
+        this.setState({
+          loadScreen: false,
+          accountId: AccountId,
+          myId: Id
         });
+        return;
+      }
+      // axios
+      //   .get("http://167.99.90.138:8675/convertedAccounts")
+      //   .then(completedRecords => {
+      // const mergedArray = res.data.records.concat(completedRecords.data);
+      const sortedCasesArray = _.reverse(_.sortBy(records, o => o.CreatedDate));
+      this.setState({
+        activeCases: sortedCasesArray,
+        loadScreen: false,
+        accountId: AccountId,
+        myId: Id
+      });
     });
+    //});
   };
 
   // buttonPress = i => {

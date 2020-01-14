@@ -146,7 +146,9 @@ class Case extends React.Component {
                 }}
               />
             </View>
-            <Text style={styles.textHeaderStyle}>STATUS</Text>
+            <Text style={[styles.textHeaderStyle, { marginTop: 30 }]}>
+              STATUS
+            </Text>
           </View>
           <View
             style={[
@@ -196,14 +198,17 @@ class Case extends React.Component {
               </TouchableOpacity>
             </View>
           )}
-          {caseDetails.Court_Injunction_url ? (
+          {caseDetails.Recovery_Pathway__r &&
+          caseDetails.Recovery_Pathway__r.Court_Injunction__r ? (
             <TouchableOpacity
               onPress={() => {
                 if (!this.props.isConnected.isConnected) {
                   return Alert.alert("No internet connection");
                 }
                 this.props.navigation.navigate("PdfViewer", {
-                  documentUrl: caseDetails.Court_Injunction_url
+                  documentUrl:
+                    caseDetails.Recovery_Pathway__r.Court_Injunction__r
+                      .Court_Injunction_URL__c
                 });
               }}
               style={[
