@@ -52,6 +52,8 @@ class Case extends React.Component {
   };
   render() {
     const { caseDetails } = this.props.navigation.state.params;
+    const { MobilePhone, Phone, Name } = caseDetails.Referral__r;
+    const phoneNumber = MobilePhone === null ? Phone : MobilePhone;
     console.log(caseDetails);
     return (
       <ScrollView
@@ -101,9 +103,7 @@ class Case extends React.Component {
               </Text>
             </View>
             <View style={styles.viewBoxStyle}>
-              <Text style={styles.textBoxStyle}>
-                {caseDetails.Referral__r.Name}
-              </Text>
+              <Text style={styles.textBoxStyle}>{Name}</Text>
             </View>
             <View
               style={[
@@ -117,9 +117,7 @@ class Case extends React.Component {
               ]}
             >
               <Text style={[styles.textBoxStyle, { flex: 4 }]}>
-                {caseDetails.Referral__r.Phone ||
-                  caseDetails.Referral__r.Mobile ||
-                  caseDetails.Referral__r.MobilePhone}
+                {phoneNumber}
               </Text>
               <Icon
                 name="phone"
@@ -127,14 +125,12 @@ class Case extends React.Component {
                 size={30}
                 onPress={() => {
                   if (Platform.OS === "android") {
-                    phoneNumber = `tel:${caseDetails.Referral__r.Phone ||
-                      caseDetails.Referral__r.MobilePhone}`;
+                    linkedPhone = `tel:${phoneNumber}`;
                   } else {
-                    phoneNumber = `telprompt:${caseDetails.Referral__r.Phone ||
-                      caseDetails.Referral__r.MobilePhone}`;
+                    linkedPhone = `telprompt:${phoneNumber}`;
                   }
 
-                  Linking.openURL(phoneNumber);
+                  Linking.openURL(linkedPhone);
                 }}
                 color={colors.darkGrey}
                 iconStyle={{

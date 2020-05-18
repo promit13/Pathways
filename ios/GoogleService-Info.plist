@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>787179059970-spcqmsd0lt5spg48fg602frseam4uuhj.apps.googleusercontent.com</string>
+	<string>1065033173418-ep3c0k0fft9udbdpjuv7htvq8dr19e9d.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.787179059970-spcqmsd0lt5spg48fg602frseam4uuhj</string>
+	<string>com.googleusercontent.apps.1065033173418-ep3c0k0fft9udbdpjuv7htvq8dr19e9d</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCxSYKV8bgyV-yvJIO13ZuMMNNQQvf8c74</string>
+	<string>AIzaSyDUVqx07nwqd6yveRsL2oYskA-hFsKztbk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>787179059970</string>
+	<string>1065033173418</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.socialdynamics.pathways</string>
+	<string>com.app.sqweeks</string>
 	<key>PROJECT_ID</key>
-	<string>pathways-429eb</string>
+	<string>sqweeks-aed6d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>pathways-429eb.appspot.com</string>
+	<string>sqweeks-aed6d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:787179059970:ios:45f187c335efc2e89ce01b</string>
+	<string>1:1065033173418:ios:08eb127a799d9e8ffbc3d3</string>
 	<key>DATABASE_URL</key>
-	<string>https://pathways-429eb.firebaseio.com</string>
+	<string>https://sqweeks-aed6d.firebaseio.com</string>
 </dict>
 </plist>

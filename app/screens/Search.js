@@ -5,18 +5,20 @@ import {
   ScrollView,
   Platform,
   Alert,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  TouchableOpacity
 } from "react-native";
+import { Icon } from "react-native-elements";
 import AsyncStorage from "@react-native-community/async-storage";
 import _ from "lodash";
 import moment from "moment";
-import colors from "../style";
 import axios from "axios";
 import { connect } from "react-redux";
 import CaseDetails from "../components/CaseDetails";
 import SearchBarWrapper from "../components/SearchBar";
 import LoadScreen from "../components/LoadScreen";
 import OfflineNotice from "../components/OfflineNotice";
+import colors from "../style";
 
 const allTitles = [
   "Awaiting to be Contacted",
@@ -35,6 +37,16 @@ const titlesToShowArray = [
   "Referred to Agency",
   "Not Referred"
 ];
+
+const styles = {
+  wrapperCollapsibleList: {
+    flex: 1,
+    marginTop: 20,
+    overflow: "hidden",
+    backgroundColor: "#FFF",
+    borderRadius: 5
+  }
+};
 
 let contactingCasesArray = [];
 let contactMadeCasesArray = [];
@@ -64,7 +76,9 @@ class Search extends React.Component {
     loadScreen: true,
     accountId: "",
     myId: "",
-    completedRecords: []
+    completedRecords: [],
+    showContent: false,
+    renderViewIndex: 0
   };
 
   componentDidMount = async () => {
@@ -198,25 +212,29 @@ class Search extends React.Component {
     });
   };
 
-  renderContent = status => {
+  renderContent = (index, status) => {
+    const { renderViewIndex, showContent, searchKey } = this.state;
     console.log(status.length, status[1]);
-    const mergedArray =
-      status[1] !== undefined ? status[0].concat(status[1]) : status[0];
-    const casesList = mergedArray.map(caseDetails => {
-      return (
-        <CaseDetails
-          caseDetails={caseDetails}
-          onPress={() => {
-            if (!this.props.isConnected.isConnected) {
-              return Alert.alert("No internet connection");
-            }
-            this.props.navigation.navigate("Case", {
-              caseDetails
-            });
-          }}
-        />
-      );
-    });
+    let casesList = [];
+    if ((index === renderViewIndex && showContent) || searchKey !== "") {
+      const mergedArray =
+        status[1] !== undefined ? status[0].concat(status[1]) : status[0];
+      casesList = mergedArray.map(caseDetails => {
+        return (
+          <CaseDetails
+            caseDetails={caseDetails}
+            onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
+              this.props.navigation.navigate("Case", {
+                caseDetails
+              });
+            }}
+          />
+        );
+      });
+    }
     return casesList;
   };
 
@@ -233,7 +251,10 @@ class Search extends React.Component {
       nationalReferrals,
       loadScreen,
       accountId,
-      myId
+      myId,
+      searchKey,
+      showContent,
+      renderViewIndex
     } = this.state;
     const checkDays = sevenDays ? 7 : thirtyDays ? 30 : sixtyDays ? 60 : 90;
     let filteredArray = [];
@@ -248,7 +269,7 @@ class Search extends React.Component {
           item.Referral__r &&
           item.Referral__r.Referrer_Contact_Name__c === myId &&
           isBetween &&
-          item.Referral__r.Name.includes(this.state.searchKey)
+          item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
         );
       }
       if (myConstabulary) {
@@ -256,13 +277,13 @@ class Search extends React.Component {
           item.Referral__r &&
           item.Referral__r.Referrer_Organisation__c === accountId &&
           isBetween &&
-          item.Referral__r.Name.includes(this.state.searchKey)
+          item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
         );
       }
       return (
         item.Referral__r &&
         isBetween &&
-        item.Referral__r.Name.includes(this.state.searchKey)
+        item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
       );
     });
 
@@ -329,8 +350,8 @@ class Search extends React.Component {
           <View style={{ flex: 1, paddingTop: 20 }}>
             <SearchBarWrapper
               showDownBar={true}
-              onSearchChange={searchKey => {
-                this.setState({ searchKey });
+              onSearchChange={key => {
+                this.setState({ searchKey: key });
               }}
               sevenDaysPress={() => {
                 this.buttonPress(0);
@@ -370,14 +391,25 @@ class Search extends React.Component {
                 height: 20
               }}
             />
-            {filteredArray.map(status => {
+            {filteredArray.map((status, i) => {
               const headerTitle = Object.keys(status)[0];
               const arrayList = Object.values(status)[0];
               console.log(arrayList, arrayList.length);
               return (
                 <View>
-                  <View
+                  <TouchableOpacity
+                    onPress={() =>
+                      searchKey === ""
+                        ? this.setState({
+                            renderViewIndex: i + 1,
+                            showContent:
+                              renderViewIndex === i + 1 ? !showContent : true
+                          })
+                        : null
+                    }
                     style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                       backgroundColor: colors.darkGrey,
                       width: "100%",
                       borderTopWidth: 2,
@@ -390,16 +422,30 @@ class Search extends React.Component {
                         fontSize: 20,
                         color: colors.darkGrey,
                         color: "white",
+                        marginTop: 5,
                         marginLeft: 25,
                         textTransform: "uppercase"
                       }}
                     >
                       {headerTitle}
                     </Text>
-                  </View>
+                    <Icon
+                      name={
+                        (renderViewIndex === i + 1 && showContent) ||
+                        searchKey !== ""
+                          ? "chevron-up"
+                          : "chevron-down"
+                      }
+                      size={30}
+                      type="entypo"
+                      color="white"
+                      iconStyle={{ marginRight: 25 }}
+                    />
+                  </TouchableOpacity>
+
                   {arrayList.length === 0
                     ? null
-                    : this.renderContent(arrayList)}
+                    : this.renderContent(i + 1, arrayList)}
                 </View>
               );
             })}

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -6,53 +6,53 @@ import {
   Image,
   Linking,
   BackHandler,
-  Alert
-} from "react-native";
-import { Icon } from "react-native-elements";
-import { connect } from "react-redux";
-import AsyncStorage from "@react-native-community/async-storage";
-import firebase from "react-native-firebase";
-import colors from "../style";
-import LoadScreen, { ModalLoading } from "../components/LoadScreen";
-import OfflineNotice from "../components/OfflineNotice";
+  Alert,
+} from 'react-native';
+import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
+import firebase from 'react-native-firebase';
+import colors from '../style';
+import LoadScreen from '../components/LoadScreen';
+import OfflineNotice from '../components/OfflineNotice';
 
 const styles = {
   textStyle: {
     color: colors.black,
-    fontSize: 20
+    fontSize: 20,
   },
   resetText: {
-    color: "white",
-    textAlign: "center"
+    color: 'white',
+    textAlign: 'center',
   },
   touchableStyle: {
     marginLeft: 20,
     marginRight: 20,
     backgroundColor: colors.accent,
     paddingVertical: 20,
-    alignItems: "center"
-  }
+    alignItems: 'center',
+  },
 };
 
 class Pathways extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
   state = {
     loading: false,
     loadScreen: true,
-    hardWareBackButton: true
+    hardWareBackButton: true,
   };
   componentDidMount = async () => {
-    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
     this.setState({
       loadScreen: false,
-      hardWareBackButton: true
+      hardWareBackButton: true,
     });
   };
 
   componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
 
   onBackPress = () => {
@@ -68,7 +68,7 @@ class Pathways extends Component {
       showModalMessage: false,
       loading: false,
       showError: false,
-      errorMessage: ""
+      errorMessage: '',
     });
     firebase.auth().signOut();
     // firebase
@@ -98,7 +98,7 @@ class Pathways extends Component {
   };
 
   sendEmail = () => {
-    Linking.openURL("mailto:support@socialdynamics.org?subject=PATHWAYS&body=");
+    Linking.openURL('mailto:support@socialdynamics.org?subject=PATHWAYS&body=');
   };
 
   render() {
@@ -112,12 +112,12 @@ class Pathways extends Component {
           </View>
         )}
         <Image
-          source={require("../../assets/path-logo.png")}
+          source={require('../../assets/path-logo.png')}
           style={{
-            alignSelf: "center",
+            alignSelf: 'center',
             marginTop: 40,
             color: colors.accent,
-            marginBottom: 20
+            marginBottom: 20,
           }}
         />
         <View style={{ flex: 1 }}>
@@ -127,7 +127,7 @@ class Pathways extends Component {
               fontSize: 20,
               marginBottom: 30,
               paddingHorizontal: 20,
-              marginLeft: 10
+              marginLeft: 10,
             }}
           >
             Welcome to Pathways, please select the recovery pathway you wish to
@@ -137,27 +137,27 @@ class Pathways extends Component {
           <TouchableOpacity
             onPress={() => {
               if (!this.props.isConnected.isConnected) {
-                return Alert.alert("No internet connection");
+                return Alert.alert('No internet connection');
               }
               this.setState({ hardWareBackButton: false });
-              this.props.navigation.navigate("Preview");
+              this.props.navigation.navigate('Preview');
             }}
             style={{
               paddingVertical: 20,
-              justifyContent: "space-between",
-              alignItems: "center",
-              flexDirection: "row",
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexDirection: 'row',
               borderWidth: 2,
               borderColor: colors.grey,
               borderLeftWidth: 0,
               borderRightWidth: 0,
-              paddingHorizontal: 30
+              paddingHorizontal: 30,
             }}
           >
             <Text
               style={{
                 fontSize: 20,
-                color: colors.black
+                color: colors.black,
               }}
             >
               Domestic Abuse Pathway
@@ -170,12 +170,12 @@ class Pathways extends Component {
               iconStyle={{ marginTop: 10 }}
             />
           </TouchableOpacity>
-          <View style={{ width: "100%", position: "absolute", bottom: 0 }}>
+          <View style={{ width: '100%', position: 'absolute', bottom: 0 }}>
             <TouchableOpacity
               style={styles.touchableStyle}
               onPress={() => {
                 if (!this.props.isConnected.isConnected) {
-                  return Alert.alert("No internet connection");
+                  return Alert.alert('No internet connection');
                 }
                 this.logout();
               }}
@@ -188,12 +188,12 @@ class Pathways extends Component {
                 {
                   marginTop: 10,
                   marginBottom: 35,
-                  backgroundColor: colors.grey
-                }
+                  backgroundColor: colors.grey,
+                },
               ]}
               onPress={() => {
                 if (!this.props.isConnected.isConnected) {
-                  return Alert.alert("No internet connection");
+                  return Alert.alert('No internet connection');
                 }
                 this.sendEmail();
               }}
@@ -211,9 +211,9 @@ class Pathways extends Component {
 
 const mapStateToProps = ({ checkNetworkStatus }) => {
   const { network } = checkNetworkStatus;
-  console.log("NETWORK STATUS", network);
+  console.log('NETWORK STATUS', network);
   return {
-    isConnected: network
+    isConnected: network,
   };
 };
 

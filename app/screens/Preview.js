@@ -193,7 +193,10 @@ class Preview extends React.Component {
         forceInset={{ bottom: "always", top: "never" }}
         style={{ flex: 1, paddingTop: 40 }}
       >
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          removeClippedSubviews={true}
+        >
           {!this.props.isConnected.isConnected && (
             <View style={{ marginTop: 40 }}>
               <OfflineNotice />

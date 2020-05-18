@@ -175,6 +175,7 @@ class ActiveCases extends React.Component {
       nationalReferrals,
       loadScreen,
       accountId,
+      searchKey,
       myId
     } = this.state;
     const checkDays = sevenDays ? 7 : thirtyDays ? 30 : sixtyDays ? 60 : 90;
@@ -185,29 +186,26 @@ class ActiveCases extends React.Component {
       const isBetween = allDays
         ? true
         : moment(item.CreatedDate).isBetween(toDate, todayDate);
-      console.log(isBetween, checkDays);
       if (myReferrals) {
         return (
           item.Referral__r &&
           item.Referral__r.Referrer_Contact_Name__c === myId &&
           isBetween &&
-          item.Referral__r.Name.includes(this.state.searchKey)
+          item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
         );
       }
       if (myConstabulary) {
-        console.log("my consta");
         return (
           item.Referral__r &&
           item.Referral__r.Referrer_Organisation__c === accountId &&
           isBetween &&
-          item.Referral__r.Name.includes(this.state.searchKey)
+          item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
         );
       }
-      console.log("national");
       return (
         item.Referral__r &&
         isBetween &&
-        item.Referral__r.Name.includes(this.state.searchKey)
+        item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
       );
     });
     filteredArray.push({ [arrayTitle]: searchFilteredArray });
@@ -226,9 +224,8 @@ class ActiveCases extends React.Component {
           <View style={{ flex: 1, paddingTop: 20 }}>
             <SearchBarWrapper
               showDownBar={true}
-              onSearchChange={searchKey => {
-                this.setState({ searchKey });
-                console.log(searchKey);
+              onSearchChange={key => {
+                this.setState({ searchKey: key });
               }}
               sevenDaysPress={() => {
                 this.buttonPress(0);

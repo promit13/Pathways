@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.8</string>
+	<string>1.1.2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -54,7 +54,7 @@
 	<key>NSMotionUsageDescription</key>
 	<string>We do not use any Motion permissions</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Add captured images</string>
+	<string>We do not use photo library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We do not use photo library</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

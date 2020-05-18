@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 import {
   TextInput,
   Text,
@@ -8,93 +8,101 @@ import {
   View,
   Image,
   BackHandler,
-  Alert
-} from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { Formik } from "formik";
-import axios from "axios";
-import * as yup from "yup";
-import firebase from "react-native-firebase";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { connect } from "react-redux";
-import NetInfo from "@react-native-community/netinfo";
-import ErrorMessage from "../components/Error";
-import { ModalLoading } from "../components/LoadScreen";
-import colors from "../style";
+  Alert,
+} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { Formik } from 'formik';
+import axios from 'axios';
+import * as yup from 'yup';
+import firebase from 'react-native-firebase';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { connect } from 'react-redux';
+import NetInfo from '@react-native-community/netinfo';
+import ErrorMessage from '../components/Error';
+import { ModalLoading } from '../components/LoadScreen';
+import colors from '../style';
 // import firebase, { auth, db } from "../utils/firebase";
-import OfflineNotice from "../components/OfflineNotice";
+import OfflineNotice from '../components/OfflineNotice';
 
-const getAccountApi = "http://167.99.90.138:8675/getAccount";
-const getCustomTokenApi = "http://167.99.90.138:8675/getCustomToken";
+const getAccountApi = 'http://167.99.90.138:8675/getAccount';
+const getCustomTokenApi = 'http://167.99.90.138:8675/getCustomToken';
 
 const text = [
-  "Welcome to Pathways, please enter your activation code from your welcome email.",
-  "If you do not have a welcome email or have any issues, please email us at:",
-  "If you wish to apply to become a referrer please go to:"
+  'Welcome to Pathways, please enter your activation code from your welcome email.',
+  'If you do not have a welcome email or have any issues, please email us at:',
+  'If you wish to apply to become a referrer please go to:',
 ];
 
 const styles = StyleSheet.create({
   loginText: {
-    color: "white",
-    textAlign: "center",
-    alignSelf: "center",
-    fontSize: 20
+    color: 'white',
+    textAlign: 'center',
+    alignSelf: 'center',
+    fontSize: 20,
   },
   fieldContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     margin: 10,
     marginLeft: 40,
     marginRight: 40,
     borderRadius: 50,
-    borderColor: "white",
-    alignItems: "center",
-    backgroundColor: "white",
+    borderColor: 'white',
+    alignItems: 'center',
+    backgroundColor: 'white',
     borderWidth: 2,
     padding: 10,
     paddingLeft: 20,
-    paddingRight: 20
+    paddingRight: 20,
   },
   textInputStyle: {
     flex: 1,
     height: 40,
-    color: "black",
+    color: 'black',
     fontSize: 18,
     padding: 10,
     borderWidth: 2,
     borderColor: colors.lightGrey,
-    alignContent: "center"
+    alignContent: 'center',
   },
   textErrorStyle: {
     fontSize: 12,
-    color: "red",
-    marginTop: 5
-  }
+    color: 'red',
+    marginTop: 5,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: colors.accent,
+    paddingTop: 12,
+    fontSize: 17,
+    height: 45,
+  },
 });
 
 class Login extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
 
   state = {
-    fcmToken: "",
+    fcmToken: '',
     showError: false,
-    errorMessage: "",
+    errorMessage: '',
     loading: false,
-    text: ""
+    text: '',
   };
 
   componentDidMount = async () => {
-    NetInfo.addEventListener("connectionChange", this.handleConnectivityChange);
-    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+    NetInfo.addEventListener('connectionChange', this.handleConnectivityChange);
+    BackHandler.addEventListener('hardwareBackPress', this.onBackPress);
   };
 
   componentWillUnmount() {
     NetInfo.removeEventListener(
-      "connectionChange",
+      'connectionChange',
       this.handleConnectivityChange
     );
-    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackPress);
   }
 
   // handleConnectivityChange = () => {
@@ -108,93 +116,93 @@ class Login extends Component {
     return true;
   };
 
-  registerUser = values => {
+  registerUser = (values) => {
     const { code } = values;
     axios
       // .post(getAccountApi, { id: "0034J00000AnUldQAF" })
       .post(getAccountApi, { id: code })
-      .then(async accountResponse => {
+      .then(async (accountResponse) => {
         console.log(accountResponse.data);
         const contactData = accountResponse.data;
         if (contactData.errorCode) {
-          if (contactData.errorCode === "NOT_FOUND") {
+          if (contactData.errorCode === 'NOT_FOUND') {
             return this.setState({
               loading: false,
               showError: true,
-              errorMessage: "Invaild code. Please try again."
+              errorMessage: 'Invaild code. Please try again.',
             });
           } else {
             return this.setState({
               loading: false,
               showError: true,
-              errorMessage: `Error: ${contactData.errorCode}`
+              errorMessage: `Error: ${contactData.errorCode}`,
             });
           }
         }
-        console.log("CHECK", contactData);
-        await AsyncStorage.setItem("userDetails", JSON.stringify(contactData));
+        console.log('CHECK', contactData);
+        await AsyncStorage.setItem('userDetails', JSON.stringify(contactData));
         axios
           .post(getCustomTokenApi, { uid: code })
-          .then(response => {
+          .then((response) => {
             console.log(response);
             console.log(response.data);
             firebase
               .auth()
               .signInWithCustomToken(response.data)
-              .then(res => {
+              .then((res) => {
                 console.log(res);
                 console.log(res.user.uid);
                 const userDetails = {
                   userVerified: true,
                   userId: code,
-                  phoneVerified: code === "0034J00000E4in8QAB" ? true : false,
+                  phoneVerified: code === '0034J00000E4in8QAB' ? true : false,
                   pin: 0,
                   pinSet: false,
-                  phone: contactData.Phone
+                  phone: contactData.Phone,
                   // messagingToken: this.state.fcmToken
                 };
                 firebase
                   .firestore()
-                  .collection("users")
+                  .collection('users')
                   .doc(res.user.uid)
                   .set(userDetails);
               })
-              .then(r => {
+              .then((r) => {
                 this.setState({ loading: false });
                 console.log(r);
               })
-              .catch(e => {
+              .catch((e) => {
                 this.setState({
                   loading: false,
                   showError: true,
-                  errorMessage: "Something went wrong. Please try again."
+                  errorMessage: 'Something went wrong. Please try again.',
                 });
                 console.log(e);
               })
-              .catch(error => {
+              .catch((error) => {
                 this.setState({
                   loading: false,
                   showError: true,
-                  errorMessage: "Something went wrong. Please try again."
+                  errorMessage: 'Something went wrong. Please try again.',
                 });
                 console.log(error);
                 // ...
               });
           })
-          .catch(err => {
+          .catch((err) => {
             this.setState({
               loading: false,
               showError: true,
-              errorMessage: "Something went wrong. Please try again."
+              errorMessage: 'Something went wrong. Please try again.',
             });
             console.log(err);
           });
       })
-      .catch(er => {
+      .catch((er) => {
         this.setState({
           loading: false,
           showError: true,
-          errorMessage: "Something went wrong. Please try again."
+          errorMessage: 'Something went wrong. Please try again.',
         });
         console.log(er);
       });
@@ -202,7 +210,7 @@ class Login extends Component {
 
   sendEmail = () => {
     Linking.openURL(
-      "mailto:support@socialdynamics.org?subject=PATHWAYS&body=Description"
+      'mailto:support@socialdynamics.org?subject=PATHWAYS&body=Description'
     );
   };
 
@@ -217,16 +225,16 @@ class Login extends Component {
         )}
         <View style={{ flex: 1, padding: 40 }}>
           <Formik
-            initialValues={{ code: "" }}
-            onSubmit={values => {
+            initialValues={{ code: '' }}
+            onSubmit={(values) => {
               if (!this.props.isConnected.isConnected) {
-                return Alert.alert("No internet connection");
+                return Alert.alert('No internet connection');
               }
               this.setState({ loading: true });
               this.registerUser(values);
             }}
             validationSchema={yup.object().shape({
-              code: yup.string().required("Please enter the activation code")
+              code: yup.string().required('Please enter the activation code'),
             })}
           >
             {({
@@ -236,23 +244,23 @@ class Login extends Component {
               setFieldTouched,
               touched,
               isValid,
-              handleSubmit
+              handleSubmit,
             }) => (
               <Fragment>
                 <Image
-                  source={require("../../assets/path-logo.png")}
+                  source={require('../../assets/path-logo.png')}
                   style={{
-                    alignSelf: "center",
+                    alignSelf: 'center',
                     marginTop: 40,
                     color: colors.accent,
-                    marginBottom: 20
+                    marginBottom: 20,
                   }}
                 />
                 <Text
                   style={{
                     color: colors.black,
                     fontSize: 20,
-                    marginBottom: 20
+                    marginBottom: 20,
                   }}
                 >
                   {text[0]}
@@ -260,9 +268,9 @@ class Login extends Component {
                 <TextInput
                   style={styles.textInputStyle}
                   value={values.code}
-                  onChangeText={handleChange("code")}
+                  onChangeText={handleChange('code')}
                   placeholder="ACTIVATION CODE"
-                  onBlur={() => setFieldTouched("code")}
+                  onBlur={() => setFieldTouched('code')}
                 />
                 {touched.code && errors.code && (
                   <Text style={styles.textErrorStyle}>{errors.code}</Text>
@@ -274,24 +282,13 @@ class Login extends Component {
                   onPress={handleSubmit}
                   underlayColor="#fff"
                 >
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      color: "white",
-                      backgroundColor: colors.accent,
-                      paddingTop: 12,
-                      fontSize: 17,
-                      height: 45
-                    }}
-                  >
-                    AUTHORISE
-                  </Text>
+                  <Text style={styles.buttonText}>AUTHORISE</Text>
                 </TouchableOpacity>
                 <Text
                   style={{
                     color: colors.black,
                     fontSize: 20,
-                    marginTop: 20
+                    marginTop: 20,
                   }}
                 >
                   {text[1]}
@@ -299,7 +296,7 @@ class Login extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     if (!this.props.isConnected.isConnected) {
-                      return Alert.alert("No Internet Connection");
+                      return Alert.alert('No Internet Connection');
                     }
                     this.sendEmail();
                   }}
@@ -308,7 +305,7 @@ class Login extends Component {
                     style={{
                       fontSize: 16,
                       marginTop: 10,
-                      color: "blue"
+                      color: 'blue',
                     }}
                   >
                     support@socialdynamics.org
@@ -318,7 +315,7 @@ class Login extends Component {
                   style={{
                     color: colors.black,
                     fontSize: 20,
-                    marginTop: 50
+                    marginTop: 50,
                   }}
                 >
                   {text[2]}
@@ -327,22 +324,31 @@ class Login extends Component {
                   style={{ marginBottom: 10 }}
                   onPress={() => {
                     if (!this.props.isConnected.isConnected) {
-                      return Alert.alert("No Internet Connection");
+                      return Alert.alert('No Internet Connection');
                     }
-                    Linking.openURL("https://socialdynamics.org").catch(err =>
-                      console.log("An error occurred", err)
+                    Linking.openURL('https://socialdynamics.org').catch((err) =>
+                      console.log('An error occurred', err)
                     );
                   }}
                 >
                   <Text
                     style={{
-                      color: "blue",
+                      color: 'blue',
                       fontSize: 16,
-                      marginTop: 10
+                      marginTop: 10,
                     }}
                   >
                     https://socialdynamics.org/apply
                   </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{ marginTop: 30 }}
+                  onPress={() => {
+                    this.props.navigation.navigate('RegisterEmail');
+                  }}
+                  underlayColor="#fff"
+                >
+                  <Text style={styles.buttonText}>JOIN WAITING LIST</Text>
                 </TouchableOpacity>
               </Fragment>
             )}
@@ -354,9 +360,9 @@ class Login extends Component {
 }
 const mapStateToProps = ({ checkNetworkStatus }) => {
   const { network } = checkNetworkStatus;
-  console.log("NETWORK STATUS", network);
+  console.log('NETWORK STATUS', network);
   return {
-    isConnected: network
+    isConnected: network,
   };
 };
 

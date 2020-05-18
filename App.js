@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -7,89 +7,89 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  Image
-} from "react-native";
-import { Provider } from "react-redux";
-import axios from "axios";
-import { moderateScale } from "react-native-size-matters";
-import firebase from "react-native-firebase";
-import SmoothPinCodeInput from "react-native-smooth-pincode-input";
-import AsyncStorage from "@react-native-community/async-storage";
-import AppNavigator from "./app/router";
-import store from "./app/store";
-import ErrorMessage from "./app/components/Error";
-import { ModalLoading } from "./app/components/LoadScreen";
-import colors from "./app/style/";
-import ModalMessage from "./app/components/ModalMessage";
+  Image,
+} from 'react-native';
+import { Provider } from 'react-redux';
+import axios from 'axios';
+import { moderateScale } from 'react-native-size-matters';
+import firebase from 'react-native-firebase';
+import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
+import AsyncStorage from '@react-native-community/async-storage';
+import AppNavigator from './app/router';
+import store from './app/store';
+import ErrorMessage from './app/components/Error';
+import { ModalLoading } from './app/components/LoadScreen';
+import colors from './app/style/';
+import ModalMessage from './app/components/ModalMessage';
 
 const resetPinMessage =
-  "An email will been send to your linked email account. Please check your email to find the code to reset your pin.";
-const resetPinApi = "http://167.99.90.138:8675/pinReset";
+  'An email will been send to your linked email account. Please check your email to find the code to reset your pin.';
+const resetPinApi = 'http://167.99.90.138:8675/pinReset';
 const styles = {
   textStyle: {
     color: colors.black,
-    fontSize: 20
+    fontSize: 20,
   },
   resetText: {
     color: colors.black,
     fontSize: 20,
-    textAlign: "center"
+    textAlign: 'center',
   },
   touchableStyle: {
     marginVertical: 30,
-    alignItems: "center"
-  }
+    alignItems: 'center',
+  },
 };
 export default class App extends React.Component {
   state = {
     pinMatched: false,
     showError: false,
-    code: "",
-    pin: "",
-    errorMessage: "",
+    code: '',
+    pin: '',
+    errorMessage: '',
     loading: false,
     userLoggedIn: false,
-    myId: "",
-    appState: AppState.currentState
+    myId: '',
+    appState: AppState.currentState,
   };
 
   componentDidMount = async () => {
     //  NetInfo.addEventListener("connectionChange", this.handleConnectivityChange);
-    AppState.addEventListener("change", this._handleAppStateChange);
-    const pin = await AsyncStorage.getItem("pin");
+    AppState.addEventListener('change', this._handleAppStateChange);
+    const pin = await AsyncStorage.getItem('pin');
     if (pin === null) {
       this.setState({ userLoggedIn: false });
       return;
     }
-    const contactData = await AsyncStorage.getItem("userDetails");
+    const contactData = await AsyncStorage.getItem('userDetails');
     const jsonObjectData = JSON.parse(contactData);
     this.setState({ pin, myId: jsonObjectData.Id, userLoggedIn: true });
   };
 
   componentWillUnmount() {
     // NetInfo.addEventListener("connectionChange", this.handleConnectivityChange);
-    AppState.removeEventListener("change", this._handleAppStateChange);
+    AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  _handleAppStateChange = nextAppState => {
+  _handleAppStateChange = (nextAppState) => {
     console.log(nextAppState);
-    this.setState({ appState: nextAppState, code: "" });
+    this.setState({ appState: nextAppState, code: '' });
   };
 
-  checkCode = code => {
+  checkCode = (code) => {
     const { pin } = this.state;
     console.log(code, pin);
     if (code !== pin) {
       this.setState({
         showError: true,
         errorMessage: "Sorry your PIN's do not match, please try again.",
-        code: ""
+        code: '',
       });
     } else {
       this.setState({
         pinMatched: true,
         showError: false,
-        errorMessage: ""
+        errorMessage: '',
       });
     }
   };
@@ -100,19 +100,19 @@ export default class App extends React.Component {
     console.log(myId);
     axios
       .post(resetPinApi, {
-        id: myId
+        id: myId,
       })
-      .then(ressponse => {
+      .then((ressponse) => {
         console.log(ressponse);
         this.logout();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         this.setState({
           loading: false,
           showError: true,
           errorMessage:
-            "Something went wrong. Please try again. Or please check your internet connection"
+            'Something went wrong. Please try again. Or please check your internet connection',
         });
       });
   };
@@ -126,11 +126,11 @@ export default class App extends React.Component {
       showModalMessage: false,
       loading: false,
       showError: false,
-      errorMessage: "",
+      errorMessage: '',
       userLoggedIn: false,
       pinMatched: false,
-      pin: "",
-      code: ""
+      pin: '',
+      code: '',
     });
     firebase.auth().signOut();
     // firebase
@@ -169,45 +169,45 @@ export default class App extends React.Component {
       showError,
       errorMessage,
       loading,
-      showModalMessage
+      showModalMessage,
     } = this.state;
     return (
       <KeyboardAvoidingView
-        behavior={Platform.OS === "android" ? "" : "padding"}
+        behavior={Platform.OS === 'android' ? '' : 'padding'}
         enabled
         style={{
           flex: 1,
           padding: moderateScale(40),
-          backgroundColor: "white"
+          backgroundColor: 'white',
         }}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
           <Image
-            source={require("./assets/path-logo.png")}
+            source={require('./assets/path-logo.png')}
             style={{
-              alignSelf: "center",
+              alignSelf: 'center',
               color: colors.accent,
               marginBottom: moderateScale(20),
-              marginTop: moderateScale(40)
+              marginTop: moderateScale(40),
             }}
           />
           <Text style={[styles.textStyle, { marginBottom: 40 }]}>
             Welcome back, please enter your PIN to access your account.
           </Text>
-          <View style={{ alignSelf: "center" }}>
+          <View style={{ alignSelf: 'center' }}>
             <SmoothPinCodeInput
               textStyle={{
                 fontSize: 24,
-                color: "salmon"
+                color: 'salmon',
               }}
               textStyleFocused={{
-                color: "crimson"
+                color: 'crimson',
               }}
               restrictToNumbers="true"
               autoFocus={true}
               value={code}
-              onTextChange={code => this.setState({ code, showError: false })}
-              onFulfill={codeInput => {
+              onTextChange={(code) => this.setState({ code, showError: false })}
+              onFulfill={(codeInput) => {
                 this.checkCode(codeInput);
               }}
             />
@@ -219,8 +219,8 @@ export default class App extends React.Component {
             style={[
               styles.touchableStyle,
               {
-                flex: 1
-              }
+                flex: 1,
+              },
             ]}
             onPress={() => {
               this.setState({ showModalMessage: true });
@@ -232,6 +232,8 @@ export default class App extends React.Component {
           {
             <ModalMessage
               text={resetPinMessage}
+              firstButtonText="Continue"
+              secondButtonText="Cancel"
               isVisible={showModalMessage}
               showTwoButtons={true}
               backDropPress={() => {
@@ -254,7 +256,7 @@ export default class App extends React.Component {
     console.disableYellowBox = true;
     if (
       !userLoggedIn ||
-      (pinMatched && appState === "active" && code === pin && userLoggedIn)
+      (pinMatched && appState === 'active' && code === pin && userLoggedIn)
     ) {
       return (
         <Provider store={store}>

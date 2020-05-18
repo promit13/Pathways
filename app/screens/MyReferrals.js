@@ -8,6 +8,7 @@ import {
   Alert,
   KeyboardAvoidingView
 } from "react-native";
+import { Icon } from "react-native-elements";
 import AsyncStorage from "@react-native-community/async-storage";
 import _ from "lodash";
 import moment from "moment";
@@ -63,7 +64,9 @@ class MyReferrals extends React.Component {
     checkDays: null,
     loadScreen: true,
     accountId: "",
-    myId: ""
+    myId: "",
+    showContent: false,
+    renderViewIndex: 0
   };
 
   componentDidMount = async () => {
@@ -156,22 +159,26 @@ class MyReferrals extends React.Component {
     });
   };
 
-  renderContent = status => {
-    const casesList = status[0].map(caseDetails => {
-      return (
-        <CaseDetails
-          caseDetails={caseDetails}
-          onPress={() => {
-            if (!this.props.isConnected.isConnected) {
-              return Alert.alert("No internet connection");
-            }
-            this.props.navigation.navigate("Case", {
-              caseDetails
-            });
-          }}
-        />
-      );
-    });
+  renderContent = (index, status) => {
+    const { renderViewIndex, showContent, searchKey } = this.state;
+    let casesList = [];
+    if ((index === renderViewIndex && showContent) || searchKey !== "") {
+      casesList = status[0].map(caseDetails => {
+        return (
+          <CaseDetails
+            caseDetails={caseDetails}
+            onPress={() => {
+              if (!this.props.isConnected.isConnected) {
+                return Alert.alert("No internet connection");
+              }
+              this.props.navigation.navigate("Case", {
+                caseDetails
+              });
+            }}
+          />
+        );
+      });
+    }
     return casesList;
   };
 
@@ -188,7 +195,10 @@ class MyReferrals extends React.Component {
       nationalReferrals,
       loadScreen,
       accountId,
-      myId
+      myId,
+      searchKey,
+      showContent,
+      renderViewIndex
     } = this.state;
     const checkDays = sevenDays ? 7 : thirtyDays ? 30 : sixtyDays ? 60 : 90;
     let filteredArray = [];
@@ -203,7 +213,7 @@ class MyReferrals extends React.Component {
           item.Referral__r &&
           item.Referral__r.Referrer_Contact_Name__c === myId &&
           isBetween &&
-          item.Referral__r.Name.includes(this.state.searchKey)
+          item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
         );
       }
       if (myConstabulary) {
@@ -211,13 +221,13 @@ class MyReferrals extends React.Component {
           item.Referral__r &&
           item.Referral__r.Referrer_Organisation__c === accountId &&
           isBetween &&
-          item.Referral__r.Name.includes(this.state.searchKey)
+          item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
         );
       }
       return (
         item.Referral__r &&
         isBetween &&
-        item.Referral__r.Name.includes(this.state.searchKey)
+        item.Referral__r.Name.toLowerCase().includes(searchKey.toLowerCase())
       );
     });
 
@@ -282,8 +292,8 @@ class MyReferrals extends React.Component {
           {!this.props.isConnected.isConnected && <OfflineNotice />}
           <View style={{ flex: 1, paddingTop: 20 }}>
             <SearchBarWrapper
-              onSearchChange={searchKey => {
-                this.setState({ searchKey });
+              onSearchChange={key => {
+                this.setState({ searchKey: key });
               }}
               sevenDaysPress={() => {
                 this.buttonPress(0);
@@ -323,13 +333,24 @@ class MyReferrals extends React.Component {
                 height: 20
               }}
             />
-            {filteredArray.map(status => {
+            {filteredArray.map((status, i) => {
               const headerTitle = Object.keys(status)[0];
               const arrayList = Object.values(status)[0];
               return (
                 <View>
-                  <View
+                  <TouchableOpacity
+                    onPress={() =>
+                      searchKey === ""
+                        ? this.setState({
+                            renderViewIndex: i + 1,
+                            showContent:
+                              renderViewIndex === i + 1 ? !showContent : true
+                          })
+                        : null
+                    }
                     style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
                       backgroundColor: colors.darkGrey,
                       width: "100%",
                       borderTopWidth: 2,
@@ -339,7 +360,6 @@ class MyReferrals extends React.Component {
                   >
                     <Text
                       style={{
-                        paddingVertical: 5,
                         fontSize: 20,
                         color: colors.darkGrey,
                         marginTop: 5,
@@ -350,10 +370,22 @@ class MyReferrals extends React.Component {
                     >
                       {headerTitle}
                     </Text>
-                  </View>
+                    <Icon
+                      name={
+                        (renderViewIndex === i + 1 && showContent) ||
+                        searchKey !== ""
+                          ? "chevron-up"
+                          : "chevron-down"
+                      }
+                      size={30}
+                      type="entypo"
+                      color="white"
+                      iconStyle={{ marginRight: 25 }}
+                    />
+                  </TouchableOpacity>
                   {arrayList.length === 0
                     ? null
-                    : this.renderContent(arrayList)}
+                    : this.renderContent(i + 1, arrayList)}
                 </View>
               );
             })}

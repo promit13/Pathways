@@ -1,40 +1,42 @@
-import React from "react";
-import { View, Dimensions, Text } from "react-native";
-import { Button } from "react-native-elements";
-import Modal from "react-native-modal";
-import colors from "../style";
+import React from 'react';
+import { View, Dimensions, Text } from 'react-native';
+import { Button } from 'react-native-elements';
+import Modal from 'react-native-modal';
+import colors from '../style';
 
-const { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get('window');
 
 const styles = {
   viewStyle: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
-    textAlign: "center"
+    textAlign: 'center',
   },
   text: {
     color: colors.darkGrey,
-    fontSize: 20
+    fontSize: 20,
   },
   button: {
     width: width - 20,
     backgroundColor: colors.accent,
-    marginTop: 30
-  }
+    marginTop: 30,
+  },
 };
 export default ModalMessage = ({
+  firstButtonText,
+  secondButtonText,
   text,
   isVisible,
   showTwoButtons,
   backDropPress,
-  onContinuePress
+  onContinuePress,
 }) => {
   return (
     <Modal
-      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
       isVisible={isVisible}
       coverScreen
       hasBackdrop
@@ -45,21 +47,21 @@ export default ModalMessage = ({
       <View style={styles.viewStyle}>
         <Text style={styles.text}>{text}</Text>
         <Button
-          title="Continue"
+          title={firstButtonText}
           buttonStyle={styles.button}
           onPress={onContinuePress}
         />
         {showTwoButtons ? (
           <Button
-            title="Cancel"
+            title={secondButtonText}
             titleStyle={{ color: colors.darkGrey }}
             onPress={backDropPress}
             buttonStyle={[
               styles.button,
               {
                 backgroundColor: colors.grey,
-                marginTop: 10
-              }
+                marginTop: 10,
+              },
             ]}
           />
         ) : null}
