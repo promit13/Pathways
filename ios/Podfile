@@ -2,7 +2,7 @@
 platform :ios, '9.0'
 
 target 'Suds' do
-  pod 'Stripe', '~> 14.0.0'
+  pod 'Stripe'
   # Pods for Suds
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
@@ -53,6 +53,8 @@ target 'Suds' do
   # pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
 
   # pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
 
 end
 

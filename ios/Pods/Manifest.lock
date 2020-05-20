@@ -357,7 +357,7 @@ PODS:
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
   - Protobuf (3.11.1)
-  - Stripe (14.0.0)
+  - Stripe (17.0.3)
   - yoga (0.59.3.React)
 
 DEPENDENCIES:
@@ -374,11 +374,13 @@ DEPENDENCIES:
   - Firebase/RemoteConfig
   - Firebase/Storage
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
-  - Stripe (~> 14.0.0)
+  - Stripe
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://cdn.cocoapods.org/:
+    - Stripe
+  https://github.com/CocoaPods/Specs.git:
     - abseil
     - boost-for-react-native
     - BoringSSL-GRPC
@@ -415,7 +417,6 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - Protobuf
-    - Stripe
 
 EXTERNAL SOURCES:
   Folly:
@@ -461,9 +462,9 @@ SPEC CHECKSUMS:
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Protobuf: 20d79da7f20b5928b80043b05080b816e802659e
-  Stripe: db29ad197c74aca6fb981e4e8355cf7ebd0fca5a
+  Stripe: 30ba9a2ac7297e93de561fed695222ef980ee521
   yoga: 1a492113f66a35e9e583bb0434f4b8cc668dd839
 
-PODFILE CHECKSUM: 02b3aaad38f19837800ad5114bf6d97d4985c226
+PODFILE CHECKSUM: a41c8f0d17262b4c4d6f5c5b0ecdb7a6c4a55c58
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.9.1
