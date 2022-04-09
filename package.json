@@ -19,7 +19,7 @@
     "firebase": "^7.6.1",
     "formik": "^1.5.8",
     "lodash": "^4.17.15",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "react": "16.8.3",
     "react-native": " 0.59.3",
     "react-native-elements": "^1.1.0",
